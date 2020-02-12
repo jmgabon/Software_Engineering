@@ -1,0 +1,174 @@
+body {
+	overflow:hidden !important;
+}	
+.my-container{
+	width: 80%;
+	margin: auto;
+}
+.logo{
+	width: 100%;
+}
+.menu{
+	width: 20%;
+	height: 500px;
+	border-right: 5px double maroon;
+	float: left;
+}
+ul{
+	list-style: none;
+}
+li{
+	font-size: 1.50rem;
+	font-weight: 500;
+}
+.main-li{
+	padding: 10px 0 0 0;
+}
+.main-li:hover{
+	color: black;
+}
+.sub-div{
+	width: 80%;
+	float: right;
+}
+.sub-li{
+	font-size: 18px;
+	font-weight: 400;
+}
+.fas{
+	margin-right:5px;
+}
+.active{
+	background: maroon;
+	color: #f8f9fa;
+	padding:3px 0 3px 20px !important;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+a{
+	display: inline-block;
+	width: 100%;
+	color: #343a40;
+	transition: 0.3s;
+}
+a.sub-li:hover{
+	background: maroon;
+	color: #f8f9fa;
+	padding:3px 0 3px 20px !important;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+a.active:hover{
+	text-decoration: none;
+	color: #f8f9fa;
+}
+.content{
+	width: 80%;
+	float: right;
+}
+.count a{
+	text-decoration: none;
+	color: black;
+}
+.count a:hover{
+	color: white;
+}
+.option a{
+	text-decoration: none;
+	color: black;
+}
+.option:hover a{
+	text-decoration: none;
+	color: black;
+}
+.count:hover .subtitle{
+	color:white;
+}
+.count:hover .title{
+	color:white;
+}
+.number{
+	font-size: 3.75rem;
+	font-weight: 500;
+	margin: 1.5rem 0 0 1.5rem;
+}
+.title{
+	font-size: 1.5rem;
+	font-weight: 500;
+	margin: 0 0 0 1.75rem;
+	color:black;
+}
+.subtitle{
+	margin: 0 0 0 1.75rem;
+	color:black;
+}
+
+
+.count{
+	width: 40%;
+	height: 200px;
+	margin:3% 0 0 5%;
+	float:left;
+	background-size: 220px;
+	background-position: right;
+	background-repeat: no-repeat;
+	background-position-y: 30px;
+	border: 2px solid black;
+	border-radius: 10px;
+	transition: 0.3s;
+}
+.count:hover{
+	background-color: maroon;
+	color: white;
+}
+.option{
+	margin: 5% 0 0 7%;
+	text-align: center;
+	font-size: 1.25rem;
+	font-weight: 500;
+	float:left;
+}
+.img-opt{
+	height: 120px;
+	transition: ease-out 0.3s;
+}
+.img-opt:hover{
+	height: 150px;
+}
+.student{
+	background-image: url("../pictures/students.png");
+}
+.student:hover{
+	background-image: url("../pictures/students-w.png");
+}
+.teacher{
+	background-image: url("../pictures/teachers.png");
+}
+.teacher:hover{
+	background-image: url("../pictures/teachers-w.png");
+}
+.room{
+	background-image: url("../pictures/rooms.png");
+}
+.room:hover{
+	background-image: url("../pictures/rooms-w.png");
+}
+.section{
+	background-image: url("../pictures/sections.png");
+}
+.section:hover{
+	background-image: url("../pictures/sections-w.png");
+}
+@media (max-width: 576px){
+	.my-container{
+		width: 100%;
+	}
+	.count{
+		margin:2%;
+		padding:0;
+		width: 100%;
+	}
+	.menu{
+		display: none;
+	}
+}
