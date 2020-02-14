@@ -1,0 +1,96 @@
+body {
+  font-size: .875rem;
+}
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 60px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  font-size: 16px;
+  width: 230px;
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+.lead-margin{
+  margin-left: 240px !important;
+}
+.content{
+  margin-left: 240px !important;
+}
+.card{
+  width: 300px;
+  height: 200px;
+  margin: 10px;
+}
+@media (max-width: 786px) {
+  .lead-margin{
+    margin-left: 20px !important;
+  }
+  .content{
+    margin-left: 0 !important;
+  }
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+  padding-left: 25px;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
+
+.sidebar .nav-link.active {
+  color: #dc3545;;
+  border-left: 2.5px solid #dc3545;;
+
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.students{
+  background-image: url("student.png");
+  background-size: cover;
+}
+
+.teachers{
+  background-image: url("teacher.png");
+  background-size: cover;
+}
+.rooms{
+  background-image: url("rooms.png");
+  background-size: cover;
+}
+.classes{
+  background-image: url("classes.png");
+  background-size: cover;
+}
+.font-sm{
+  font-size: 12px !important;
+}
