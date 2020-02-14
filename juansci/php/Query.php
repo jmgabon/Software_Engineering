@@ -17,6 +17,6 @@
 	}
 	catch(Exception $e){
 		echo $query;
-		echo $e;
+		// echo $e;
 	}
 ?>

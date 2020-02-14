@@ -125,7 +125,7 @@ function Create(btn_Create, table2, autoincrement, FK, fieldToUpdate, createCall
 		}
 		// Search(txt_search, columnIDS);
 	}
-	// console.log(content);
+	console.log(content);
 }
 
 // function Update(){
@@ -460,6 +460,7 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	var colNum = document.querySelector("#" + txt_search.id + "Table thead tr").childElementCount;//childElementCount counts child of parent
 	var tbody = document.querySelector("#" + txt_search.id + "Table tbody");
 	var main_body = tbody.parentNode.parentNode;
+	console.log(main_body);
 	let limit;
 	// console.log(main_body.children.length);
 	if(document.querySelector("#modal")){
@@ -513,16 +514,18 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	var btn_Previous = document.createElement('button');
 	pagination.classList.add("pgn");
 	btn_Next.classList.add("pgn-next");
-	btn_Previous.classList.add("pgn-prev")
+	btn_Previous.classList.add("pgn-prev");
 
 	pagination.appendChild(btn_Previous);
 	pagination.appendChild(btn_Next);
 	
 	if(document.querySelector("#modal")){
 		document.querySelector("#modal-footer").appendChild(pagination);
+		console.log("MODAL");
 	}
 	else{
 		main_body.appendChild(pagination);
+		console.log("NO MODAL");
 	}
 
 	pagination.style.textAlign = "center";
@@ -587,7 +590,7 @@ function Edit(whatToEdit){ //whatToEdit is an array
 	}
 
 	var select = document.querySelectorAll("#" + parent_id + " select");
-
+	// console.log(select[0]);
 	for(var i = 0; i < select.length; i++){			//Selected option is matched
 		for(var j = 0; j < select[i].options.length; j++){
 			if(select[i].options[j].text == whatToEdit[i + input.length]){

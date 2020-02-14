@@ -1,3 +1,5 @@
+//POPULATION IS THE PROBLEM
+
 var searchSection = document.getElementById("SearchSection");
 var createSection = document.getElementById("CreateSection");
 var resetSection = document.getElementById("ResetSection");
@@ -245,4 +247,38 @@ function PickAdviser(xhttp){
 	// console.log(columnIDS);
 	columnIDS = GetID(document.querySelectorAll("#SearchSectionTable thead td"), 1);
 	// console.log(columnIDS);
+}
+
+function Edit(whatToEdit){ //whatToEdit is an array 
+	//JUST copies the table depending on their order
+
+	console.log(whatToEdit);
+	var disabled; 
+	var input = document.querySelectorAll("#" + parent_id + " input");
+	var btn = document.querySelectorAll("#" + parent_id + " button");
+
+	for(var i = 0; i < input.length; i++){
+		if(i == 0){
+			disabled = document.createAttribute("disabled");
+			input[i].setAttributeNode(disabled); //disabled input
+		}
+		input[i].value = whatToEdit[i];
+	}
+	
+	var select = document.querySelectorAll("#" + parent_id + " select");
+	for(var i = 0; i < select.length; i++){			//Selected option is matched
+		for(var j = 0; j < select[i].options.length; j++){
+			if(select[i].options[j].text == whatToEdit[i + input.length +1]){
+				select[i].selectedIndex = j;
+				break;
+			}
+		}
+	}
+	//THIS CAN BE CHANGED
+	for(i = 0; i < btn.length; i++){
+		if(btn[i].innerHTML == "Create"){
+			btn[i].innerHTML = "Update";		
+			break;
+		}
+	}
 }

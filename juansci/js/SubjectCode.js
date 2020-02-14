@@ -25,4 +25,5 @@ createSubjectCode.addEventListener("click", function(){
 		CheckIfUpdated
 	);
 });
+
 resetSubjectCode.addEventListener("click", ResetInput.bind(null, initialValue));

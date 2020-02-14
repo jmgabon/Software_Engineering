@@ -55,6 +55,7 @@
 		}
 		$stmt->bindValue($j, $colVal[0]);
 		$stmt->execute();
+		// echo($preparedStatement);
 		// "UPDATE " . $table2 . " SET " . $table2 . ".".$foreignKey." = (SELECT ".$table1.".".$foreignKey." FROM ".$table1." ORDER BY ".$table1.".".$foreignKey." DESC LIMIT 1) WHERE ".$table2.".".$fieldToUpdate." = ".$fieldToUpdateVal;
 		
 		if(!is_null($fieldToUpdateVal)){ //Checks if $fieldToUpdateVal is null

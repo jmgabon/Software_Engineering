@@ -8,11 +8,12 @@
 <html>
 <head>
 	<title>Student List</title>
-	<link rel="stylesheet" type="text/css" href="../css/modal.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/merged-styles.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
-	<!-- <link rel="stylesheet" type="text/css" href="..css/all.css" /> -->
-	<link rel="icon" href="../pictures\logo.png" />
+	<link rel="stylesheet" type="text/css" href="../css/Entire.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
+	<link rel="stylesheet" type="text/css" href="../css/all.css" />
+    <link rel="icon" href="../pictures/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<img src="../pictures/logodesign.jpg" class="w-100">
@@ -47,7 +48,7 @@
 	<button class="mt-3 rounded-pill" id="ResetSection">Reset</button>
 	</div> -->
 
-	<div id="modal">
+	<!-- <div id="modal">
 		<div id="modal-content">
 			<span id="close" onclick="closeModal(document.getElementById('modal-body'));">&times;</span>
 			<div id="modal-header" >
@@ -58,7 +59,7 @@
 			<div id="modal-footer">	
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="secondCol col-xl-12">
 		<p class="h5 pb-2">
 			<label class="float-right" for="SearchStudent">
@@ -70,6 +71,7 @@
 				<!-- <td>Section Number</td> -->
 				<td id="LRNNum">LRN Number</td>
 				<td id="LastName">Last Name</td>
+				<td id="Extension">Extension</td>
 				<td id="FirstName">First Name</td>
 				<td id="MiddleName">Middle Name</td>
 				<td id="Birthday" style="display: none;"></td>

@@ -2,6 +2,7 @@
 var studentInfo;
 
 studentInfo = JSON.parse(sessionStorage.getItem('StudentInfo'));
+// console.log(studentInfo);
 var std_picture = document.querySelector("#SecondCol img");
 var input_std_picture = document.querySelector("#SecondCol input");
 input_std_picture.addEventListener("change", SeePicture);
@@ -41,7 +42,7 @@ if(studentInfo != null){
 	disabled = document.createAttribute("disabled");
 	input_std_picture.setAttributeNode(disabled);
 }
-studentInfo = null;
+// studentInfo = null;
 sessionStorage.removeItem('StudentInfo');
 var submitForm = document.getElementById("submitForm");
 // submitForm.addEventListener("click", ValidateForm.bind(null, "StdReg"));
@@ -77,6 +78,7 @@ function ValidateForm(){ //Validate if Form has no Blanks in every required fiel
 	else{
 		if(imageToUpload.files[0] == undefined && studentInfo == null){
 			alert("STUDENT'S PICTURE IS NOT UPLOADED");
+			console.log(studentInfo);
 		}
 		else{
 			// UploadPhoto(imageToUpload);

@@ -169,14 +169,15 @@ if(employeeInfo != null){
 		}
 	}
 	// input_std_picture.files[0]['name'] = "..\\pictures\\student\\" + employeeInfo[input.length-1];
-	console.log(employeeInfo[input.length]);
-	// console.log(EmployeeInfo);
-	std_picture.src = "..\\pictures\\employee\\" + employeeInfo[input.length];
+	// console.log(employeeInfo[input.length]);
+	// console.log(employeeInfo);
+	std_picture.src = "..\\pictures\\employee\\" + employeeInfo[10];
+	console.log(std_picture.src);
 	disabled = document.createAttribute("disabled");
 	input_std_picture.setAttributeNode(disabled);
 }
 sessionStorage.removeItem('EmployeeInfo');
-employeeInfo = null;
+// employeeInfo = null;
 for(var i = 0; i < input.length; i++){
 	// input[i].autocomplete = "";
 	input[i].addEventListener("change", function(){
@@ -270,6 +271,7 @@ function CheckIfRegistered(xhttp){
 	} 	
 	else{
 		alert("REGISTERED");
+		window.location.reload(false); 
 	}
 }
 
@@ -279,6 +281,8 @@ function CheckIfUpdated(xhttp){
 	}
 	else{
 		alert("UPDATED");
+		window.location.reload(false); 
+
 	}
 }
 
@@ -309,5 +313,5 @@ function UploadPhoto(file){
 	for(const fileToUpload of file.files){
 		formData.append("files[]", fileToUpload);
 	}
-	AJAX_FILES(formData, false, "post", "../php/Upload.php", true, null);
+	AJAX_FILES(formData, false, "post", "../php/UploadEmployee.php", true, null);
 }
