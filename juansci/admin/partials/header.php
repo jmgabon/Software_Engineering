@@ -59,7 +59,7 @@
         <img src="../pictures/logo2.png" width="200px" class="ml-2 mt-2 mb-4">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a id="dashboard" class="nav-link" href="index.php">
+              <a id="dashboard" class="nav-link" href="dashboard.php">
                 <span data-feather="home"></span>
                 <i class="fas fa-tachometer-alt mr-2"></i>
                 Dashboard <span class="sr-only">(current)</span>
