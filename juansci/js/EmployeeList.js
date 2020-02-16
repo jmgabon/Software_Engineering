@@ -19,6 +19,6 @@ Search();
 function Edit(whatToEdit){
 	console.log(whatToEdit[0]);
 	sessionStorage.setItem('EmployeeInfo', JSON.stringify(whatToEdit));
-	window.open("Employee_Registration.php");
+	window.open("employee_reg.php");
 }
 searchEmployee.addEventListener("change", Search);

@@ -171,7 +171,7 @@ if(employeeInfo != null){
 	// input_std_picture.files[0]['name'] = "..\\pictures\\student\\" + employeeInfo[input.length-1];
 	// console.log(employeeInfo[input.length]);
 	// console.log(employeeInfo);
-	std_picture.src = "..\\pictures\\employee\\" + employeeInfo[10];
+	std_picture.src = "..\\pictures\\employee\\" + employeeInfo[9];
 	console.log(std_picture.src);
 	disabled = document.createAttribute("disabled");
 	input_std_picture.setAttributeNode(disabled);

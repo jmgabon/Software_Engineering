@@ -19,6 +19,6 @@ Search();
 function Edit(whatToEdit){
 	console.log(whatToEdit[0]);
 	sessionStorage.setItem('StudentInfo', JSON.stringify(whatToEdit));
-	window.open("Student_Registration.php");
+	window.open("student_reg.php");
 }
 searchStudent.addEventListener("change", Search);
