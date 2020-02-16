@@ -38,19 +38,6 @@ const button = document.querySelectorAll('button');
 const labelMAPEH = document.querySelector('#labelMAPEH');
 
 
-
-
-
-function setSubMAPEH() {
-    SubjectCode = selectMAPEH.value + ' ' + txt_GradeLevel.innerHTML;
-    txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
-
-    RemoveChildNodes(tbody);
-    setStudentListDB();
-
-    console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
-}
-
 function setAdviserNameDB() {
     let query = '';
     txt_Adviser.innerHTML = '';
@@ -71,6 +58,90 @@ function setAdviserNameDB() {
     });
 }
 
+
+openSubjectModal = button[0];
+openSubjectModal.addEventListener('click', function() {
+    this.style.backgroundColor = '';
+    theadID = 'SectionNum@SubjectCode@SectionName@GradeLevel@teacher.Name';
+    theadHTML = 'Section Num@Subject Code@Section Name@Grade Level@Teacher Name';
+
+    CreateInput('searchSubject', 'search', modal_body);
+    document.querySelector('#searchSubject').className = 'modal-search';
+    CreateTable('searchSubjectTable', theadID, theadHTML, '@', modal_body, 0, 'SectionNum@teacher.Name');
+    document.querySelector('thead').className = 'dark';
+
+    const searchbox = document.querySelector('#searchSubject');
+
+    openModal('Select Subject', 'subject');
+
+    Search = function() {
+        let query = '';
+
+        query += 'SELECT section.SectionNum, subject.SubjectCode, ';
+        query += 'section.SectionName, section.GradeLevel, teacher.Name ';
+        query += 'FROM subject ';
+        query += 'INNER JOIN section ';
+        query += 'ON subject.SectionNum = section.SectionNum ';
+        query += 'JOIN teacher ';
+        query += 'ON subject.EmployeeNum = teacher.EmployeeNum ';
+        query += 'WHERE subject.EmployeeNum = ' + EmployeeNum;
+
+        SimplifiedQuery('SELECT', query, searchbox, getSubject);
+    }
+
+    searchbox.addEventListener('change', Search);
+
+    Search();
+});
+
+
+function getSubject(xhttp) {
+    CreateTBody(xhttp);
+    const tbody_tr = document.querySelectorAll('#searchSubjectTable tbody tr');
+
+    for (let i = 0; i < tbody_tr.length; i++) {
+        tbody_tr[i].addEventListener('click', function() {
+            document.querySelector('#searchSubject').value = '';
+            closeModal(modal_body);
+
+            SectionNum = this.childNodes[0].innerHTML;
+            SubjectCode = this.childNodes[1].innerHTML;
+            txt_Section.innerHTML = this.childNodes[2].innerHTML;
+            txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
+
+            input_SubjectCode.value = SubjectCode;
+            txt_SubjectCode.innerHTML = SubjectCode;
+
+            if (!input_SubjectCode.value.includes('MAPEH')) {
+                labelMAPEH.style.display = 'none';
+                RemoveChildNodes(tbody);
+                setQuarterDB();
+                setAdviserNameDB();
+                setStudentListDB();
+            } else {
+                labelMAPEH.style.display = 'block';
+                selectMAPEH.value = selectMAPEH.options[0].value;
+                RemoveChildNodes(tbody);
+                setQuarterDB();
+                setAdviserNameDB();
+            }
+
+            console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+        });
+
+        tbody_tr[i].addEventListener('mouseover', function() {
+            this.style.backgroundColor = 'maroon';
+            this.style.color = 'white';
+        });
+
+        tbody_tr[i].addEventListener('mouseout', function() {
+            this.style.backgroundColor = '';
+            this.style.color = '';
+        });
+    }
+}
+
+
 function setStudentListDB() {
     let query = '';
 
@@ -87,7 +158,7 @@ function setQuarterDB() {
     let query = '';
 
     query += 'SELECT SettingValue ';
-    query += 'FROM admin_settings ';
+    query += 'FROM setting ';
     query += 'WHERE SettingName = "quarter_enabled" ';
 
     SimplifiedQuery('SELECT', query, '', getQuarter);
@@ -107,6 +178,24 @@ function getQuarter(xhttp) {
 }
 
 
+function setSubMAPEH() {
+    SubjectCode = selectMAPEH.value + ' ' + txt_GradeLevel.innerHTML;
+    txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
+
+    RemoveChildNodes(tbody);
+    setStudentListDB();
+
+    console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+}
+
+
+function enablerQuarter(q) {
+    if (q == quarterSelected) {
+        return false
+    }
+    return true
+}
+
 
 function tBodyGrade(xhttp) {
 
@@ -123,36 +212,26 @@ function tBodyGrade(xhttp) {
                 for (let j = 0; j < colNum; j++) {
                     td = document.createElement('td');
 
-                    function enablerQuarter(q) {
-                        if (q == quarterSelected) {
-                            return false
-                        }
-                        return true
-                    }
 
                     function setInputGrade(i) {
                         input_quarter = document.createElement('input');
-                        input_quarter.setAttribute('type', 'number');
-                        input_quarter.setAttribute('min', 65);
-                        input_quarter.setAttribute('max', 100);
-                        input_quarter.setAttribute('onKeyDown', 'return false');
+                        input_quarter.setAttribute('type', 'input');
+                        input_quarter.setAttribute('style', 'width:3em');
+                        input_quarter.setAttribute('maxlength', '3');
+                        input_quarter.disabled = enablerQuarter(i);
 
                         switch (i) {
                             case 1:
                                 input_quarter.setAttribute('id', 'q1');
-                                input_quarter.disabled = enablerQuarter(i);
                                 break;
                             case 2:
                                 input_quarter.setAttribute('id', 'q2');
-                                input_quarter.disabled = enablerQuarter(i);
                                 break;
                             case 3:
                                 input_quarter.setAttribute('id', 'q3');
-                                input_quarter.disabled = enablerQuarter(i);
                                 break;
                             case 4:
                                 input_quarter.setAttribute('id', 'q4');
-                                input_quarter.disabled = enablerQuarter(i);
                                 break;
                         }
                         td.appendChild(input_quarter);
@@ -160,22 +239,20 @@ function tBodyGrade(xhttp) {
 
                     function setSaveButton(i) {
                         button_save = document.createElement('button');
+                        button_save.disabled = enablerQuarter(i);
+
                         switch (i) {
                             case 1:
                                 button_save.setAttribute('id', 'save1');
-                                button_save.disabled = enablerQuarter(i);
                                 break;
                             case 2:
                                 button_save.setAttribute('id', 'save2');
-                                button_save.disabled = enablerQuarter(i);
                                 break;
                             case 3:
                                 button_save.setAttribute('id', 'save3');
-                                button_save.disabled = enablerQuarter(i);
                                 break;
                             case 4:
                                 button_save.setAttribute('id', 'save4');
-                                button_save.disabled = enablerQuarter(i);
                                 break;
                         }
 
@@ -232,22 +309,22 @@ function tBodyGrade(xhttp) {
 
             save1.addEventListener('click', function() {
                 Quarter = 1;
-                checkGrade();
+                saveGrade();
             });
 
             save2.addEventListener('click', function() {
                 Quarter = 2;
-                checkGrade();
+                saveGrade();
             });
 
             save3.addEventListener('click', function() {
                 Quarter = 3;
-                checkGrade();
+                saveGrade();
             });
 
             save4.addEventListener('click', function() {
                 Quarter = 4;
-                checkGrade();
+                saveGrade();
             });
         } else {
             alert('No enrolled students yet.');
@@ -260,6 +337,7 @@ function tBodyGrade(xhttp) {
         console.log(err);
     }
 }
+
 
 function setGradeDB() {
     let query = '';
@@ -280,11 +358,11 @@ function setGradeDB() {
     query += 'AND grade_subject.SubjectCode IN ("' + SubjectCode + '") ';
     query += 'GROUP BY student.LRNNum ';
 
-    SimplifiedQuery('SELECT', query, '', saveGradeJSON);
+    SimplifiedQuery('SELECT', query, '', getGradeDB);
 }
 
 
-function saveGradeJSON(xhttp) {
+function getGradeDB(xhttp) {
     try {
         jsonGrade = JSON.parse(xhttp.responseText);
         console.log('Student(s) with Grade: ' + jsonGrade.length);
@@ -297,6 +375,7 @@ function saveGradeJSON(xhttp) {
         console.log(err);
     }
 }
+
 
 function insertGrade() {
     const q1 = document.querySelectorAll('#q1');
@@ -325,16 +404,35 @@ function insertGrade() {
     getFinalAndRemark();
 }
 
-function checkGrade() {
-    let GradeID;
-    let found;
 
-    getFinalAndRemark();
+function checkValidInput() {
     for (let i = 0; i < jsonStudent.length; i++) {
-        const GradeRating = document.querySelectorAll('#q' + Quarter)[i].value
-        found = false;
+        let GradeRating = document.querySelectorAll('#q' + Quarter)[i].value;
 
-        if (GradeRating != '') {
+        if (GradeRating === '0') {
+            return false;
+        }
+
+        GradeRating = Number(GradeRating);
+        if (!Number.isInteger(GradeRating)) {
+            return false;
+        } else if (!((GradeRating == '') || (GradeRating >= 65 && GradeRating <= 100))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+function saveGrade() {
+    if (checkValidInput()) {
+        let GradeID;
+        let found;
+
+        for (let i = 0; i < jsonStudent.length; i++) {
+            const GradeRating = document.querySelectorAll('#q' + Quarter)[i].value
+            found = false;
+
             while (!found) {
                 for (let j = 0; j < jsonGrade.length; j++) {
                     if (jsonStudent[i][0] == jsonGrade[j][0]) {
@@ -347,39 +445,42 @@ function checkGrade() {
                         } else if (Quarter == 4) {
                             GradeID = jsonGrade[j][10];
                         }
-                        updateGradeDB();
+
                         found = true;
                     }
                 }
-
                 if (!found) {
                     GradeID = 0;
-                    updateGradeDB();
                     found = true;
                 }
             }
+
+            if (GradeRating != '') {
+                let query = '';
+
+                query += 'INSERT INTO grade_subject ';
+                query += '(GradeID, LRNNum, GradeLevel, SubjectCode, Quarter, GradeRating) ';
+                query += 'VALUES ("' + GradeID + '", "';
+                query += jsonStudent[i][0] + '", "';
+                query += txt_GradeLevel.innerHTML + '", "';
+                query += SubjectCode + '", "';
+                query += Quarter + '", "';
+                query += GradeRating + '") ';
+                query += 'ON DUPLICATE KEY UPDATE GradeRating = ' + GradeRating;
+
+                SimplifiedQuery('INSERT', query, '', () => null);
+            } else {
+                let query = 'DELETE FROM grade_subject WHERE grade_subject.GradeID = ' + GradeID;
+                SimplifiedQuery('DELETE', query, '', () => null);
+            }
         }
 
-        function updateGradeDB() {
-            let query = '';
-
-            query += 'INSERT INTO grade_subject ';
-            query += '(GradeID, LRNNum, GradeLevel, SubjectCode, Quarter, GradeRating) ';
-            query += 'VALUES ("' + GradeID + '", "';
-            query += jsonStudent[i][0] + '", "';
-            query += txt_GradeLevel.innerHTML + '", "';
-            query += SubjectCode + '", "';
-            query += Quarter + '", "';
-            query += GradeRating + '") ';
-            query += 'ON DUPLICATE KEY UPDATE GradeRating = ' + GradeRating;
-
-            SimplifiedQuery('INSERT', query, '', () => null);
-        }
+        alert('QUARTER ' + Quarter + ' GRADES SAVED');
+        console.log('QUARTER ' + Quarter + ' GRADES SAVED');
+        setGradeDB();
+    } else {
+        alert('Invalid input! Check all grades.')
     }
-
-    alert('QUARTER ' + Quarter + ' GRADES SAVED');
-    console.log('QUARTER ' + Quarter + ' GRADES SAVED');
-    setGradeDB();
 }
 
 function getFinalAndRemark() {
@@ -387,6 +488,9 @@ function getFinalAndRemark() {
     const CreateGradeTable = document.querySelector('#CreateGradeTable');
 
     for (let i = 0; i < jsonStudent.length; i++) {
+        CreateGradeTable.rows[i + 2].cells[6].innerHTML = '';
+        CreateGradeTable.rows[i + 2].cells[7].innerHTML = '';
+
         if (jsonStudent.length > 1) {
             if (q1[i].value != '' && q2[i].value != '' && q3[i].value != '' && q4[i].value != '') {
                 finalRating = (Number(q1[i].value) + Number(q2[i].value) +
@@ -416,89 +520,6 @@ function getFinalAndRemark() {
 
 
 /////
-
-
-openSubjectModal = button[0];
-
-openSubjectModal.addEventListener('click', function() {
-    this.style.backgroundColor = '';
-    theadID = 'SectionNum@SubjectCode@SectionName@GradeLevel@teacher.Name';
-    theadHTML = 'Section Num@Subject Code@Section Name@Grade Level@Teacher Name';
-
-    CreateInput('searchSubject', 'search', modal_body);
-    document.querySelector('#searchSubject').className = 'modal-search';
-    CreateTable('searchSubjectTable', theadID, theadHTML, '@', modal_body, 0, 'SectionNum@teacher.Name');
-    document.querySelector('thead').className = 'dark';
-
-    const searchbox = document.querySelector('#searchSubject');
-
-    openModal('Select Subject', 'subject');
-
-    Search = function() {
-        let query = '';
-
-        query += 'SELECT section.SectionNum, subject.SubjectCode, ';
-        query += 'section.SectionName, section.GradeLevel, teacher.Name ';
-        query += 'FROM subject ';
-        query += 'INNER JOIN section ';
-        query += 'ON subject.SectionNum = section.SectionNum ';
-        query += 'JOIN teacher ';
-        query += 'ON subject.EmployeeNum = teacher.EmployeeNum ';
-        query += 'WHERE subject.EmployeeNum = ' + EmployeeNum;
-
-        SimplifiedQuery('SELECT', query, searchbox, getSubject);
-    }
-
-    searchbox.addEventListener('change', Search);
-
-    Search();
-});
-
-function getSubject(xhttp) {
-    CreateTBody(xhttp);
-    const tbody_tr = document.querySelectorAll('#searchSubjectTable tbody tr');
-
-    for (let i = 0; i < tbody_tr.length; i++) {
-        tbody_tr[i].addEventListener('click', function() {
-            document.querySelector('#searchSubject').value = '';
-            closeModal(modal_body);
-
-            SectionNum = this.childNodes[0].innerHTML;
-            SubjectCode = this.childNodes[1].innerHTML;
-            txt_Section.innerHTML = this.childNodes[2].innerHTML;
-            txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
-
-            input_SubjectCode.value = SubjectCode;
-            txt_SubjectCode.innerHTML = SubjectCode;
-
-            if (!input_SubjectCode.value.includes('MAPEH')) {
-                labelMAPEH.style.display = 'none';
-                RemoveChildNodes(tbody);
-                setQuarterDB();
-                setAdviserNameDB();
-                setStudentListDB();
-            } else {
-                labelMAPEH.style.display = 'block';
-                selectMAPEH.value = selectMAPEH.options[0].value;
-                RemoveChildNodes(tbody);
-                setQuarterDB();
-                setAdviserNameDB();
-            }
-
-            console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
-        });
-
-        tbody_tr[i].addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'maroon';
-            this.style.color = 'white';
-        });
-
-        tbody_tr[i].addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
-            this.style.color = '';
-        });
-    }
-}
 
 
 //  FOR TESTING

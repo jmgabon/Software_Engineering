@@ -175,7 +175,7 @@ const wrapperGradeEnabler = (function() {
         let query = '';
 
         query += 'SELECT SettingValue ';
-        query += 'FROM admin_settings ';
+        query += 'FROM setting ';
         query += 'WHERE SettingName = "quarter_enabled" ';
 
         SimplifiedQuery('SELECT', query, '', getQuarter);
@@ -205,7 +205,7 @@ const wrapperGradeEnabler = (function() {
         saveQuarter: function(q) {
             let query = '';
 
-            query += 'UPDATE admin_settings ';
+            query += 'UPDATE setting ';
             query += 'SET SettingValue ="' + q + '" ';
             query += 'WHERE SettingName = "quarter_enabled" ';
 
