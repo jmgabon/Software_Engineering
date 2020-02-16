@@ -21,7 +21,7 @@ var state = "";
 
 buttons[0].addEventListener("click", function(){
 	state = "Add";
-	this.style.backgroundColor = "maroon";
+	this.style.backgroundColor = "#dc3545";
 	this.style.color="white";
 	buttons[1].style.backgroundColor = "";
 	buttons[1].style.color="black";
@@ -30,7 +30,7 @@ buttons[0].addEventListener("click", function(){
 
 buttons[1].addEventListener("click", function(){
 	state = "Change";
-	this.style.backgroundColor = "maroon";
+	this.style.backgroundColor = "#dc3545";
 	this.style.color="white";
 	buttons[0].style.backgroundColor = "";
 	buttons[0].style.color="black";
@@ -108,7 +108,7 @@ function PickStudent(xhttp){
 	var tbody_tr = document.querySelectorAll("#SearchStudentTable tbody tr");
 	for(var i=0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("mouseover", function(){
-			this.style.backgroundColor = 'maroon';
+			this.style.backgroundColor = '#dc3545';
 			this.style.color = "white";
 		});
 		tbody_tr[i].addEventListener("mouseout", function(){
@@ -213,7 +213,7 @@ function PickSection(xhttp){
 	var tbody_tr = document.querySelectorAll("#SearchSectionTable tbody tr");
 	for(var i=0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("mouseover", function(){
-			this.style.backgroundColor = 'maroon';
+			this.style.backgroundColor = '#dc3545';
 			this.style.color = "white";
 		});
 		tbody_tr[i].addEventListener("mouseout", function(){

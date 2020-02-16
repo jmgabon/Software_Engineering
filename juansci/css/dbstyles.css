@@ -40,6 +40,7 @@ body {
 }
 .content-main{
   margin-left: 340px !important;
+  margin-right: 100px !important;
 }
 .card{
   width: 300px;
@@ -84,20 +85,20 @@ body {
 }
 
 .students{
-  background-image: url("student.png");
+  background-image: url("../pictures/student.png");
   background-size: cover;
 }
 
 .teachers{
-  background-image: url("teacher.png");
+  background-image: url("../pictures/teacher.png");
   background-size: cover;
 }
 .rooms{
-  background-image: url("rooms.png");
+  background-image: url("../pictures/room.png");
   background-size: cover;
 }
 .classes{
-  background-image: url("classes.png");
+  background-image: url("../pictures/classes.png");
   background-size: cover;
 }
 .font-sm{

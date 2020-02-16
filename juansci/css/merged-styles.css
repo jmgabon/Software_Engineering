@@ -52,15 +52,15 @@
             height: 28px;
             width: 30px;
             color: white;
-            background-color: maroon;
-            border: 2px solid maroon;
+            background-color: #dc3545;
+            border: 2px solid #dc3545;
             font-size: 16px;
             border-radius: 3px;
         }
         
         .modal-button:hover {
             background-color: white;
-            color: maroon;
+            color: #dc3545;
         }
         
         .small {
@@ -236,7 +236,7 @@
         .rounded-pill {
             color: white;
             font-weight: 500;
-            background-color: maroon;
+            background-color: #dc3545;
             border: none;
             width: 80px;
             height: 30px;
@@ -249,8 +249,8 @@
         
         .rounded-pill:hover {
             background-color: white;
-            border: 2px solid maroon;
-            color: maroon;
+            border: 2px solid #dc3545;
+            color: #dc3545;
         }
         
         .footer {
