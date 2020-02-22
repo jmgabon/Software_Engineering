@@ -10,27 +10,19 @@ const wrapperGradeSorter = (function() {
         btnSaveSubj: '#btnSaveSubj',
     }
 
+
     let setSubjectListDB = function(grLvl) {
         let query = '';
 
-        query += 'SELECT grade_sortable.OrderNumber, subjectcode.SubjectCode, subjectcode.SubjectDescription ';
+        query += 'SELECT subjectcode.SubjectCode ';
         query += 'FROM subjectcode ';
         query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
         query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
-        query += 'GROUP BY grade_sortable.OrderNumber ASC ';
-
-        // query += 'SELECT subjectcode.SubjectCode, subjectcode.SubjectDescription ';
-        // query += 'FROM subjectcode ';
-        // query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
+        query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+        query += 'ORDER BY grade_sortable.OrderNumber ASC ';
 
         SimplifiedQuery('SELECT', query, '', getSubjectListDB);
     }
-
-    // SELECT grade_sortable.OrderNumber, subjectcode.SubjectCode, subjectcode.SubjectDescription 
-    // FROM subjectcode 
-    // JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode 
-    // WHERE subjectcode.GradeLevel IN (' + grLvl + ') 
-    // GROUP BY grade_sortable.OrderNumber ASC 
 
 
     let getSubjectListDB = function(xhttp) {
@@ -66,9 +58,8 @@ const wrapperGradeSorter = (function() {
         }
     }
 
-    let sortSubject = function(listSubject, onUpdate) {
+    let sortSubject = function(listSubject) {
         let dragEl;
-        let clickEl;
 
         [].slice.call(listSubject.children).forEach(function(itemEl) {
             itemEl.draggable = true;

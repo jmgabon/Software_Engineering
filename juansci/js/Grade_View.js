@@ -38,6 +38,7 @@ let sectionNum;
 let sectionName;
 let principalName;
 let adviserName;
+let numFailed;
 
 let trTableGrade;
 
@@ -133,7 +134,10 @@ let createTBodySubj = function(subj) {
             arrSubjCode.push(subj[i]['SubjectCode']);
 
             // finds MAPEH, gets children
-            if (subj[i]['SubjectCode'].includes('MAPEH')) {
+            if (subj[i]['SubjectCode'] === 'MAPEH 7' ||
+                subj[i]['SubjectCode'] === 'MAPEH 8' ||
+                subj[i]['SubjectCode'] === 'MAPEH 9' ||
+                subj[i]['SubjectCode'] === 'MAPEH 10') {
                 Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).forEach((key) => {
                     tr = document.createElement('tr');
 
@@ -159,11 +163,12 @@ let createTBodySubj = function(subj) {
 let setSubjectListDB = function(grLvl) {
     let query = '';
 
-    query += 'SELECT grade_sortable.OrderNumber, subjectcode.SubjectCode, subjectcode.SubjectDescription ';
+    query += 'SELECT subjectcode.SubjectCode, subjectcode.SubjectDescription ';
     query += 'FROM subjectcode ';
     query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
     query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
-    query += 'GROUP BY grade_sortable.OrderNumber ASC ';
+    query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+    query += 'ORDER BY grade_sortable.OrderNumber ASC ';
 
     SimplifiedQuery('SELECT', query, '', getSubjectListDB);
 }
@@ -337,7 +342,10 @@ function getAveMAPEH() {
 
     for (let i = 0; i < trTableGrade.length; i++) {
 
-        if (trTableGrade[i].textContent.includes('MAPEH')) {
+        if (trTableGrade[i].textContent === 'MAPEH 7' ||
+            trTableGrade[i].textContent === 'MAPEH 8' ||
+            trTableGrade[i].textContent === 'MAPEH 9' ||
+            trTableGrade[i].textContent === 'MAPEH 10') {
             for (let j = 1; j <= 4; j++) {
                 let aveMAPEH = 0;
                 let isMAPEHGradeCompleted = true;
@@ -362,6 +370,8 @@ function getAveMAPEH() {
 
 
 function calculateFinalWithRemark() {
+    numFailed = 0;
+
     for (let i = 0; i < trTableGrade.length - 1; i++) {
         let isRowGradeCompleted = true;
 
@@ -382,10 +392,12 @@ function calculateFinalWithRemark() {
             finalRating = finalRating.toFixed(0);
             trTableGrade[i].cells[5].textContent = finalRating;
 
-            if (finalRating >= 75)
+            if (finalRating >= 75) {
                 trTableGrade[i].cells[6].textContent = 'PASSED';
-            else
+            } else {
                 trTableGrade[i].cells[6].textContent = 'FAILED';
+                numFailed++;
+            }
         }
     }
 }
@@ -429,7 +441,13 @@ function calculateAverage() {
     if (GWA == '') {
         remarksGWA = '';
     } else if (GWA >= 75) {
-        remarksGWA = 'PROMOTED';
+        if (numFailed === 0) {
+            remarksGWA = 'PROMOTED';
+        } else if ((numFailed === 1) || (numFailed === 2)) {
+            remarksGWA = 'PROMOTED (CONDITIONAL)';
+        } else {
+            remarksGWA = 'RETAINED';
+        }
     } else {
         remarksGWA = 'RETAINED';
     }

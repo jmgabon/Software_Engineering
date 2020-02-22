@@ -173,7 +173,7 @@
             <div class="col-6">
                 <p class="text-right">LRN: <?php echo $LRNNum ?></p>
                 <br />
-                <h5 class="text-center p-0 m-0">SAN JUAN CITY NATIONAL HIGH SCHOOL</br>
+                <h5 class="text-center p-0 m-0">SAN JUAN CITY SCIENCE HIGH SCHOOL</br>
                 (JUNIOR HIGH SCHOOL)</h5>
                 <p class="text-center mb-4 ">School Year: <?php echo $schoolYear ?></p>
                 <br />

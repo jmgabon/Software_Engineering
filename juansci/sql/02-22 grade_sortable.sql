@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2020 at 03:44 PM
+-- Generation Time: Feb 22, 2020 at 11:40 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -44,6 +44,16 @@ CREATE TABLE `grade_sortable` (
 --
 ALTER TABLE `grade_sortable`
   ADD UNIQUE KEY `SubjectCode` (`SubjectCode`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `grade_sortable`
+--
+ALTER TABLE `grade_sortable`
+  ADD CONSTRAINT `grade_sortable_ibfk_1` FOREIGN KEY (`SubjectCode`) REFERENCES `subjectcode` (`SubjectCode`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

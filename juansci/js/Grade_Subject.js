@@ -112,18 +112,22 @@ function getSubject(xhttp) {
             input_SubjectCode.value = SubjectCode;
             txt_SubjectCode.innerHTML = SubjectCode;
 
-            if (!input_SubjectCode.value.includes('MAPEH')) {
-                labelMAPEH.style.display = 'none';
-                RemoveChildNodes(tbody);
-                setQuarterDB();
-                setAdviserNameDB();
-                setStudentListDB();
-            } else {
+            if (input_SubjectCode.value === 'MAPEH 7' ||
+                input_SubjectCode.value === 'MAPEH 8' ||
+                input_SubjectCode.value === 'MAPEH 9' ||
+                input_SubjectCode.value === 'MAPEH 10') {
                 labelMAPEH.style.display = 'block';
                 selectMAPEH.value = selectMAPEH.options[0].value;
                 RemoveChildNodes(tbody);
                 setQuarterDB();
                 setAdviserNameDB();
+
+            } else {
+                labelMAPEH.style.display = 'none';
+                RemoveChildNodes(tbody);
+                setQuarterDB();
+                setAdviserNameDB();
+                setStudentListDB();
             }
 
             console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
@@ -191,9 +195,9 @@ function setSubMAPEH() {
 
 function enablerQuarter(q) {
     if (q == quarterSelected) {
-        return false
+        // return false
     }
-    return true
+    // return true
 }
 
 

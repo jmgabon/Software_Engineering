@@ -2,6 +2,7 @@
 
 
 let parent_id = 'student';
+let numFailed;
 let trTableGrade;
 let arrSubjCode = [];
 
@@ -52,13 +53,20 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
     function getScholasticRecordInfo(xhttp) {
         try {
             let jsonSchoInfo = JSON.parse(xhttp.responseText);
-
-            document.querySelectorAll('#txt_gradeLevel')[tblLen].textContent = gradeLevel;
+            console.log(jsonSchoInfo);
 
             if (jsonSchoInfo.length !== 0) {
-                document.querySelectorAll('#txt_Adviser')[tblLen].textContent = jsonSchoInfo[0][0];
-            } else {
-                document.querySelectorAll('#txt_Adviser')[tblLen].textContent = 'N/A'
+                let firstSY = Number(jsonSchoInfo[0]['DateCreated'].slice(0, 4));
+
+
+                document.querySelectorAll('#txt_school')[tblLen].textContent = 'San Juan City Science High School';
+                document.querySelectorAll('#txt_schoolID')[tblLen].textContent = '305607';
+                document.querySelectorAll('#txt_district')[tblLen].textContent = '1';
+                document.querySelectorAll('#txt_division')[tblLen].textContent = 'Division of San Juan City';
+                document.querySelectorAll('#txt_region')[tblLen].textContent = 'National Capital Region';
+                document.querySelectorAll('#txt_gradeLevel')[tblLen].textContent = gradeLevel;
+                document.querySelectorAll('#txt_schoolYear')[tblLen].textContent = firstSY + '-' + (firstSY + 1);
+                document.querySelectorAll('#txt_Adviser')[tblLen].textContent = jsonSchoInfo[0]['Name'];
             }
 
         } catch (err) {
@@ -71,12 +79,13 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
 
     let query = '';
 
-    query += 'SELECT teacher.Name ';
-    query += 'FROM teacher ';
-    query += 'LEFT JOIN student_section ';
-    query += 'ON teacher.SectionNum = student_section.SectionNum ';
-    query += 'WHERE student_section.LRNNum IN (' + txt_LRN.textContent + ') ';
-    query += 'AND student_section.GradeLevel IN (' + gradeLevel + ') ';
+    query += 'SELECT teacher_backup.Name, student_section_backup.DateCreated ';
+    query += 'FROM teacher_backup ';
+    query += 'LEFT JOIN student_section_backup ';
+    query += 'ON teacher_backup.SectionNum = student_section_backup.SectionNum ';
+    query += 'WHERE student_section_backup.LRNNum IN (' + txt_LRN.textContent + ') ';
+    query += 'AND student_section_backup.GradeLevel IN (' + gradeLevel + ') ';
+    query += 'ORDER BY student_section_backup.DateCreated DESC ';
 
     SimplifiedQuery('SELECT', query, '', getScholasticRecordInfo);
 }
@@ -84,22 +93,22 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
 
 modal_button.addEventListener('click', function() {
     this.style.backgroundColor = '';
-    let theadID = 'LRNNum@LastName@FirstName@MiddleName@Birthday@Gender';
-    let theadHTML = 'LRN Number@Last Name@First Name@Middle Name@Birthday@Gender';
+    let theadID = 'LRNNum@LastName@FirstName@MiddleName@Birthday@Gender@DateCreated';
+    let theadHTML = 'LRN Number@Last Name@First Name@Middle Name@Birthday@Gender@Date Created';
     CreateInput('SearchStudent', 'search', modal_body);
     document.querySelector('#SearchStudent').className = 'modal-search';
-    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Birthday@Gender');
+    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'Birthday@Gender');
     document.querySelector('thead').className = 'dark';
     openModal('Select Student', 'Student');
 
     let Search = function() {
         SearchWithQuery(
-            'student',
+            'student_backup',
             null,
             GetID(document.querySelectorAll('#SearchStudentTable thead td'), 0),
             null,
             null,
-            'student.LRNNum = student_section.LRNNum',
+            'student_backup.LRNNum = student_section_backup.LRNNum',
             document.getElementById('SearchStudent'),
             null,
             PickStudent
@@ -205,7 +214,10 @@ let setSubjectListDB = function(tblLen, iArrSubjCode, gradeLevel) {
                 arrSubjCode[iArrSubjCode].push(subj[i]['SubjectCode']);
 
                 // finds MAPEH, gets children
-                if (subj[i]['SubjectCode'].includes('MAPEH')) {
+                if (subj[i]['SubjectCode'] === 'MAPEH 7' ||
+                    subj[i]['SubjectCode'] === 'MAPEH 8' ||
+                    subj[i]['SubjectCode'] === 'MAPEH 9' ||
+                    subj[i]['SubjectCode'] === 'MAPEH 10') {
                     Object.keys(objMAPEH[indexgradeLevel(gradeLevel)]).forEach((key) => {
                         tr = document.createElement('tr');
 
@@ -247,11 +259,12 @@ let setSubjectListDB = function(tblLen, iArrSubjCode, gradeLevel) {
 
     let query = '';
 
-    query += 'SELECT grade_sortable.OrderNumber, subjectcode.SubjectCode, subjectcode.SubjectDescription ';
+    query += 'SELECT subjectcode.SubjectCode, subjectcode.SubjectDescription ';
     query += 'FROM subjectcode ';
     query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
     query += 'WHERE subjectcode.GradeLevel IN (' + gradeLevel + ') ';
-    query += 'GROUP BY grade_sortable.OrderNumber ASC ';
+    query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+    query += 'ORDER BY grade_sortable.OrderNumber ASC ';
 
     SimplifiedQuery('SELECT', query, '', getSubjectListDB);
 }
@@ -298,9 +311,10 @@ function setGradeSubjDB(tblLen, iArrSubjCode, gradeLevel) {
     let query = '';
 
     query += 'SELECT SubjectCode, Quarter, GradeRating ';
-    query += 'FROM grade_subject ';
+    query += 'FROM grade_subject_backup ';
     query += 'WHERE LRNNum IN (' + txt_LRN.textContent + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
+    query += 'ORDER BY DateCreated ASC ';
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
 }
@@ -309,7 +323,10 @@ function setGradeSubjDB(tblLen, iArrSubjCode, gradeLevel) {
 function getAveMAPEH(iArrSubjCode, gradeLevel) {
     for (let i = 0; i < trTableGrade.length; i++) {
 
-        if (trTableGrade[i].textContent.includes('MAPEH')) {
+        if (trTableGrade[i].textContent === 'MAPEH 7' ||
+            trTableGrade[i].textContent === 'MAPEH 8' ||
+            trTableGrade[i].textContent === 'MAPEH 9' ||
+            trTableGrade[i].textContent === 'MAPEH 10') {
             for (let j = 1; j <= 4; j++) {
                 let aveMAPEH = 0;
                 let isMAPEHGradeCompleted = true;
@@ -334,6 +351,8 @@ function getAveMAPEH(iArrSubjCode, gradeLevel) {
 
 
 function calculateFinalWithRemark() {
+    numFailed = 0;
+
     for (let i = 0; i < trTableGrade.length - 1; i++) {
         let isRowGradeCompleted = true;
 
@@ -354,10 +373,12 @@ function calculateFinalWithRemark() {
             finalRating = finalRating.toFixed(0);
             trTableGrade[i].cells[5].textContent = finalRating;
 
-            if (finalRating >= 75)
+            if (finalRating >= 75) {
                 trTableGrade[i].cells[6].textContent = 'PASSED';
-            else
+            } else {
                 trTableGrade[i].cells[6].textContent = 'FAILED';
+                numFailed++;
+            }
         }
     }
 }
@@ -402,7 +423,13 @@ function calculateAverage(iArrSubjCode, gradeLevel) {
     if (GWA == '') {
         remarksGWA = '';
     } else if (GWA >= 75) {
-        remarksGWA = 'PROMOTED';
+        if (numFailed === 0) {
+            remarksGWA = 'PROMOTED';
+        } else if ((numFailed === 1) || (numFailed === 2)) {
+            remarksGWA = 'PROMOTED (CONDITIONAL)';
+        } else {
+            remarksGWA = 'RETAINED';
+        }
     } else {
         remarksGWA = 'RETAINED';
     }
@@ -413,17 +440,15 @@ function calculateAverage(iArrSubjCode, gradeLevel) {
 
 
 let init = (function() {
-    let gradeLevel = 7;
-    let numberOfTables = 4;
+    let gradeLevels = [7, 8, 9, 10];
     let scholasticRecord = document.querySelector("#scholasticRecord");
     let scholasticRecordHTML = scholasticRecord.innerHTML;
 
-    for (let i = 1; i < numberOfTables; i++) {
+    for (let i = 1; i < gradeLevels.length; i++) {
         scholasticRecord.insertAdjacentHTML("afterbegin", scholasticRecordHTML);
     }
 
-    for (let i = 0; i < numberOfTables; i++) {
-        setSubjectListDB(i, i, gradeLevel);
-        gradeLevel++;
+    for (let i = 0; i < gradeLevels.length; i++) {
+        setSubjectListDB(i, i, gradeLevels[i]);
     }
 })();
