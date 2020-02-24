@@ -1,7 +1,7 @@
 <?php
   session_start();
   if($_SESSION['id'] === null || $_SESSION['access'] != "admin"){
-    header('Location: ../portal');
+    header('Location: ../');
   }
 ?>
 <!DOCTYPE html>
@@ -50,6 +50,7 @@
           <div class="ml-auto d-none d-md-block">
             
             <a href="http://localhost/juansci/wordpress/wp-admin/" class="btn btn-danger text-light">Manage Home</a>
+            <a href="../" class="btn btn-danger text-light">Log Out</a>
           </div>
       </nav>
       <!---------------SIDEBAR--------------->

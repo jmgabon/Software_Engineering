@@ -2,7 +2,7 @@ var btn_close = document.querySelector("#modal #close");
 var modal_title = document.querySelector("#modal-title");
 var modal = document.querySelector("#modal");
 
-btn_close.addEventListener("click", closeModal);
+// btn_close.addEventListener("click", closeModal);
 
 function closeModal(modalContent){
 	modal.style.display = "none";
