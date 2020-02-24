@@ -1,6 +1,6 @@
 let button = document.querySelectorAll('button');
 let input = document.querySelectorAll('input');
-let select = document.querySelector('select');
+// let select = document.querySelector('select');
 let verify = document.getElementById("verify");
 //LOGIN
 // console.log(window.location.href.search("/Portal.php") != -1);
@@ -10,21 +10,11 @@ button[0].addEventListener("click", function(event){
 	// console.log("HELLO");
 	var data = 'username=' + input[0].value;
 	data += '&pass=' + input[1].value;
-	data += '&access=' + select.options[select.selectedIndex].value;
+	// data += '&access=' + select.options[select.selectedIndex].value;
 	if(this.innerHTML == "Confirm"){
-		// var content = {};
-		// user = null;
-		// content['username'] = input[0].value;
-		// content['pass'] = input[1].value;
 		if(input[1].value == input[2].value){
 			data += "&state=changepass";
 			AJAX(data, true, "post", "php/Authenticate.php", true, PasswordChanged);
-			// UpdateWithPreset(
-			// 	"Access",
-			// 	content,
-			// 	0, 
-			// 	PasswordChanged
-			// );
 		}
 		else{
 			alert("PASSWORD NOT MATCH");
@@ -35,14 +25,13 @@ button[0].addEventListener("click", function(event){
 		data += "&state=login"; 
 		AJAX(data, true, "post", "php/Authenticate.php", true, test);
 	}
-	// console.log("LOGIN");
 });
 
 function PasswordChanged(xhttp){
 	alert("PASSWORD CHANGED");
+	verify.value = "";
 	verify.style.display = "none";
 	button[0].innerHTML = "Log In";
-	// button[1].removeAttributeNode(disabled);
 }
 
 input[1].addEventListener("change", function(){

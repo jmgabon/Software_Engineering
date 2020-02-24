@@ -4,12 +4,12 @@
 	$username = $_POST['username'];
 	$password = $_POST['pass'];
 	$state = $_POST['state'];
-	$access = strtolower($_POST['access']);
+	// $access = strtolower($_POST['access']);
 	if($state == 'login'){
-		$stmt = $db->prepare("SELECT * FROM access WHERE username = ? AND pass=ENCODE(?, 'secret') AND access = ?");
+		$stmt = $db->prepare("SELECT * FROM access WHERE username = ? AND pass=ENCODE(?, 'secret')");
 		$stmt->bindValue(1, $username);
 		$stmt->bindValue(2, $password);
-		$stmt->bindValue(3, $access);
+		// $stmt->bindValue(3, $access);
 
 		$stmt->execute();
 		$row = $stmt->fetch();
