@@ -17,6 +17,7 @@
 				<!-- <td>Section Number</td> -->
 				<td id="LRNNum">LRN Number</td>
 				<td id="LastName">Last Name</td>
+				<td id="Extension">Extension</td>
 				<td id="FirstName">First Name</td>
 				<td id="MiddleName">Middle Name</td>
 				<td id="Birthday" style="display: none;"></td>

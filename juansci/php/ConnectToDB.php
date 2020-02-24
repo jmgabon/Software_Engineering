@@ -1,6 +1,9 @@
 <?php
 
-$dsn = 'mysql:dbname=sjshs;host=localhost;port=3306';
+// $dsn = 'mysql:dbname=juanscic_MIS;host=juansci.com';//
+// $username = 'juanscic_rtucpe';
+// $password = 'Ju@nsci2020';
+$dsn = 'mysql:dbname=sjshs;host=localhost;port=3306';//
 $username = 'tgold';
 $password = 'payaman';
 try { //UNBUFFERED
@@ -12,6 +15,7 @@ try { //UNBUFFERED
     //BUFFERED
 } 
 catch(PDOException $e) {
-    die('Could not connect to the database:<br/>' . $e);
+    // die('Could not connect to the database:<br/>' . $e);
+    echo('Could not connect to the database:<br/>' . $e);
 }
 ?>

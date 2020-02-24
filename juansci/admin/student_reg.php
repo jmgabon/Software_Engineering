@@ -14,6 +14,7 @@
    <p><label for="LRNNum"><b>LRN: </b></label><input type="text" id = "LRNNum" name = "LRNNum" required minlength="12" maxlength="12" /></p>
    <p class="h5 pb-2">Student's Name</p>
 	<p><label for="LastName">Last Name: </label><input type="text" id = "LastName" name = "LastName" required/></p>
+   <p><label for="Extension">Extension: </label><input type="text" id = "Extension" name = "Extension" required/></p>
 	<p><label for="FirstName">First Name: </label><input type="text" id = "FirstName" name = "FirstName" required/></p>
 	<p><label for="MiddleName">Middle Name: </label><input type="text" id = "MiddleName" name = "MiddleName"/></p>
 

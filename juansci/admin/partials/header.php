@@ -1,7 +1,7 @@
 <?php
   session_start();
   if($_SESSION['id'] === null || $_SESSION['access'] != "admin"){
-    header('Location: ../Portal.php');
+    header('Location: ../portal');
   }
 ?>
 <!DOCTYPE html>

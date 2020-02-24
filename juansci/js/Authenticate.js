@@ -5,11 +5,13 @@ let verify = document.getElementById("verify");
 //LOGIN
 // console.log(window.location.href.search("/Portal.php") != -1);
 // console.log(window.location.href.toString());
-button[0].addEventListener("click", function(){
+button[0].addEventListener("click", function(event){
+	event.preventDefault();
+	// console.log("HELLO");
 	var data = 'username=' + input[0].value;
 	data += '&pass=' + input[1].value;
-	data += '&access=' + select.options[select.selectedIndex].text;
-	if(this.innerHTML == "CONFIRM"){
+	data += '&access=' + select.options[select.selectedIndex].value;
+	if(this.innerHTML == "Confirm"){
 		// var content = {};
 		// user = null;
 		// content['username'] = input[0].value;
@@ -28,7 +30,7 @@ button[0].addEventListener("click", function(){
 			alert("PASSWORD NOT MATCH");
 		}
 	}
-	else if(this.innerHTML == "LOGIN"){
+	else if(this.innerHTML == "Log In"){
 		console.log(data);
 		data += "&state=login"; 
 		AJAX(data, true, "post", "php/Authenticate.php", true, test);
@@ -39,8 +41,8 @@ button[0].addEventListener("click", function(){
 function PasswordChanged(xhttp){
 	alert("PASSWORD CHANGED");
 	verify.style.display = "none";
-	button[0].innerHTML = "LOGIN";
-	button[1].removeAttributeNode(disabled);
+	button[0].innerHTML = "Log In";
+	// button[1].removeAttributeNode(disabled);
 }
 
 input[1].addEventListener("change", function(){
@@ -59,7 +61,7 @@ function test(xhttp){
 			input[0].setAttributeNode(disabled);
 			// button[1].setAttributeNode(disabled);
 			verify.style.display = "";
-			button[0].innerHTML = "CONFIRM";
+			button[0].innerHTML = "Confirm";
 		}
 		else{
 			// console.log(xhttp.responseText);
@@ -69,16 +71,17 @@ function test(xhttp){
 	else{
 		alert("Wrong username or password");
 	}
+	// console.log("HELLo");
 }
 
 //RESET
-button[1].addEventListener("click", function(){
-	input.forEach((input)=>{
-		input.value = "";
-		console.log(this);
-	});
-	console.log("RESET");
-});
+// button[1].addEventListener("click", function(){
+// 	input.forEach((input)=>{
+// 		input.value = "";
+// 		console.log(this);
+// 	});
+// 	console.log("RESET");
+// });
 // [1,2,3].map(AA);
 
 // function AA(){
