@@ -58,6 +58,7 @@
 		// echo($preparedStatement);
 		// "UPDATE " . $table2 . " SET " . $table2 . ".".$foreignKey." = (SELECT ".$table1.".".$foreignKey." FROM ".$table1." ORDER BY ".$table1.".".$foreignKey." DESC LIMIT 1) WHERE ".$table2.".".$fieldToUpdate." = ".$fieldToUpdateVal;
 		
+		/*//REMOVED
 		if(!is_null($fieldToUpdateVal)){ //Checks if $fieldToUpdateVal is null
 			$preparedStatement = "UPDATE " . $table2 . " SET " . $table2 . ".".$foreignKey." = NULL WHERE ".$table2.".".$foreignKey." = ".$colVal[0];
 			// echo $preparedStatement;
@@ -67,6 +68,7 @@
 			$stmt = $db->prepare($preparedStatement);
 			$stmt->execute();
 		}
+		*/
 		$stmt->closeCursor();
 		echo "Successful";
 	}

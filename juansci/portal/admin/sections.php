@@ -13,8 +13,8 @@
 		<button onclick="CreateModal('Available Rooms', 'Room')">&check;</button>
 	</p>
 	<p>
-		<label for="">Adviser: <br/><input type="search" id="txt_TeacherEmployeeNum" style="display: none;" />
-		<input type="search" id="txt_TeacherName" disabled/></label>
+		<label for="">Adviser: <br/><input type="search" id="txt_EmployeeNum" style="display: none;" />
+		<input type="search" id="" disabled/></label>
 		<button onclick="CreateModal('Available Teachers', 'Teacher')">&check;</button>
 	</p>
 	<!-- <p class="mt-2"><label for="">Population: <input type="number" id="Population" disabled value="0"/></label> -->
@@ -49,11 +49,11 @@
 			<thead class="dark">
 				<tr>
 				<!-- <td>Section Number</td> -->
-				<td id="SectionNum" style="display: none;">Section Name</td>
+				<td id="SectionNum" style="display: none;">Section Number</td>
 				<td id="SectionName">Section Name</td>
 				<td id="RoomNum">Room Number</td>
-				<td id="Teacher.EmployeeNum" style="display: none"></td>
-				<td id="Teacher.Name">Adviser</td>
+				<td id="Section.EmployeeNum" style="display: none"></td>
+				<td id="Adviser">Adviser</td>
 				<td id="Population">Population</td>
 				<td id="GradeLevel">GradeLevel</td>
 				<!-- <td id="Population">Population</td> -->

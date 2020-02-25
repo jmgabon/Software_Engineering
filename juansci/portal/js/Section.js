@@ -17,31 +17,26 @@ var Search;
 console.log(GetID(document.querySelectorAll("#SearchSectionTable thead td"), 0));
 var table1, table2;
 
-// Search = function(){ //set Search function inside cms.js
-// 	// SearchWithQuery(
-// 	// 	"Section",
-// 	// 	"Teacher", 
-// 	// 	GetID(document.querySelectorAll("#SearchSectionTable thead td"), 0),
-// 	// 	// + "(SELECT COUNT(LRNNum) FROM student_section INNER JOIN section WHERE section.SectionNum = student_section.SectionNum)"
-// 	// 	"Adviser=Teacher.Name", //Adviser is equivalent to TeacherName field 
-// 	// 	"LEFT JOIN",
-// 	// 	"teacher.SectionNum = section.SectionNum",
-// 	// 	searchSection,
-// 	// 	null,
-// 	// 	CreateTBody
-// 	// );
-// }
 Search = function(){ //set Search function inside cms.js
 	var query = "";
 	var crud = "";
 	var basequery = query;
 	var nospaces;
 	var content;
-	query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
+	// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
+	query += "SELECT section.SectionNum,section.SectionName, RoomNum, ";
+	query += "employee.EmployeeNum, "
+	query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
 	query += "COUNT(LRNNum) AS Population, section.GradeLevel ";
-	query += "FROM section LEFT JOIN teacher ON teacher.SectionNum = section.SectionNum ";
+	// query += "section.GradeLevel, ";
+	// query += "COUNT(LRNNum) AS Population, section.GradeLevel FROM section ";
+	query += "FROM section LEFT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
+
 	query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
+	// query += "GROUP BY section.SectionNum";
+	// query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
 	crud = "SELECT";
+	console.log(query);
 	basequery = query;
 	nospaces;
 	content;
@@ -166,7 +161,7 @@ function CreateModal(header, title){ //Shows modal in html that is hidden then c
 	}
 
 	else if(title == 'Teacher'){
-		theadID = "EmployeeNum@Name";
+		theadID = "employee.EmployeeNum@Name";
 		theadHTML = "Employee Number@Name";
 		CreateInput("SearchTeacher", "search", modal_body);
 		CreateTable("SearchTeacherTable", theadID, theadHTML, "@", modal_body, 0, null);
@@ -176,20 +171,40 @@ function CreateModal(header, title){ //Shows modal in html that is hidden then c
 		SearchTeacherSection();
 		searchTeacher.addEventListener("change", SearchTeacherSection);
 		function SearchTeacherSection(){
-			SearchWithQuery(
-				"Teacher",
-				"Section",
-				GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0),
-				null,
-				"LEFT JOIN",
-				"teacher.SectionNum = section.SectionNum",
-				searchTeacher,
-				"teacher.SectionNum IS NULL",
-				PickAdviser
-			);
+			var query = "";
+			var crud = "";
+			var basequery = query;
+			var nospaces;
+			var content;
+			query += "SELECT employee.EmployeeNum, ";
+			query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Name ";
+			query += "FROM section RIGHT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
+			query += "WHERE section.EmployeeNum IS NULL ";
+			crud = "SELECT";
+			console.log(query);
+			basequery = query;
+			nospaces;
+			content;
+			nospaces = (searchSection.value).trim();
+			content = nospaces.split("=");
+			if(content.length > 1){
+				content[0] = content[0].replace(/ /g, "");
+				content[0] = content[0].replace("Number" , "Num");
+				content[1] = content[1].trim();
+				if(content[0].toLowerCase() != "teacher" && content[0].toLowerCase() != "adviser"){
+					query += " WHERE " + "section." +content[0] + " LIKE '" + content[1]+ "%'";
+				}
+				else{
+					query += " WHERE " + "teacher.Name LIKE'" + content[1]+ "%'";
+				}
+			}
+			else if(content.length == 1){
+				query += "";
+			}
+			// query += "GROUP BY section.SectionNum";
+			SimplifiedQuery(crud, query, searchSection, PickAdviser);
 		}
 	}
-
 	openModal(header, title);
 }
 
@@ -226,8 +241,9 @@ function PickAdviser(xhttp){
 	// var tbody = document.querySelector("#SearchRoomTable tbody");
 	for(var i = 0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("click", function(){
-			document.getElementById("txt_TeacherName").value = this.childNodes[1].innerHTML;
-			document.getElementById("txt_TeacherEmployeeNum").value = this.childNodes[0].innerHTML;
+			// document.getElementById("txt_TeacherName").value = this.childNodes[1].innerHTML;
+			document.querySelectorAll("input")[4].value = this.childNodes[1].innerHTML;
+			document.getElementById("txt_EmployeeNum").value = this.childNodes[0].innerHTML;
 			// RemoveChildNodes(tbody); //Deletes whole table after click of a row
 
 			searchTeacher.value = "";

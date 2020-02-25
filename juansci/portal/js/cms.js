@@ -96,7 +96,9 @@ function Create(btn_Create, table2, autoincrement, FK, fieldToUpdate, createCall
 			if(input[i].type == "number" && input[i].value == ""){
 				input[i].value = 0;
 			}
-			content[input[i].id] = input[i].value;
+			if(input[i].id != ''){
+				content[input[i].id] = input[i].value;
+			}
 			input[i].style.backgroundColor = '';
 		}	
 		else{
@@ -318,10 +320,10 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	if(firstResult == null){
 		firstResult = results;
 	}
-	console.log(parent_id);
+	
 	// console.log(firstResult)
 	// console.log(results.length);
-	// console.log(results);
+	console.log(results);
 
 	var thead_td = document.querySelectorAll("#Search" + parent_id + "Table thead tr td");
 	var colNum = document.querySelector("#Search" + parent_id + "Table thead tr").childElementCount;//childElementCount counts child of parent
