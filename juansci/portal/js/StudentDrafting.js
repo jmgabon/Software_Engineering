@@ -139,7 +139,7 @@ buttons[3].addEventListener("click", function(){
 		}
 		else{
 			// button[0].style.backgroundColor = '';
-			theadID = "SectionNum@SectionName@Teacher.Name@Population";
+			theadID = "SectionNum@SectionName@Adviser@Population";
 			theadHTML = "SectionNum@Section Name@Adviser@Population";
 			CreateInput("SearchSection", "search", modal_body);
 			CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, "SectionNum");
@@ -164,9 +164,11 @@ buttons[3].addEventListener("click", function(){
 				var basequery = query;
 				var nospaces;
 				var content;
-				query += "SELECT section.SectionNum,section.SectionName, teacher.Name, ";
+				query += "SELECT section.SectionNum,section.SectionName, ";
+				query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
 				query += "COUNT(LRNNum) AS Population ";
-				query += "FROM section LEFT JOIN teacher ON teacher.SectionNum = section.SectionNum ";
+				query += "FROM section LEFT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
+				// query += "FROM section LEFT JOIN teacher ON teacher.SectionNum = section.SectionNum ";
 				query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
 				query += "WHERE section.GradeLevel =" + txt_GradeLevel.value +" ";
 				crud = "SELECT";

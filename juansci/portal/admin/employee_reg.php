@@ -8,7 +8,7 @@
    <div id = "FirstCol">
    <p class="h5 pb-2">Employees's Name</p>
    <p><label for="LastName">Last Name: </label><input type="text" id = "LastName" name = "LastName" required/></p>
-   <p><label for="Extension">Extension: </label><input type="text" id = "Extension" name = "Extension" required/></p>
+   <p><label for="Extension">Extension: </label><input type="text" id = "Extension" name = "Extension"/></p>
    <p><label for="FirstName">First Name: </label><input type="text" id = "FirstName" name = "FirstName" required/></p>
    <p><label for="MiddleName">Middle Name: </label><input type="text" id = "MiddleName" name = "MiddleName"/></p>
    <p><label for="Birthday" class="h5 pt-2" required>Birthday </label></p>
