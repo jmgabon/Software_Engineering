@@ -48,12 +48,44 @@ buttons[0].addEventListener("click", function(){
 	var searchTeacher = document.getElementById('SearchTeacher'); 
 	// console.log(GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0));
 	Search = function(){
-		SearchWithoutQuery(
-			"Teacher",
-			searchTeacher,
-			GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0),
-			PickTeacher
-		);
+		var query = "";
+		var crud = "";
+		var basequery = query;
+		var nospaces;
+		var content;
+		// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
+		query += "SELECT EmployeeNum, ";
+		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
+		query += "FROM employee ";
+
+		// query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
+		crud = "SELECT";
+		console.log(query);
+		basequery = query;
+		nospaces;
+		content;
+		nospaces = (searchTeacher.value).trim();
+		content = nospaces.split("=");
+		if(content.length > 1){
+			content[0] = content[0].replace(/ /g, "");
+			content[0] = content[0].replace("Number" , "Num");
+			content[1] = content[1].trim();
+				// console.log(content[0].toLowerCase() == "adviser");
+			if(content[0].toLowerCase() != "teacher" && content[0].toLowerCase() != "adviser"){
+				query += " WHERE " + "section." +content[0] + " LIKE '" + content[1]+ "%'";
+			}
+			else{
+				query += " WHERE " + "teacher.Name LIKE'" + content[1]+ "%'";
+			}
+		}
+		else if(content.length == 1){
+			// query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
+			query += "";
+		}
+		// query += "GROUP BY section.SectionNum";
+		// query = basequery;
+		// console.log(query);
+		SimplifiedQuery(crud, query, searchTeacher, PickTeacher);
 	}
 	Search();
 

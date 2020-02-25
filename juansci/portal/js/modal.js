@@ -13,7 +13,7 @@ function closeModal(modalContent){
 	RemoveChildNodes(modalContent);
 	currentpage = saved_page;
 
-	if(parent_id != undefined){
+	if(parent_id != undefined && document.querySelector("table").id != ''){
 		CreateTBody(null);
 	}
 	

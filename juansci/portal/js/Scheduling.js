@@ -53,14 +53,16 @@ for(var i = 1; i < tr.length+1; i++){
 
 openSectionModal.addEventListener("click", function(){
 	this.style.backgroundColor = "";
-	theadID = "SectionNum@SectionName@GradeLevel@Teacher.Name";
+	theadID = "SectionNum@SectionName@GradeLevel@Adviser";
 	theadHTML = "Section Number@Section Name@Grade Level@Adviser";
 	CreateInput("SearchSection", "search", modal_body);
 	document.querySelector("#SearchSection").className = "modal-search";
 	CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, "SectionNum");
 	document.querySelector("thead").className = "dark";
 	openModal("Section", "Section");
+	searchSection = document.getElementById("SearchSection");
 	// function SearchWithQuery(table1, table2, columnNames, correction, whatJoin, compare, searchbox, otherQuery, callback){
+	/*		
 	Search = function(){
 		SearchWithQuery(
 			"Section",
@@ -74,12 +76,54 @@ openSectionModal.addEventListener("click", function(){
 			PickSection
 		);
 	}
+	*/
+	Search = function(){
+		var query = "";
+		var crud = "";
+		var basequery = query;
+		var nospaces;
+		var content;
+		// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
+		query += "SELECT section.SectionNum,section.SectionName, GradeLevel, ";
+		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
+		query += "FROM section LEFT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
+
+		// query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
+		crud = "SELECT";
+		console.log(query);
+		basequery = query;
+		nospaces;
+		content;
+		nospaces = (searchSection.value).trim();
+		content = nospaces.split("=");
+		if(content.length > 1){
+			content[0] = content[0].replace(/ /g, "");
+			content[0] = content[0].replace("Number" , "Num");
+			content[1] = content[1].trim();
+				// console.log(content[0].toLowerCase() == "adviser");
+			if(content[0].toLowerCase() != "teacher" && content[0].toLowerCase() != "adviser"){
+				query += " WHERE " + "section." +content[0] + " LIKE '" + content[1]+ "%'";
+			}
+			else{
+				query += " WHERE " + "teacher.Name LIKE'" + content[1]+ "%'";
+			}
+		}
+		else if(content.length == 1){
+			// query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
+			query += "";
+		}
+		// query += "GROUP BY section.SectionNum";
+		// query = basequery;
+		// console.log(query);
+		SimplifiedQuery(crud, query, searchSection, PickSection);
+	}
 	Search();
-	document.getElementById("SearchSection").addEventListener("change", Search);
+	searchSection.addEventListener("change", Search);
 });
 
 function PickSection(xhttp){
 	CreateTBody(xhttp, PickSection);
+	console.log(modal_body);
 	var tbody_tr = document.querySelectorAll("#SearchSectionTable tbody tr");
 	for(var i = 0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("click", function(){

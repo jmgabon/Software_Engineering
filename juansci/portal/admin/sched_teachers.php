@@ -20,6 +20,7 @@
 	<p>
 		<label for="">Teacher: <input type="search" id="txt_TeacherEmployeeNum" style="display: none;" />
 		<input type="search" id="txt_TeacherName" disabled/></label>
+		<!-- 2 -->
 		<button class="modal-button"><i class="far fa-window-restore"></i></button>
 	</p>
 	<p>
