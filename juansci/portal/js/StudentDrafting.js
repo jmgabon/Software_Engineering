@@ -250,14 +250,15 @@ function PickSection(xhttp){
 
 			}
 
-			SimplifiedQuery(crud, query, null, CheckIfUpdated);
+			SimplifiedQuery(crud, query, null, UpdateSection);
 			closeModal(modal_body); 
 		});
 	}
 }
 
-function CheckIfUpdated(xhttp){
-	EmptyNode(inputs);
+function UpdateSection(xhttp){
+	
 	alert(xhttp.responseText);
+	EmptyNode(inputs);
 }
 

@@ -1,6 +1,8 @@
-        
+        <!-- <script type="text/javascript" src="../js/pagination.js"></script> -->
         <script type="text/javascript">
             var user = "<?php echo($_SESSION['access']);?>";
+
+
             // console.log(user);
         </script>
         <script type="text/javascript" src="../js/ajax.js"></script>

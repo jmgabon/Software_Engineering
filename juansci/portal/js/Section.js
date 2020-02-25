@@ -1,5 +1,4 @@
 //POPULATION IS THE PROBLEM
-
 var searchSection = document.getElementById("SearchSection");
 var createSection = document.getElementById("CreateSection");
 var resetSection = document.getElementById("ResetSection");
