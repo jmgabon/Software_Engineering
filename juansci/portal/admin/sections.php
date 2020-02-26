@@ -42,9 +42,18 @@
 	</div>
 	<div class="col-xl-8">
 		<p class="h5 pb-2">List of Sections
-			<label class="float-right" for="SearchRoom">
-				<input placeholder="Search for sections.." type="search" class="mt-1 form-control rounded-0 bg-light" id="SearchSection">
-			</label></p>
+		<label class="float-right" for="SearchRoom">
+				<!-- <input placeholder="Search for sections.." type="search" class="mt-1 form-control rounded-0 bg-light" id="SearchSection"> -->
+		<select class="mt-1 form-control rounded-0 bg-light" id="Category">
+            <option value="SectionNum" selected="selected">Section Number</option>
+            <option value="SectionName">Section Name</option>
+            <option value="RoomNum">Room Number</option>
+            <option value="Adviser">Adviser</option>
+            <option value="Population">Population</option>
+            <option value="GradeLevel">GradeLevel</option>
+        </select>
+        <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="SearchSection">
+		</label></p>
 		<table id="SearchSectionTable">
 			<thead class="dark">
 				<tr>

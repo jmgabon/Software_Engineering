@@ -87,7 +87,7 @@
                  Employees
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="employeesDropdown">
-                <a href="employee_reg.php" class="dropdown-item">Registration</a>
+                <a href="employee_reg.php" onclick="RemoveStorage()" class="dropdown-item">Registration</a>
                 <a href="employee_lst.php" class="dropdown-item">Masterlist</a>
               </div>
             </li>
@@ -134,4 +134,10 @@
             </div>
         </div>
       </nav>
+      <script type="text/javascript">
+      function RemoveStorage(){
+        sessionStorage.removeItem('EmployeeInfo');   
+      }
+         // sessionStorage.removeItem('EmployeeInfo');  
+      </script>
       

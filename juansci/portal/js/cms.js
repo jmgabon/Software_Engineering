@@ -69,7 +69,7 @@ var currentpage = 1;
 //parent_id is the table name (sql)
 // elem.childElementCount - counts child elements 
 function SimplifiedQuery(crud,query,searchbox,callback){
-	txt_search = searchbox;	
+	// txt_search = searchbox;	
 	var data = "crud=" + crud;
 	data += "&query=" + query;
 
@@ -260,14 +260,14 @@ function SearchWithoutQuery(table1, searchbox, columnIDS, callback){
 	// this.columnIDS = columnIDS;
 	data = "table1=" + table1;
 	if(typeof searchbox == "object"){
-		txt_search = searchbox;
+		// txt_search = searchbox;
 		data += "&value=" + searchbox.value;
 	}
 	else{
 		data += "&value=" + searchbox;
 	}
 	data += "&columnIDS=" + JSON.stringify(columnIDS); 
-	// console.log(data);
+	console.log(data);
 	if(typeof callback === "function"){
 		AJAX(data, true, "post", "../php/Search.php", true, callback);	
 	}
@@ -278,7 +278,7 @@ function SearchWithoutQuery(table1, searchbox, columnIDS, callback){
 
 function SearchWithQuery(table1, table2, columnNames, correction, whatJoin, compare, searchbox, otherQuery, callback){
 	var data;
-	txt_search = searchbox;
+	// txt_search = searchbox;
 	// columnIDS = GetID(document.querySelectorAll("#SearchRoomTable thead td"), 0);
 	// console.log(typeof searchbox);
 	data = "table1=" + table1;
@@ -294,7 +294,7 @@ function SearchWithQuery(table1, table2, columnNames, correction, whatJoin, comp
 	data += "&compareWhat=" + compare;
 	data += "&whereQuery=" + otherQuery;
 	data += "&correction=" + correction;
-	// console.log(data);
+	console.log(data);
 	AJAX(data, true, "post", "../php/Search.php", true, callback); 
 }
 
@@ -358,9 +358,10 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 				btn_Edit.innerHTML = "EDIT";
 				btn_Delete.innerHTML = "DELETE";
 				btn_Edit.addEventListener("click", Edit.bind(null, results[i]));
-				btn_Delete.addEventListener("click", Delete.bind(null, results[i])); //Selects ID make sure that first column is ID
+				btn_Delete.addEventListener("click", Delete.bind(null, results[i]));
+				 //Selects ID make sure that first column is ID
 				td.appendChild(btn_Edit);
-				td.appendChild(btn_Delete);
+				// td.appendChild(btn_Delete);
 				class_btn1 = document.createAttribute("class");
 				class_btn2 = document.createAttribute("class");
 				class_btn1.value = "btn_Table"; //

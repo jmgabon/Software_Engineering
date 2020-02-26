@@ -90,6 +90,57 @@ function CreateInput(input_id, type, parentNode){	//Creates input tag with id
 	parentNode.appendChild(p);
 }
 
+function CreateSelect(thead_id, theadHTML, seperator, parentNode){
+	thead_id = thead_id.split(seperator);
+	theadHTML = theadHTML.split(seperator);
+
+	let select = document.createElement("select");
+	for(let i = 0; i < thead_id.length; i++){
+		let option = document.createElement("option");
+		let optionSelected = document.createElement("selected");
+		if(i == 0){
+			optionSelected.value = "selected";
+			option.appendChild(optionSelected);
+		}
+		option.text = theadHTML[i];
+		option.value = thead_id[i];
+		select.appendChild(option);
+	}
+	console.log(thead_id);
+	console.log(theadHTML);
+	parentNode.appendChild(select);
+}
+
+function CreateSearchBox(thead_id, theadHTML, seperator, input_id, type, parentNode){
+	var input = document.createElement("input");
+	var p = document.createElement("p");
+	var inputTYPE = document.createAttribute("type");
+	var inputID = document.createAttribute("id");
+	inputID.value = input_id;
+	inputTYPE.value = type;
+	input.setAttributeNode(inputID);
+
+	thead_id = thead_id.split(seperator);
+	theadHTML = theadHTML.split(seperator);
+
+	let select = document.createElement("select");
+	for(let i = 0; i < thead_id.length; i++){
+		let option = document.createElement("option");
+		let optionSelected = document.createElement("selected");
+		if(i == 0){
+			optionSelected.value = "selected";
+			option.appendChild(optionSelected);
+		}
+		option.text = theadHTML[i];
+		option.value = thead_id[i];
+		select.appendChild(option);
+	}
+	p.appendChild(select);
+	p.appendChild(input);
+
+	parentNode.appendChild(p);
+}
+
 function EmptyNode(node){
 	for(var i = 0; i < node.length; i++){
 		node[i].innerHTML = "";

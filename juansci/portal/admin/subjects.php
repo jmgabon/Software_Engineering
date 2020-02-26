@@ -21,7 +21,14 @@
     <div class="secondCol col col-xl-8">
         <p class="h5 pb-2">List of Subject Codes
         <label class="float-right" for="SearchSubjectCode">
-            <input placeholder="Search for subject codes.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchSubjectCode" style="width: 200px !important;">
+            <!-- <input placeholder="Search for subject codes.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchSubjectCode" style="width: 200px !important;"> -->
+        <select class="mt-1 form-control rounded-0 bg-light" id="Category">
+            <option value="SubjectCode" selected="selected">Subject Code</option>
+            <option value="SubjectDescription">Description</option>
+            <option value="Frequency">Units</option>
+            <option value="GradeLevel">Grade Level</option>
+        </select>
+        <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="SearchSubjectCode">
         </label></p>
         <table id="SearchSubjectCodeTable">
             <thead class="dark">
@@ -42,6 +49,10 @@
     </div>
 		
 </div>	
-
+<!-- <script type="text/javascript">
+     document.getElementById("SearchSubjectCode").addEventListener('change', function(){
+        console.log(parseInt(this.value));
+     });
+</script> -->
 <?php include 'partials/footer.php'; ?>
 <script type="text/javascript" src="../js/SubjectCode.js"></script>

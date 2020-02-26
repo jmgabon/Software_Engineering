@@ -1,13 +1,14 @@
 var searchSubjectCode = document.getElementById("SearchSubjectCode");
 var createSubjectCode = document.getElementById("CreateSubjectCode");
 var resetSubjectCode = document.getElementById("ResetSubjectCode");
+var cat = document.querySelector("#Category");
 // var createSection = document.getElementById("CreateSection");
 
 var parent_id = "SubjectCode";
 var Search = function(){
 	SearchWithoutQuery(
 		parent_id,
-		searchSubjectCode, 
+		cat.options[cat.selectedIndex].value + "=" + searchSubjectCode.value, 
 		GetID(document.querySelectorAll("#SearchSubjectCodeTable thead td"), 1)
 	);
 }
