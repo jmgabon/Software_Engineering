@@ -22,3 +22,11 @@ $("#slide").on("click", function () {
 		hidden=false;
 	}
 });
+
+$('#profileDropdown').on('click', function(){
+    $('#divDropdown').toggleClass('d-block');
+})
+$(window).click(function() {
+    $('#divDropdown').removeClass('d-block');
+    });
+    

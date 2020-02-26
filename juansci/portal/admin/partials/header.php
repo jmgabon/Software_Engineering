@@ -15,20 +15,27 @@
         <link rel="stylesheet" type="text/css" href="../css/dbstyles.css">
         <link rel="stylesheet" type="text/css" href="../css/all.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous&display=swap">
+        <link rel="icon" href="../pictures/logo-new.png">
     </head>
     <script src="../js/jquery-3.4.1.js"></script>
     <body id="test1" class="bg-light">
       <!---------------TOPNAV--------------->
+      
       <nav class="sticky-top navbar shadow bg-dark text-light navbar-expand-lg">
         <div class="container-fluid">
           <p id="demo" class="m-0 p-0"></p>
           
           <a class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user p-0 m-0"></i>
               <span id="user" class="text-capitalize ml-1"></span>
             </a>
+            <div class="d-none" id="divDropdown">
+                <a href="" class="dropdown-item">Profile</a>
+                <a href="../" class="dropdown-item">Logout</a>
+            </div>
           </a>
+          
           <script>
             var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var today  = new Date();
@@ -42,15 +49,13 @@
       
       <!----------------MIDNAV---------------->
       <nav class="navbar shadow bg-white navbar-expand-lg">
+      
         <p id="lead" class="lead nav-item mr-auto lead-margin mb-0"></p>
         <a id="slide" class="navbar-toggler d-md-none" type="button" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fa fa-bars text-dark"></i>
         </a>
-        
           <div class="ml-auto d-none d-md-block">
-            
-            <a href="http://localhost/juansci/wordpress/wp-admin/" class="btn btn-danger text-light">Manage Home</a>
-            <a href="../" class="btn btn-danger text-light">Log Out</a>
+            <a href="" class="btn btn-danger text-light">Manage Home</a>
           </div>
       </nav>
       <!---------------SIDEBAR--------------->
@@ -121,11 +126,16 @@
                     Rooms
                 </a>
             </li>
-            <li id="setting" class="nav-item mb-4">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-cog mr-2"></i>
-                    Settings
-                </a>
+            <li class="nav-item">
+              <a id="setting" class="nav-link dropdown-toggle" href="#" 
+                id="settingsDropdown" role="button" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-clock mr-2"></i>
+                Settings
+              </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
+                <a href="grade_setting.php" class="dropdown-item">Report Card</a>
+              </div>
             </li>
               
           </ul>
@@ -134,4 +144,5 @@
             </div>
         </div>
       </nav>
+      
       
