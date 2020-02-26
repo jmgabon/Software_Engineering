@@ -1,14 +1,14 @@
 var searchStudent = document.getElementById("SearchStudent");
 
 var modal_body = document.getElementById("modal-body");
-
+let cat = document.getElementById("Category");
 var parent_id = "Student";
 var saved_id;
 
 var Search = function(){
 	SearchWithoutQuery(
 		parent_id,
-		searchStudent, 
+		cat.options[cat.selectedIndex].value + "=" + searchStudent.value,
 		GetID(document.querySelectorAll("#SearchStudentTable thead td"), 1),
 		null
 	);

@@ -11,9 +11,14 @@
         <div class="secondCol col-xl-12">
             <p class="h5 pb-2">
                 <label class="float-right" for="SearchEmployee">
-                    <select>
+                    <select id="Category" class="mt-1 form-control rounded-0 bg-light" >
                         <option value="EmployeeNum">Employee Number</option>
-                    </select>
+                        <option value="LastName">Last Name</option>
+                        <option value="Extension">Extension</option>
+                        <option value="FirstName">First Name</option>
+                        <option value="MiddleName">Middle Name</option>
+                        <option value="Position">Account Type</option>
+                    </select>   
                     <input placeholder="Search for Employees.." type="search" class="mt-1 form-control rounded-0 bg-light" id="SearchEmployee">
                 </label></p>
             <table id="SearchEmployeeTable">

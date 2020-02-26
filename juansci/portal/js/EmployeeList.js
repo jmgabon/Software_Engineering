@@ -1,14 +1,14 @@
 var searchEmployee = document.getElementById("SearchEmployee");
 
 var modal_body = document.getElementById("modal-body");
-
+var cat = document.getElementById("Category");
 var parent_id = "Employee";
 var saved_id;
 
 var Search = function(){
 	SearchWithoutQuery(
 		parent_id,
-		searchEmployee, 
+		cat.options[cat.selectedIndex].value + "=" + searchEmployee.value, 
 		GetID(document.querySelectorAll("#SearchEmployeeTable thead td"), 1),
 		null
 	);

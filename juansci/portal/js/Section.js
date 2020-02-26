@@ -29,7 +29,7 @@ Search = function(){ //set Search function inside cms.js
 	// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
 	query += "SELECT section.SectionNum,section.SectionName, RoomNum, ";
 	query += "employee.EmployeeNum, "
-	query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
+	query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, ' ', IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
 	query += "COUNT(LRNNum) AS Population, section.GradeLevel ";
 	query += "FROM section LEFT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
 	query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";

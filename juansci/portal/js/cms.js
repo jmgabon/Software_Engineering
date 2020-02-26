@@ -442,7 +442,7 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	}
 	catch(err){
 		alert("CANNOT FIND");
-		// console.log(xhttp.responseText);
+		console.log(xhttp.responseText);
 		console.log(err);
 	}
 
