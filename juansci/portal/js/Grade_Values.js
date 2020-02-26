@@ -6,7 +6,7 @@
 
 
 
-let parent_id = 'student';
+let parent_id;
 let jsonGradeVal;
 let GradeValID;
 let BehaviorID;
@@ -45,10 +45,9 @@ const wrapperUIValues = (function() {
     let setSectionInfo = function() {
         let query = '';
 
-        query += 'SELECT teacher.SectionNum, section.SectionName, section.GradeLevel ';
-        query += 'FROM teacher ';
-        query += 'LEFT JOIN section ON teacher.SectionNum = section.SectionNum ';
-        query += 'WHERE teacher.EmployeeNum IN (' + EmployeeNum + ') ';
+        query += 'SELECT SectionNum, SectionName, GradeLevel ';
+        query += 'FROM section ';
+        query += 'WHERE EmployeeNum IN (' + EmployeeNum + ') ';
 
         SimplifiedQuery('SELECT', query, '', getSectionInfo);
     };
@@ -282,23 +281,21 @@ const mainController = (function(wrapUI, wrapVal) {
             CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum');
             document.querySelector('thead').className = 'dark';
             openModal('Select Student', 'Student');
+            const searchStudent = document.querySelector('#SearchStudent');
 
             let Search = function() {
-                SearchWithQuery(
-                    'student',
-                    'student_section', // 'Section',
-                    GetID(document.querySelectorAll('#SearchStudentTable thead td'), 0),
-                    null,
-                    'LEFT JOIN',
-                    'student.LRNNum = student_section.LRNNum',
-                    document.getElementById('SearchStudent'),
-                    'student_section.SectionNum IN (' + SectionNum + ')',
-                    PickStudent
-                );
+                let query = '';
+
+                query += 'SELECT student.LRNNum, LastName, FirstName, MiddleName, Age, Gender ';
+                query += 'FROM student ';
+                query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
+                query += 'WHERE student_section.SectionNum IN (' + SectionNum + ')';
+
+                SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
             }
             Search();
 
-            document.getElementById('SearchStudent').addEventListener('change', Search);
+            searchStudent.addEventListener('change', Search);
         });
 
 

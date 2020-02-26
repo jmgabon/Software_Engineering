@@ -1,8 +1,7 @@
 <?php
     session_start();
     if($_SESSION['id'] === null  || !($_SESSION['access'] === "teacher" xor $_SESSION['access'] === "student")){
-
-        header('Location: ../Portal.php');
+        header('Location: ../');
     }
 
     include '../php/Header_User.php';
@@ -32,7 +31,7 @@
         <legend class="h4 pl-0 pt-3 mb-0">ADVISER'S VIEW: STUDENT GRADE</legend>
 
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="../teacher/Dashboard.php">Menu</a>|<a href="../Portal.php">Logout</a>
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="../<?php echo $_SESSION['access']?>/Dashboard.php">Menu</a>|<a href="../">Logout</a>
         </div>
 
     </div>
@@ -74,7 +73,7 @@
             <?php if($_SESSION['access'] == "teacher") { ?>
                 <div class="float-right hide-on-print">
                     <input type="text" id="txt_LRNNum" style="display: none;" />
-                    <label for="">Student Name: <input class="ml-2 sec-name" type="text" id="txt_StudentModal" required/></label>
+                    <label for="">Select Student: <input class="ml-2 sec-name" type="text" id="txt_StudentModal" required disabled/></label>
                     <button class="modal-button"><i class="far fa-window-restore"></i></button>
                 </div>
             <?php } ?>

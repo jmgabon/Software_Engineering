@@ -1,7 +1,7 @@
 <?php
     session_start();
     if($_SESSION['id'] === null || $_SESSION['access'] != "student"){
-        header('Location: ../Portal.php');
+        header('Location: ../');
     }
 
     include '../php/Header_User.php';
@@ -27,7 +27,7 @@
 			<span class="separator">|</span>
             <a href="#" class="header-link float-right">POLICY</a>
             <span class="separator">|</span>
-            <a href="../Portal.php" class="header-link float-right">LOGOUT</a>
+            <a href="../" class="header-link float-right">LOGOUT</a>
 			<br/>
 			<p class="h5 mb-1 float-right bd">JuanSci Portal - MAIN MENU</p><br/>
 			<p class="header-text float-right"><span class="name" id="name">

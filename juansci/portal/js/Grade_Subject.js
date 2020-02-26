@@ -23,7 +23,7 @@ let Quarter;
 let jsonStudent;
 let jsonGrade;
 let SubjectCode;
-let parent_id = 'subject';
+let parent_id;
 let selectMAPEH = document.querySelector('#selectMAPEH');
 let colNum = document.querySelector('table thead tr').childElementCount + 3;
 
@@ -42,8 +42,10 @@ function setAdviserNameDB() {
     let query = '';
     txt_Adviser.innerHTML = '';
 
-    query += 'SELECT name ';
-    query += 'FROM teacher ';
+    query += 'SELECT IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
+    query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+    query += 'FROM section ';
+    query += 'LEFT JOIN employee ON section.EmployeeNum = employee.EmployeeNum ';
     query += 'WHERE SectionNum IN (' + SectionNum + ') ';
 
     SimplifiedQuery('SELECT', query, '', function(xhttp) {
@@ -54,6 +56,7 @@ function setAdviserNameDB() {
             alert('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
             console.log(xhttp.responseText);
             console.log('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
+            xhttp.abort();
         }
     });
 }
@@ -62,46 +65,45 @@ function setAdviserNameDB() {
 openSubjectModal = button[0];
 openSubjectModal.addEventListener('click', function() {
     this.style.backgroundColor = '';
-    theadID = 'SectionNum@SubjectCode@SectionName@GradeLevel@teacher.Name';
-    theadHTML = 'Section Num@Subject Code@Section Name@Grade Level@Teacher Name';
-
-    CreateInput('searchSubject', 'search', modal_body);
-    document.querySelector('#searchSubject').className = 'modal-search';
-    CreateTable('searchSubjectTable', theadID, theadHTML, '@', modal_body, 0, 'SectionNum@teacher.Name');
+    let theadID = 'SectionNum@SubjectCode@SectionName@GradeLevel@Adviser';
+    let theadHTML = 'Section Num@Subject Code@Section Name@Grade Level@Adviser';
+    CreateInput('SearchSubject', 'search', modal_body);
+    document.querySelector('#SearchSubject').className = 'modal-search';
+    CreateTable('SearchSubjectTable', theadID, theadHTML, '@', modal_body, 0, 'SectionNum');
     document.querySelector('thead').className = 'dark';
+    openModal('Select Subject', 'Subject');
+    const searchSubject = document.querySelector('#SearchSubject');
 
-    const searchbox = document.querySelector('#searchSubject');
-
-    openModal('Select Subject', 'subject');
-
-    Search = function() {
+    let Search = function() {
         let query = '';
 
         query += 'SELECT section.SectionNum, subject.SubjectCode, ';
-        query += 'section.SectionName, section.GradeLevel, teacher.Name ';
+        query += 'section.SectionName, section.GradeLevel, ';
+        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
+        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
         query += 'FROM subject ';
         query += 'INNER JOIN section ';
         query += 'ON subject.SectionNum = section.SectionNum ';
-        query += 'JOIN teacher ';
-        query += 'ON subject.EmployeeNum = teacher.EmployeeNum ';
+        query += 'JOIN employee ';
+        query += 'ON subject.EmployeeNum = employee.EmployeeNum ';
         query += 'WHERE subject.EmployeeNum = ' + EmployeeNum;
 
-        SimplifiedQuery('SELECT', query, searchbox, getSubject);
+        SimplifiedQuery('SELECT', query, searchSubject, getSubject);
     }
-
-    searchbox.addEventListener('change', Search);
-
     Search();
+
+    searchSubject.addEventListener('change', Search);
 });
 
 
 function getSubject(xhttp) {
-    CreateTBody(xhttp);
-    const tbody_tr = document.querySelectorAll('#searchSubjectTable tbody tr');
+    console.log(JSON.parse(xhttp.responseText));
+    CreateTBody(xhttp, getSubject);
+    const tbody_tr = document.querySelectorAll('#SearchSubjectTable tbody tr');
 
     for (let i = 0; i < tbody_tr.length; i++) {
         tbody_tr[i].addEventListener('click', function() {
-            document.querySelector('#searchSubject').value = '';
+            document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
             SectionNum = this.childNodes[0].innerHTML;

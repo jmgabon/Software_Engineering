@@ -1,10 +1,21 @@
 <?php
      session_start();
      if($_SESSION['id'] === null || $_SESSION['access'] != "teacher"){
-         header('Location: ../Portal.php');
+         header('Location: ../');
      }
 
-    include '../php/Header_User.php';
+     include '../php/Header_User.php';
+
+    // check if adviser (if not, logout)
+    $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
+    $stmt->bindValue(1, $_SESSION['id']);
+    $stmt->execute();
+    $secNum = $stmt->fetch();
+    $stmt->closeCursor();
+
+    if (empty($secNum[0])) {
+        header('Location: ../');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +40,7 @@
     <div class="header mb-3">
         <legend class="h4 pl-0 pt-3 mb-0">REPORT ON LEARNER'S OBSERVED VALUES</legend>
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../Portal.php">Logout</a>
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
         </div>
 
     </div>
@@ -54,7 +65,7 @@
 
         <div class="float-right">
             <input type="text" id="txt_LRNNum" style="display: none;" />
-            <label for="">Select Student: <input class="ml-2 sec-name" type="text" id="txt_StudentModal" required/></label>
+            <label for="">Select Student: <input class="ml-2 sec-name" type="text" id="txt_StudentModal" required disabled/></label>
             <button class="modal-button"><i class="far fa-window-restore"></i></button>
         </div>
 

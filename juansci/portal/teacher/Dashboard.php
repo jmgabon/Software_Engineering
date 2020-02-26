@@ -1,14 +1,14 @@
 <?php
     session_start();
     if($_SESSION['id'] === null || $_SESSION['access'] != "teacher"){
-        header('Location: ../Portal.php');
+        header('Location: ../');
     }
 
     include '../php/Header_User.php';
 
 
     // check if adviser (if not, hide Print Student Grades)
-    $stmt = $db->prepare('SELECT SectionNum FROM teacher WHERE EmployeeNum = ?');
+    $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
     $secNum = $stmt->fetch();
@@ -35,7 +35,7 @@
 			<span class="separator">|</span>
             <a href="#" class="header-link float-right">POLICY</a>
             <span class="separator">|</span>
-            <a href="../Portal.php" class="header-link float-right">LOGOUT</a>
+            <a href="../" class="header-link float-right">LOGOUT</a>
 			<br/>
 			<p class="h5 mb-1 float-right bd">JuanSci Portal - MAIN MENU</p><br/>
 			<p class="header-text float-right"><span class="name" id="name">
@@ -55,13 +55,13 @@
                 </a>
                 <p class="label">Grade Students on Subjects</p>
             </div>
+        <?php if (!empty($secNum[0])) { ?>
             <div class="col option">
                 <a href="Grade_Values.php">
                    <img src="../pictures/gradevalue.png" class="img-opt">
                 </a>
                 <p class="label">Grade Students on Values</p>
             </div>
-        <?php if (!empty($secNum[0])) { ?>
             <div class="col option">
                 <a href="../php/Grade_View.php">
                     <img src="../pictures/print.png" class="img-opt">
