@@ -1,13 +1,21 @@
 <?php
-     session_start();
-     if($_SESSION['id'] === null  || !($_SESSION['access'] === "teacher" xor $_SESSION['access'] === "student")){
-         header('Location: ../Portal.php');
-     }
+    session_start();
+    if($_SESSION['id'] === null  || !($_SESSION['access'] === "teacher" xor $_SESSION['access'] === "student")){
+        header('Location: ../');
+    }
 
-     include '../php/Header_User.php';
+    include '../php/Header_User.php';
 
+    // check if adviser (if not, logout)
+    $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
+    $stmt->bindValue(1, $_SESSION['id']);
+    $stmt->execute();
+    $secNum = $stmt->fetch();
+    $stmt->closeCursor();
 
-    if(isset($_POST['LRNNum'])){
+    if (empty($secNum[0])) {
+        header('Location: ../');
+    } else if(isset($_POST['LRNNum'])){
         $LRNNum = ($_POST['LRNNum'] !== 'undefined') ? $_POST['LRNNum'] : 'N/A';
         $schoolYear = ($_POST['schoolYear'] !== 'undefined') ? $_POST['schoolYear'] : 'N/A';
         $studentName = ($_POST['studentName'] !== 'undefined') ? $_POST['studentName'] : 'N/A';
@@ -43,7 +51,7 @@
         <legend class="h4 pl-0 pt-3 mb-0">ADVISER'S VIEW: STUDENT GRADE</legend>
 
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../Portal.php">Logout</a>
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
         </div>
 
     </div>

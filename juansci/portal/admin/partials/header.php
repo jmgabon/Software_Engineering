@@ -82,6 +82,7 @@
                 <a href="student_reg.php" class="dropdown-item">Registration</a>
                 <a href="student_dft.php" class="dropdown-item">Drafting</a>
                 <a href="student_lst.php" class="dropdown-item">Masterlist</a>
+                <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a>
               </div>
             </li>
             <li class="nav-item">
@@ -134,7 +135,7 @@
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
-                <a href="grade_setting.php" class="dropdown-item">Report Card</a>
+                <a href="setting_grade.php" class="dropdown-item">Report Card</a>
               </div>
             </li>
               

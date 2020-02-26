@@ -1,7 +1,7 @@
 <?php
 	session_start();
     if($_SESSION['id'] === null || $_SESSION['access'] != "teacher"){
-        header('Location: ../Portal.php');
+        header('Location: ../');
 	}
 
     include '../php/Header_User.php';
@@ -27,7 +27,7 @@
     <div class="header mb-3">
         <legend class="h4 pl-0 pt-3 mb-0">SCHEDULE</legend>
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../Portal.php">Logout</a>
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
         </div>
     </div>
     <div class="room-container">
@@ -151,7 +151,7 @@
 			query += "FROM subject LEFT JOIN sched ON subject.SubjectID = sched.SubjectID ";
 			query += "LEFT JOIN section ON subject.SectionNum = section.SectionNum ";
 			query += "LEFT JOIN subjectcode ON subjectcode.SubjectCode = subject.SubjectCode ";
-			query += "WHERE EmployeeNum = '<?php echo($_SESSION['id']);?>'";
+			query += "WHERE subject.EmployeeNum = '<?php echo($_SESSION['id']);?>'";
 			// function SimplifiedQuery(crud,query,searchbox,callback){
 			SimplifiedQuery(
 				"SELECT",

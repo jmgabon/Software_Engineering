@@ -1,7 +1,7 @@
 'use strict';
 
 
-let parent_id = 'student';
+let parent_id;
 let numFailed;
 let trTableGrade;
 let arrSubjCode = [];
@@ -66,7 +66,7 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
                 document.querySelectorAll('#txt_region')[tblLen].textContent = 'National Capital Region';
                 document.querySelectorAll('#txt_gradeLevel')[tblLen].textContent = gradeLevel;
                 document.querySelectorAll('#txt_schoolYear')[tblLen].textContent = firstSY + '-' + (firstSY + 1);
-                document.querySelectorAll('#txt_Adviser')[tblLen].textContent = jsonSchoInfo[0]['Name'];
+                document.querySelectorAll('#txt_Adviser')[tblLen].textContent = jsonSchoInfo[0]['Adviser'];
             }
 
         } catch (err) {
@@ -79,13 +79,18 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
 
     let query = '';
 
-    query += 'SELECT teacher_backup.Name, student_section_backup.DateCreated ';
-    query += 'FROM teacher_backup ';
-    query += 'LEFT JOIN student_section_backup ';
-    query += 'ON teacher_backup.SectionNum = student_section_backup.SectionNum ';
+    query += 'SELECT IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
+    query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
+    query += 'student_section_backup.DateCreated ';
+    query += 'FROM section_backup ';
+    query += 'JOIN student_section_backup ';
+    query += 'ON section_backup.SectionNum = student_section_backup.SectionNum ';
+    query += 'JOIN employee_backup ';
+    query += 'ON section_backup.EmployeeNum = employee_backup.EmployeeNum ';
     query += 'WHERE student_section_backup.LRNNum IN (' + txt_LRN.textContent + ') ';
     query += 'AND student_section_backup.GradeLevel IN (' + gradeLevel + ') ';
     query += 'ORDER BY student_section_backup.DateCreated DESC ';
+    query += 'LIMIT 1 ';
 
     SimplifiedQuery('SELECT', query, '', getScholasticRecordInfo);
 }
@@ -93,38 +98,49 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
 
 modal_button.addEventListener('click', function() {
     this.style.backgroundColor = '';
-    let theadID = 'LRNNum@LastName@FirstName@MiddleName@Birthday@Gender@DateCreated';
-    let theadHTML = 'LRN Number@Last Name@First Name@Middle Name@Birthday@Gender@Date Created';
+    let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName@Birthday@Gender';
+    let theadHTML = 'LRN Number@Last Name@Extension@First Name@Middle Name@Birthday@Gender';
     CreateInput('SearchStudent', 'search', modal_body);
     document.querySelector('#SearchStudent').className = 'modal-search';
-    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'Birthday@Gender');
+    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Birthday@Gender');
     document.querySelector('thead').className = 'dark';
     openModal('Select Student', 'Student');
+    const searchStudent = document.querySelector('#SearchStudent');
 
     let Search = function() {
-        SearchWithQuery(
-            'student_backup',
-            null,
-            GetID(document.querySelectorAll('#SearchStudentTable thead td'), 0),
-            null,
-            null,
-            'student_backup.LRNNum = student_section_backup.LRNNum',
-            document.getElementById('SearchStudent'),
-            null,
-            PickStudent
-        );
+        let query = '';
+
+        query += 'SELECT * ';
+        query += 'FROM ( ';
+        query += 'SELECT student_backup.LRNNum, LastName, Extension, FirstName, MiddleName, Birthday, Gender, student_backup.DateCreated ';
+        query += 'FROM student_backup  ';
+        query += 'LEFT JOIN student_section_backup ON student_backup.LRNNum = student_section_backup.LRNNum ';
+        query += 'ORDER BY student_backup.DateCreated DESC ';
+        query += 'LIMIT 18446744073709551615 ';
+        query += ') AS sub ';
+        query += 'GROUP BY sub.LRNNum ';
+
+        SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
     }
     Search();
 
-    document.getElementById('SearchStudent').addEventListener('change', Search);
+    searchStudent.addEventListener('change', Search);
 });
+
+
+function clearStudentData() {
+    const studentData = document.querySelectorAll('#scholasticRecord p span');
+    for (let i = 0; i < studentData.length; i++) {
+        studentData[i].textContent = '';
+    }
+}
 
 
 function PickStudent(xhttp) {
     CreateTBody(xhttp);
     let jsonStudentInfo = JSON.parse(xhttp.responseText)
-    console.log(jsonStudentInfo)
     let tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
+
     for (let i = 0; i < tbody_tr.length; i++) {
         tbody_tr[i].addEventListener('click', function() {
             const txt_StudentModal = document.querySelector('#txt_StudentModal');
@@ -136,19 +152,30 @@ function PickStudent(xhttp) {
             txt_LRN[1].textContent = txt_LRN.textContent
 
             txt_LastName.textContent = this.childNodes[1].textContent;
-            txt_FirstName.textContent = this.childNodes[2].textContent;
+            txt_FirstName.textContent = this.childNodes[3].textContent;
+            txt_ExtName.textContent = this.childNodes[2].textContent;
 
-            txt_MiddleName.textContent = 'N/A';
-            if (this.childNodes[3].textContent !== null) {
-                txt_MiddleName.textContent = this.childNodes[3].textContent;
+            if (this.childNodes[2].textContent !== '') {
+                txt_ExtName.textContent = this.childNodes[2].textContent;
+            } else {
+                txt_ExtName.textContent = 'N/A';
+            }
+
+            if (this.childNodes[4].textContent !== '') {
+                txt_MiddleName.textContent = this.childNodes[4].textContent;
+            } else {
+                txt_MiddleName.textContent = 'N/A';
             }
 
             txt_StudentName.textContent = txt_FirstName.textContent + ' ';
             txt_StudentName.textContent += txt_MiddleName.textContent + ' ';
             txt_StudentName.textContent += txt_LastName.textContent;
+            txt_StudentModal.textContent = txt_StudentName.textContent;
 
-            txt_Birthdate.textContent = this.childNodes[4].textContent;
-            txt_Sex.textContent = this.childNodes[5].textContent;
+            txt_Birthdate.textContent = this.childNodes[5].textContent;
+            txt_Sex.textContent = this.childNodes[6].textContent;
+
+            clearStudentData();
 
             let gradeLevel = 7;
             for (let i = 0; i < 4; i++) {
@@ -314,7 +341,9 @@ function setGradeSubjDB(tblLen, iArrSubjCode, gradeLevel) {
     query += 'FROM grade_subject_backup ';
     query += 'WHERE LRNNum IN (' + txt_LRN.textContent + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
+    // query += 'GROUP BY Quarter ';
     query += 'ORDER BY DateCreated ASC ';
+    // query += 'LIMIT 1 ';
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
 }

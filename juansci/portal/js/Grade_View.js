@@ -21,7 +21,8 @@ const wrapperGradeViewMain = (function(wrapSubj, wrapVal) {
 //
 
 
-let parent_id = 'student';
+let parent_id;
+// let parent_id = 'student';
 
 // if (accessRole === 'teacher') {
 //     console.log('yo')
@@ -229,20 +230,23 @@ function setSectionInfo() {
     let query = '';
 
     if (accessRole === 'teacher') {
-        query += 'SELECT teacher.SectionNum, teacher.Name, section.SectionName, section.GradeLevel ';
-        query += 'FROM teacher ';
-        query += 'LEFT JOIN section ON teacher.SectionNum = section.SectionNum ';
-        query += 'WHERE teacher.EmployeeNum IN (' + employeeNum + ') ';
+        query += 'SELECT section.SectionNum, section.SectionName, section.GradeLevel, ';
+        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
+        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+        query += 'FROM section ';
+        query += 'LEFT JOIN employee ON section.EmployeeNum = employee.EmployeeNum ';
+        query += 'WHERE section.EmployeeNum IN (' + employeeNum + ') ';
     } else if (accessRole === 'student') {
-        query += 'SELECT section.SectionNum, section.SectionName, section.GradeLevel, teacher.Name ';
+        query += 'SELECT section.SectionNum, section.SectionName, section.GradeLevel, ';
+        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
+        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
         query += 'FROM section ';
         query += 'LEFT JOIN student_section ';
         query += 'ON section.SectionNum = student_section.SectionNum ';
-        query += 'JOIN teacher ';
-        query += 'ON section.SectionNum = teacher.SectionNum ';
+        query += 'JOIN employee ';
+        query += 'ON section.EmployeeNum = employee.EmployeeNum ';
         query += 'WHERE student_section.LRNNum IN (' + LRNNum + ') ';
     }
-
 
     SimplifiedQuery('SELECT', query, '', getSectionInfo);
 }
@@ -257,12 +261,12 @@ function getSectionInfo(xhttp) {
         console.log(jsonSecInfo);
 
         sectionNum = jsonSecInfo[0]['SectionNum'];
-        adviserName = jsonSecInfo[0]['Name'];
+        adviserName = jsonSecInfo[0]['Adviser'];
         sectionName = jsonSecInfo[0]['SectionName'];
         gradeLevel = jsonSecInfo[0]['GradeLevel'];
 
-        adviserName = adviserName.split(', ')
-        adviserName = adviserName[1] + ' ' + adviserName[0]
+        // adviserName = adviserName.split(', ')
+        // adviserName = adviserName[1] + ' ' + adviserName[0]
 
         txt_AdviserName.textContent = adviserName;
         txt_SectionName.textContent = sectionName;
@@ -515,30 +519,30 @@ if (accessRole === 'teacher') {
         CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Age@Gender');
         document.querySelector('thead').className = 'dark';
         openModal('Select Student', 'Student');
+        const searchStudent = document.querySelector('#SearchStudent');
 
         let Search = function() {
-            SearchWithQuery(
-                'student',
-                'student_section',
-                GetID(document.querySelectorAll('#SearchStudentTable thead td'), 0),
-                null,
-                'LEFT JOIN',
-                'student.LRNNum = student_section.LRNNum',
-                document.getElementById('SearchStudent'),
-                'student_section.SectionNum IN (' + sectionNum + ')',
-                PickStudent
-            );
+            let query = '';
+
+            query += 'SELECT student.LRNNum, LastName, FirstName, MiddleName, Age, Gender ';
+            query += 'FROM student ';
+            query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
+            query += 'WHERE student_section.SectionNum IN (' + sectionNum + ')';
+
+            SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
         }
         Search();
 
-        document.getElementById('SearchStudent').addEventListener('change', Search);
+        searchStudent.addEventListener('change', Search);
     });
 }
 
 
 function PickStudent(xhttp) {
-    CreateTBody(xhttp);
-    let tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
+    console.log(JSON.parse(xhttp.responseText));
+    CreateTBody(xhttp, PickStudent);
+    const tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
+
     for (let i = 0; i < tbody_tr.length; i++) {
         tbody_tr[i].addEventListener('click', function() {
             const txt_StudentModal = document.querySelector('#txt_StudentModal');

@@ -2,7 +2,7 @@
     session_start();
     if($_SESSION['id'] === null  || !$_SESSION['access'] === 'admin'){
 
-        header('Location: ../Portal.php');
+        header('Location: ../');
     }
 
     include '../php/Header_User.php';
@@ -32,7 +32,7 @@
         <legend class="h4 pl-0 pt-3 mb-0">LEARNER'S PERMANENT RECORD</legend>
 
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../Portal.php">Logout</a>
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
         </div>
 
     </div>
