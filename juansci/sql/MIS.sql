@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2020 at 11:34 AM
+-- Generation Time: Feb 27, 2020 at 11:11 PM
 -- Server version: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -1855,6 +1855,30 @@ INSERT INTO `employee_backup` (`EmployeeNum`, `LastName`, `Extension`, `FirstNam
 (26, 'Duterte', NULL, 'Rodrigo', 'Roa', '1946-03-28', 73, 'Mapayapa Street', '', 'Davao City', 'Davao Oriental', 'Philippines', 'Male', 'Admin', '76371_541686522517167_1955437084_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
 (27, 'aaaaaaa', NULL, 'a', 'aa', '2020-02-05', 0, 'a', 'a', 'a', 'a', 'Philippines', 'Male', 'Teacher', 'Les4_1.jpg', '2020-02-13 11:04:46', 'admin', 'UPDATED'),
 (28, 'MAMA', NULL, 'mama', 'M', '1998-01-20', 22, 'Mali', 'Gaya', 'Nasugbu', 'Batangas', 'Philippines', 'Male', 'Teacher', 'Batangas', '2020-02-14 11:26:34', 'admin', 'UPDATED'),
+(29, 'Cadayona', NULL, 'Gracielle Mae', 'Manuel', '1987-05-28', 32, 'New', 'New', 'New York City', 'New York', 'United States of America', 'Female', 'Teacher', '407093_355692657777994_1875201973_n.jpg', '2020-02-27 05:54:22', 'admin', 'UPDATED'),
+(1, 'Gabon', 'Jr', 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Admin', 'Metro Manila', '2020-02-26 17:47:30', 'admin', 'UPDATED'),
+(2, 'Oprenario', NULL, 'Leslie Alexis', 'Manuel', '1990-03-31', 29, '23 E. Caruncho Avenue', 'Malinao', 'Pasig', 'Metro Manila', 'Philippines', 'Female', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-06 11:26:51', 'admin', 'UPDATED'),
+(3, 'Gabon', NULL, 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Admin', 'Metro Manila', '2020-02-26 16:15:29', 'admin', 'UPDATED'),
+(4, 'Oprenario', NULL, 'Leslie Alexis', 'Manuel', '1990-03-31', 29, '23 E. Caruncho Avenue', 'Malinao', 'Pasig', 'Metro Manila', 'Philippines', 'Female', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-06 11:26:55', 'admin', 'UPDATED'),
+(13, 'Tan', NULL, 'Kurt Ronald', 'D', '1998-08-14', 21, 'Canton', '', 'San Juan', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '../pictures/employee/D.Gray-man.jpg', '2019-10-18 15:18:25', '', 'UPDATED'),
+(15, 'Orale', NULL, 'John Raymer', 'S', '1998-08-14', 21, 'Canton', '', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '../pictures/employee/D.Gray-man.jpg', '2019-10-18 15:46:36', '', 'UPDATED'),
+(23, 'Ulan', NULL, 'Stephanie Aubrey', '', '1998-08-01', 21, 'Para', '', 'Paranaque', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-02 06:22:33', 'admin', 'UPDATED'),
+(25, 'G', NULL, 'G', 'G', '1990-11-01', 29, 'G', 'G', 'G', 'G', 'Philippines', 'Male', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(26, 'Duterte', NULL, 'Rodrigo', 'Roa', '1946-03-28', 73, 'Mapayapa Street', '', 'Davao City', 'Davao Oriental', 'Philippines', 'Male', 'Admin', '76371_541686522517167_1955437084_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(27, 'aaaaaaa', NULL, 'a', 'aa', '2020-02-05', 0, 'a', 'a', 'a', 'a', 'Philippines', 'Male', 'Teacher', 'Les4_1.jpg', '2020-02-13 11:04:46', 'admin', 'UPDATED'),
+(28, 'MAMA', NULL, 'mama', 'M', '1998-01-20', 22, 'Mali', 'Gaya', 'Nasugbu', 'Batangas', 'Philippines', 'Male', 'Teacher', 'Batangas', '2020-02-14 11:26:34', 'admin', 'UPDATED'),
+(29, 'Cadayona', NULL, 'Gracielle Mae', 'Manuel', '1987-05-28', 32, 'New', 'New', 'New York City', 'New York', 'United States of America', 'Female', 'Teacher', '407093_355692657777994_1875201973_n.jpg', '2020-02-27 05:54:22', 'admin', 'UPDATED'),
+(1, 'Gabon', 'Jr', 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Admin', 'Metro Manila', '2020-02-26 17:47:30', 'admin', 'UPDATED'),
+(2, 'Oprenario', NULL, 'Leslie Alexis', 'Manuel', '1990-03-31', 29, '23 E. Caruncho Avenue', 'Malinao', 'Pasig', 'Metro Manila', 'Philippines', 'Female', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-06 11:26:51', 'admin', 'UPDATED'),
+(3, 'Gabon', NULL, 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Admin', 'Metro Manila', '2020-02-26 16:15:29', 'admin', 'UPDATED'),
+(4, 'Oprenario', NULL, 'Leslie Alexis', 'Manuel', '1990-03-31', 29, '23 E. Caruncho Avenue', 'Malinao', 'Pasig', 'Metro Manila', 'Philippines', 'Female', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-06 11:26:55', 'admin', 'UPDATED'),
+(13, 'Tan', NULL, 'Kurt Ronald', 'D', '1998-08-14', 21, 'Canton', '', 'San Juan', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '../pictures/employee/D.Gray-man.jpg', '2019-10-18 15:18:25', '', 'UPDATED'),
+(15, 'Orale', NULL, 'John Raymer', 'S', '1998-08-14', 21, 'Canton', '', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '../pictures/employee/D.Gray-man.jpg', '2019-10-18 15:46:36', '', 'UPDATED'),
+(23, 'Ulan', NULL, 'Stephanie Aubrey', '', '1998-08-01', 21, 'Para', '', 'Paranaque', 'Metro Manila', 'Philippines', 'Male', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-02 06:22:33', 'admin', 'UPDATED'),
+(25, 'G', NULL, 'G', 'G', '1990-11-01', 29, 'G', 'G', 'G', 'G', 'Philippines', 'Male', 'Teacher', '385286_541686595850493_1094974341_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(26, 'Duterte', NULL, 'Rodrigo', 'Roa', '1946-03-28', 73, 'Mapayapa Street', '', 'Davao City', 'Davao Oriental', 'Philippines', 'Male', 'Admin', '76371_541686522517167_1955437084_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(27, 'aaaaaaa', NULL, 'a', 'aa', '2020-02-05', 0, 'a', 'a', 'a', 'a', 'Philippines', 'Male', 'Teacher', 'Les4_1.jpg', '2020-02-13 11:04:46', 'admin', 'UPDATED'),
+(28, 'MAMA', NULL, 'mama', 'M', '1998-01-20', 22, 'Mali', 'Gaya', 'Nasugbu', 'Batangas', 'Philippines', 'Male', 'Teacher', 'Batangas', '2020-02-14 11:26:34', 'admin', 'UPDATED'),
 (29, 'Cadayona', NULL, 'Gracielle Mae', 'Manuel', '1987-05-28', 32, 'New', 'New', 'New York City', 'New York', 'United States of America', 'Female', 'Teacher', '407093_355692657777994_1875201973_n.jpg', '2020-02-27 05:54:22', 'admin', 'UPDATED');
 
 -- --------------------------------------------------------
@@ -1886,6 +1910,41 @@ CREATE TABLE `grade_subject` (
   `DateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Triggers `grade_subject`
+--
+DELIMITER $$
+CREATE TRIGGER `AFTER INSERT grade_subject` AFTER INSERT ON `grade_subject` FOR EACH ROW INSERT INTO grade_subject_backup
+SELECT *, "CREATED"
+FROM grade_subject
+WHERE GradeID = new.GradeID
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `AFTER UPDATE grade_subject` AFTER UPDATE ON `grade_subject` FOR EACH ROW INSERT INTO grade_subject_backup
+SELECT *, "UPDATED"
+FROM grade_subject
+WHERE GradeID = new.GradeID
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grade_subject_backup`
+--
+
+CREATE TABLE `grade_subject_backup` (
+  `GradeID` int(11) NOT NULL,
+  `LRNNum` bigint(12) NOT NULL,
+  `GradeLevel` int(11) NOT NULL,
+  `SubjectCode` varchar(50) NOT NULL,
+  `Quarter` int(11) NOT NULL,
+  `GradeRating` float DEFAULT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Action` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 --
@@ -1899,7 +1958,42 @@ CREATE TABLE `grade_values` (
   `BehaviorID` varchar(50) NOT NULL,
   `Quarter` int(11) NOT NULL,
   `GradeValRating` varchar(50) DEFAULT NULL,
-  `DateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `DateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Triggers `grade_values`
+--
+DELIMITER $$
+CREATE TRIGGER `AFTER INSERT grade_values` AFTER INSERT ON `grade_values` FOR EACH ROW INSERT INTO grade_values_backup
+SELECT *, "CREATED"
+FROM grade_values
+WHERE GradeValID = new.GradeValID
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `AFTER UPDATE grade_values` AFTER UPDATE ON `grade_values` FOR EACH ROW INSERT INTO grade_values_backup
+SELECT *, "UPDATED"
+FROM grade_values
+WHERE GradeValID = new.GradeValID
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grade_values_backup`
+--
+
+CREATE TABLE `grade_values_backup` (
+  `GradeValID` int(11) NOT NULL,
+  `LRNNum` bigint(12) NOT NULL,
+  `GradeValLevel` int(11) NOT NULL,
+  `BehaviorID` varchar(50) NOT NULL,
+  `Quarter` int(11) NOT NULL,
+  `GradeValRating` varchar(50) DEFAULT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Action` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2589,6 +2683,24 @@ INSERT INTO `section_backup` (`SectionName`, `GradeLevel`, `RoomNum`, `SectionNu
 ('Fire', 7, 110, 42, 23, '2020-02-26 15:06:29', 'admin', 'CREATED'),
 ('Tesla', 7, 205, 28, 0, '2020-02-25 04:16:43', 'admin', 'UPDATED'),
 ('Newton', 7, 203, 26, 27, '2020-02-27 06:33:11', 'admin', 'UPDATED');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `setting`
+--
+
+CREATE TABLE `setting` (
+  `SettingName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `SettingValue` longtext COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `setting`
+--
+
+INSERT INTO `setting` (`SettingName`, `SettingValue`) VALUES
+('quarter_enabled', '4');
 
 -- --------------------------------------------------------
 
@@ -3960,6 +4072,24 @@ INSERT INTO `student_backup` (`LRNNum`, `LastName`, `Extension`, `FirstName`, `M
 (199494113333, 'Barea', NULL, 'John', NULL, '2008-12-10', 11, 'Tra', 'Lala', 'Tralala City', 'Tral', 'Philippines', 'Male', 7, 'New', '407093_355692657777994_1875201973_n.jpg', '2020-01-02 06:24:20', '', 'UPDATED'),
 (394328483211, 'Mariano', NULL, 'Mariano', NULL, '2005-04-10', 14, 'Marian', 'O', 'Maria', 'Mariano', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-02 06:24:20', 'admin', 'UPDATED'),
 (472429112122, 'Gabon', NULL, 'G', 'G', '2005-01-03', 15, 'G', 'G', 'G', 'G', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(567890321425, 'Gabon', NULL, 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '#4803 V. Baltazar', NULL, 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', '46280_541687292517090_621937474_n.jpg', '2020-02-13 10:09:32', '', 'UPDATED'),
+(123456789121, 'Gabon', 'Jr', 'Jose', 'Manuel', '1997-03-28', 22, '#23 E. Caruncho Ave', NULL, 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'New', '46280_541687292517090_621937474_n.jpg', '2020-02-26 17:57:02', 'admin', 'UPDATED'),
+(123456789123, 'Gabon', NULL, 'Jose Mari', 'Manuel', '1997-03-28', 22, '#242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', '46280_541687292517090_621937474_n.jpg', '2019-10-11 11:19:02', '', 'UPDATED'),
+(134421942894, 'Haba', NULL, 'Ma', 'Jack', '2006-07-07', 13, 'JaJa', 'jaja', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 8, 'Old', 'Les4_3.jpg', '2020-02-13 11:53:26', 'admin', 'UPDATED'),
+(147274234724, 'AAAAAAAAaaaa', NULL, 'aaaaaaaaaa', 'aaaaaaaaa', '1998-02-25', 22, 'aaaaaaaaaaa', 'aaaaa', 'aa', 'aaaaaaaaaa', 'Philippines', 'Male', 7, 'Old', 'Kinnikuman.jpg', '2020-02-26 02:59:27', '', 'UPDATED'),
+(155366694777, 'Lamoste', NULL, 'John Cedric', NULL, '1998-05-22', 21, 'Masa', NULL, 'Taguig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', 'Dr. Stone.jpg', '2020-01-02 06:24:20', '', 'UPDATED'),
+(199494113333, 'Barea', NULL, 'John', NULL, '2008-12-10', 11, 'Tra', 'Lala', 'Tralala City', 'Tral', 'Philippines', 'Male', 7, 'New', '407093_355692657777994_1875201973_n.jpg', '2020-01-02 06:24:20', '', 'UPDATED'),
+(394328483211, 'Mariano', NULL, 'Mariano', NULL, '2005-04-10', 14, 'Marian', 'O', 'Maria', 'Mariano', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-02 06:24:20', 'admin', 'UPDATED'),
+(472429112122, 'Gabon', NULL, 'G', 'G', '2005-01-03', 15, 'G', 'G', 'G', 'G', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
+(567890321425, 'Gabon', NULL, 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '#4803 V. Baltazar', NULL, 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', '46280_541687292517090_621937474_n.jpg', '2020-02-13 10:09:32', '', 'UPDATED'),
+(123456789121, 'Gabon', 'Jr', 'Jose', 'Manuel', '1997-03-28', 22, '#23 E. Caruncho Ave', NULL, 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'New', '46280_541687292517090_621937474_n.jpg', '2020-02-26 17:57:02', 'admin', 'UPDATED'),
+(123456789123, 'Gabon', NULL, 'Jose Mari', 'Manuel', '1997-03-28', 22, '#242 Marigold St', 'Pinagbuhatan', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', '46280_541687292517090_621937474_n.jpg', '2019-10-11 11:19:02', '', 'UPDATED'),
+(134421942894, 'Haba', NULL, 'Ma', 'Jack', '2006-07-07', 13, 'JaJa', 'jaja', 'Pasig', 'Metro Manila', 'Philippines', 'Male', 8, 'Old', 'Les4_3.jpg', '2020-02-13 11:53:26', 'admin', 'UPDATED'),
+(147274234724, 'AAAAAAAAaaaa', NULL, 'aaaaaaaaaa', 'aaaaaaaaa', '1998-02-25', 22, 'aaaaaaaaaaa', 'aaaaa', 'aa', 'aaaaaaaaaa', 'Philippines', 'Male', 7, 'Old', 'Kinnikuman.jpg', '2020-02-26 02:59:27', '', 'UPDATED'),
+(155366694777, 'Lamoste', NULL, 'John Cedric', NULL, '1998-05-22', 21, 'Masa', NULL, 'Taguig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', 'Dr. Stone.jpg', '2020-01-02 06:24:20', '', 'UPDATED'),
+(199494113333, 'Barea', NULL, 'John', NULL, '2008-12-10', 11, 'Tra', 'Lala', 'Tralala City', 'Tral', 'Philippines', 'Male', 7, 'New', '407093_355692657777994_1875201973_n.jpg', '2020-01-02 06:24:20', '', 'UPDATED'),
+(394328483211, 'Mariano', NULL, 'Mariano', NULL, '2005-04-10', 14, 'Marian', 'O', 'Maria', 'Mariano', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-02 06:24:20', 'admin', 'UPDATED'),
+(472429112122, 'Gabon', NULL, 'G', 'G', '2005-01-03', 15, 'G', 'G', 'G', 'G', 'Philippines', 'Male', 7, 'Old', '385286_541686595850493_1094974341_n.jpg', '2020-01-05 12:26:42', 'admin', 'UPDATED'),
 (567890321425, 'Gabon', NULL, 'Carlos Miguel', 'Manuel', '2010-01-22', 10, '#4803 V. Baltazar', NULL, 'Pasig', 'Metro Manila', 'Philippines', 'Male', 7, 'Old', '46280_541687292517090_621937474_n.jpg', '2020-02-13 10:09:32', '', 'UPDATED');
 
 -- --------------------------------------------------------
@@ -4406,6 +4536,12 @@ ALTER TABLE `section`
   ADD PRIMARY KEY (`SectionNum`);
 
 --
+-- Indexes for table `setting`
+--
+ALTER TABLE `setting`
+  ADD UNIQUE KEY `option_name` (`SettingName`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -4461,6 +4597,12 @@ ALTER TABLE `section`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `grade_sortable`
+--
+ALTER TABLE `grade_sortable`
+  ADD CONSTRAINT `grade_sortable_ibfk_1` FOREIGN KEY (`SubjectCode`) REFERENCES `subjectcode` (`SubjectCode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sched`
