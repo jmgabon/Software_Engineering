@@ -98,11 +98,13 @@ function CreateModal(header, title){ //Shows modal in html that is hidden then c
 	}
 
 	else if(title == 'Teacher'){
-		theadID = "employee.EmployeeNum@LastName@FirstName@Middle Name@Name";
-		theadHTML = "Employee Number@Last Name@First Name@Middle Name@Name";
+		theadID = "employee.EmployeeNum@LastName@Extension@FirstName@Middle Name";
+		theadHTML = "Employee Number@Last Name@Extension@First Name@Middle Name";
+		CreateSearchBox(theadID, theadHTML, '@', 'SearchTeacher', 'search', modal_body);
+		theadHTML += "@" + hiddenCol;
+		theadID += "@" + hiddenCol;
 		hiddenCol = "Name";
 		// CreateInput("SearchTeacher", "search", modal_body);
-		CreateSearchBox(theadID, theadHTML, '@', 'SearchTeacher', 'search', modal_body);
 		CreateTable("SearchTeacherTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
 		columnIDS = GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0);
 		cat = document.querySelector("#modal-body select");
@@ -115,8 +117,8 @@ function CreateModal(header, title){ //Shows modal in html that is hidden then c
 			var basequery = query;
 			var nospaces;
 			var content;
-			query += "SELECT employee.EmployeeNum, LastName, FirstName, MiddleName, ";
-			query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Name ";
+			query += "SELECT employee.EmployeeNum, LastName, Extension,FirstName, MiddleName, ";
+			query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Name ";
 			query += "FROM section RIGHT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
 			query += "WHERE section.EmployeeNum IS NULL ";
 			query += "GROUP BY employee.EmployeeNum ";
@@ -163,7 +165,7 @@ function PickAdviser(xhttp){
 	for(var i = 0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("click", function(){
 			// document.getElementById("txt_TeacherName").value = this.childNodes[1].innerHTML;
-			document.querySelectorAll("input")[4].value = this.childNodes[4].innerHTML;
+			document.querySelectorAll("input")[4].value = this.childNodes[5].innerHTML;
 			document.getElementById("txt_EmployeeNum").value = this.childNodes[0].innerHTML;
 			// RemoveChildNodes(tbody); //Deletes whole table after click of a row
 

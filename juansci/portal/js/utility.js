@@ -77,6 +77,48 @@ function CreateTable(table_id, thead_id, thead_innerHTML, seperator, parentNode,
 	// console.log(parentNode);
 }
 
+function CreateSearchBox(thead_id, theadHTML, seperator, input_id, type, parentNode){
+	var input = document.createElement("input");
+	var p = document.createElement("p");
+	var inputTYPE = document.createAttribute("type");
+	var inputID = document.createAttribute("id");
+	inputID.value = input_id;
+	inputTYPE.value = type;
+	input.setAttributeNode(inputID);
+
+	thead_id = thead_id.split(seperator);
+	theadHTML = theadHTML.split(seperator);
+
+	// if(hiddenCol !== null){
+	// 	hiddenCol = hiddenCol.split(seperator);
+	// }
+
+	let select = document.createElement("select");
+	for(let i = 0; i < thead_id.length; i++){
+		let option = document.createElement("option");
+		let optionSelected = document.createElement("selected");
+		if(i == 0){
+			optionSelected.value = "selected";
+			option.appendChild(optionSelected);
+		}
+		option.text = theadHTML[i];
+		option.value = thead_id[i];
+		// if(hiddenCol !== null){
+		// 	for(var j = 0; j < hiddenCol.length; j++){
+		// 		if(thead_id[i] == hiddenCol[j]){
+		// 			// console.log("EQUAL");
+		// 			td.style.display = "none";			
+		// 			break;
+		// 		}
+		// 	}
+		// }
+		select.appendChild(option);
+	}
+	p.appendChild(select);
+	p.appendChild(input);
+
+	parentNode.appendChild(p);
+}
 
 function CreateInput(input_id, type, parentNode){	//Creates input tag with id 
 	var input = document.createElement("input");
@@ -109,36 +151,6 @@ function CreateSelect(thead_id, theadHTML, seperator, parentNode){
 	console.log(thead_id);
 	console.log(theadHTML);
 	parentNode.appendChild(select);
-}
-
-function CreateSearchBox(thead_id, theadHTML, seperator, input_id, type, parentNode){
-	var input = document.createElement("input");
-	var p = document.createElement("p");
-	var inputTYPE = document.createAttribute("type");
-	var inputID = document.createAttribute("id");
-	inputID.value = input_id;
-	inputTYPE.value = type;
-	input.setAttributeNode(inputID);
-
-	thead_id = thead_id.split(seperator);
-	theadHTML = theadHTML.split(seperator);
-
-	let select = document.createElement("select");
-	for(let i = 0; i < thead_id.length; i++){
-		let option = document.createElement("option");
-		let optionSelected = document.createElement("selected");
-		if(i == 0){
-			optionSelected.value = "selected";
-			option.appendChild(optionSelected);
-		}
-		option.text = theadHTML[i];
-		option.value = thead_id[i];
-		select.appendChild(option);
-	}
-	p.appendChild(select);
-	p.appendChild(input);
-
-	parentNode.appendChild(p);
 }
 
 function EmptyNode(node){
