@@ -28,7 +28,7 @@
     <img src="../pictures/logodesign.jpg" class="logodesign hide-on-print">
 
     <div class="hide-on-print header mb-3">
-        <legend class="h4 pl-0 pt-3 mb-0">ADVISER'S VIEW: STUDENT GRADE</legend>
+        <legend class="h4 pl-0 pt-3 mb-0"><?php echo strtoupper($_SESSION['access'])?>'S VIEW: STUDENT GRADE</legend>
 
         <div class="menu">
         <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="../<?php echo $_SESSION['access']?>/Dashboard.php">Menu</a>|<a href="../">Logout</a>

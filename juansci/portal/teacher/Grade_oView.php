@@ -10,10 +10,10 @@
     $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
-    $secNum = $stmt->fetch();
+    $row = $stmt->fetch();
     $stmt->closeCursor();
 
-    if (empty($secNum[0])) {
+    if (empty($row[0])) {
         header('Location: ../');
     } else if(isset($_POST['LRNNum'])){
         $LRNNum = ($_POST['LRNNum'] !== 'undefined') ? $_POST['LRNNum'] : 'N/A';

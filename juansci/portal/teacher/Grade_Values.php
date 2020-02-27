@@ -10,10 +10,10 @@
     $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
-    $secNum = $stmt->fetch();
+    $row = $stmt->fetch();
     $stmt->closeCursor();
 
-    if (empty($secNum[0])) {
+    if (empty($row[0])) {
         header('Location: ../');
     }
 ?>
@@ -97,7 +97,7 @@
                             <td>Expresses one's spiritual beliefs while respecting the spiritual beliefs of others</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -106,7 +106,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -115,7 +115,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -124,7 +124,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -137,7 +137,7 @@
                             <td>Shows adherence to ethical principles by upholding truth</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -146,7 +146,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -155,7 +155,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -164,7 +164,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -178,7 +178,7 @@
                             <td>Is sensitive to individual, social, and cultural differences</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -187,7 +187,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -196,7 +196,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -205,7 +205,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -218,7 +218,7 @@
                             <td>Demonstrates contributions towards solidarity</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -227,7 +227,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -236,7 +236,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -245,7 +245,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -259,7 +259,7 @@
                             <td>Cares for the environment and utilizes resources wisely, judiciously, and economically</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -268,7 +268,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -277,7 +277,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -286,7 +286,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -299,7 +299,7 @@
                             <td>Demonstrates pride in being a Filipino; exercises the right and responsibilities of Filipino citizen</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -308,7 +308,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -317,7 +317,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -326,7 +326,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -340,7 +340,7 @@
                             <td>Demonstrates appropriate behavior in carrying out activities in the school community, and country</td>
                             <td>
                                 <select class="grValQ1">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -349,7 +349,7 @@
                             </td>
                             <td>
                                 <select class="grValQ2">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -358,7 +358,7 @@
                             </td>
                             <td>
                                 <select class="grValQ3">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>
@@ -367,7 +367,7 @@
                             </td>
                             <td>
                                 <select class="grValQ4">
-                                    <option selected value="--">--</option>
+                                    <option selected value="--" disabled>--</option>
                                     <option value="AO">AO</option>
                                     <option value="SO">SO</option>
                                     <option value="RO">RO</option>

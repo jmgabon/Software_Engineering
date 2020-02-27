@@ -56,7 +56,6 @@ function setAdviserNameDB() {
             alert('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
             console.log(xhttp.responseText);
             console.log('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
-            xhttp.abort();
         }
     });
 }
@@ -64,29 +63,37 @@ function setAdviserNameDB() {
 
 openSubjectModal = button[0];
 openSubjectModal.addEventListener('click', function() {
-    this.style.backgroundColor = '';
-    let theadID = 'SectionNum@SubjectCode@SectionName@GradeLevel@Adviser';
-    let theadHTML = 'Section Num@Subject Code@Section Name@Grade Level@Adviser';
-    CreateInput('SearchSubject', 'search', modal_body);
-    document.querySelector('#SearchSubject').className = 'modal-search';
-    CreateTable('SearchSubjectTable', theadID, theadHTML, '@', modal_body, 0, 'SectionNum');
+    let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser';
+    let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser';
+    CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
+
+    let cat = document.querySelector('#modal-body select');
+    let hiddenCol = 'SectionNum';
+    const searchSubject = document.querySelector('#SearchSubject');
+    theadID += '@' + hiddenCol;
+    theadHTML += '@' + hiddenCol;
+    CreateTable('SearchSubjectTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
     document.querySelector('thead').className = 'dark';
     openModal('Select Subject', 'Subject');
-    const searchSubject = document.querySelector('#SearchSubject');
 
     let Search = function() {
         let query = '';
 
-        query += 'SELECT section.SectionNum, subject.SubjectCode, ';
-        query += 'section.SectionName, section.GradeLevel, ';
+        query += 'SELECT subject.SubjectCode, section.SectionName, section.GradeLevel, ';
         query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
+        query += 'section.SectionNum ';
         query += 'FROM subject ';
         query += 'INNER JOIN section ';
         query += 'ON subject.SectionNum = section.SectionNum ';
         query += 'JOIN employee ';
         query += 'ON subject.EmployeeNum = employee.EmployeeNum ';
-        query += 'WHERE subject.EmployeeNum = ' + EmployeeNum;
+        query += 'WHERE subject.EmployeeNum = ' + EmployeeNum + ' ';
+        if (searchSubject.value !== '') {
+            let addQuery = (cat.options[cat.selectedIndex].value === 'Adviser') ? 'HAVING ' : 'AND ';
+            query += addQuery + cat.options[cat.selectedIndex].value + ' LIKE "' + searchSubject.value + '%"';
+        }
 
         SimplifiedQuery('SELECT', query, searchSubject, getSubject);
     }
@@ -106,10 +113,10 @@ function getSubject(xhttp) {
             document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
-            SectionNum = this.childNodes[0].innerHTML;
-            SubjectCode = this.childNodes[1].innerHTML;
-            txt_Section.innerHTML = this.childNodes[2].innerHTML;
-            txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
+            SectionNum = this.childNodes[4].innerHTML;
+            SubjectCode = this.childNodes[0].innerHTML;
+            txt_Section.innerHTML = this.childNodes[1].innerHTML;
+            txt_GradeLevel.innerHTML = this.childNodes[2].innerHTML;
 
             input_SubjectCode.value = SubjectCode;
             txt_SubjectCode.innerHTML = SubjectCode;
@@ -197,9 +204,9 @@ function setSubMAPEH() {
 
 function enablerQuarter(q) {
     if (q == quarterSelected) {
-        // return false
+        return false
     }
-    // return true
+    return true
 }
 
 
@@ -422,7 +429,9 @@ function checkValidInput() {
         GradeRating = Number(GradeRating);
         if (!Number.isInteger(GradeRating)) {
             return false;
-        } else if (!((GradeRating == '') || (GradeRating >= 65 && GradeRating <= 100))) {
+        } else if (GradeRating === '') {
+            return false;
+        } else if (!(GradeRating >= 65 && GradeRating <= 100)) {
             return false;
         }
     }
@@ -485,7 +494,7 @@ function saveGrade() {
         console.log('QUARTER ' + Quarter + ' GRADES SAVED');
         setGradeDB();
     } else {
-        alert('Invalid input! Check all grades.')
+        alert('Invalid input! Check all grades.');
     }
 }
 
@@ -523,27 +532,3 @@ function getFinalAndRemark() {
         }
     }
 }
-
-
-/////
-
-
-//  FOR TESTING
-
-// SELECT student.LRNNum, grade_subject.GradeLevel, grade_subject.SubjectCode,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeRating END), null) AS Q1,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeRating END), null) AS Q2,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeRating END), null) AS Q3,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeRating END), null) AS Q4,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeID END), null) AS IDQ1,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeID END), null) AS IDQ2,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeID END), null) AS IDQ3,
-// COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeID END), null) AS IDQ4
-// FROM student
-// LEFT JOIN grade_subject ON student.LRNNum = @@@ 
-// INNER JOIN student_section ON student.LRNNum = student_section.LRNNum
-// WHERE student_section.SectionNum IN (@@@)
-// AND grade_subject.SubjectCode IN ("@@@")
-// GROUP BY student.LRNNum
-
-//
