@@ -11,7 +11,7 @@
     $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
-    $secNum = $stmt->fetch();
+    $row = $stmt->fetch();
     $stmt->closeCursor();
 ?>
 
@@ -55,7 +55,7 @@
                 </a>
                 <p class="label">Grade Students on Subjects</p>
             </div>
-        <?php if (!empty($secNum[0])) { ?>
+        <?php if (!empty($row[0])) { ?>
             <div class="col option">
                 <a href="Grade_Values.php">
                    <img src="../pictures/gradevalue.png" class="img-opt">

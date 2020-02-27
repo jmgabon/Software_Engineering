@@ -21,14 +21,6 @@ const wrapperGradeViewMain = (function(wrapSubj, wrapVal) {
 //
 
 
-let parent_id;
-// let parent_id = 'student';
-
-// if (accessRole === 'teacher') {
-//     console.log('yo')
-//     let LRNNum;
-// }
-
 
 let schoolYear;
 let studentName;
@@ -41,16 +33,13 @@ let principalName;
 let adviserName;
 let numFailed;
 
+let parent_id;
 let trTableGrade;
+let arrSubjCode = [];
 
 const modal_body = document.querySelector('#modal-body');
 const modal_button = document.querySelector('.modal-button');
-
-let arrSubjCode = [];
-
-console.log(accessRole)
-
-let objMAPEH = [
+const objMAPEH = [
     // Subject Code : Subject Description
     {
         'MUSIC 7': 'Music 7',
@@ -79,6 +68,8 @@ let objMAPEH = [
         'HEALTH 10': 'Health 10',
     }
 ];
+
+
 
 function AddPostData() {
     const formData = document.forms['postData'];
@@ -511,23 +502,33 @@ function printInnerReportCard() {
 
 if (accessRole === 'teacher') {
     modal_button.addEventListener('click', function() {
-        this.style.backgroundColor = '';
-        let theadID = 'LRNNum@LastName@FirstName@MiddleName@Age@Gender';
-        let theadHTML = 'LRN Number@Last Name@First Name@Middle Name@Age@Gender';
-        CreateInput('SearchStudent', 'search', modal_body);
-        document.querySelector('#SearchStudent').className = 'modal-search';
-        CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Age@Gender');
+        let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
+        let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+        CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
+
+        let cat = document.querySelector('#modal-body select');
+        let hiddenCol = '';
+        const searchStudent = document.querySelector('#SearchStudent');
+        theadID += '@' + hiddenCol;
+        theadHTML += '@' + hiddenCol;
+        CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
         document.querySelector('thead').className = 'dark';
         openModal('Select Student', 'Student');
-        const searchStudent = document.querySelector('#SearchStudent');
+
 
         let Search = function() {
             let query = '';
 
-            query += 'SELECT student.LRNNum, LastName, FirstName, MiddleName, Age, Gender ';
+            query += 'SELECT student.LRNNum, LastName, Extension, FirstName, MiddleName, Age, Gender ';
             query += 'FROM student ';
             query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
             query += 'WHERE student_section.SectionNum IN (' + sectionNum + ')';
+
+            if (searchStudent.value !== '') {
+                let addQuery = (cat.options[cat.selectedIndex].value === 'LRNNum') ? 'AND student.' : 'AND ';
+                query += addQuery + cat.options[cat.selectedIndex].value + ' LIKE "' + searchStudent.value + '%"';
+            }
 
             SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
         }

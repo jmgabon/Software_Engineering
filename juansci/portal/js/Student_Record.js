@@ -18,7 +18,8 @@ const txt_LRN = document.querySelectorAll('#txt_LRN');
 const txt_Birthdate = document.querySelector('#txt_Birthdate');
 const txt_Sex = document.querySelector('#txt_Sex');
 
-const objMAPEH = [ // Subject Code : Subject Description
+const objMAPEH = [
+    // Subject Code : Subject Description
     {
         'MUSIC 7': 'Music 7',
         'ARTS 7': 'Arts 7',
@@ -97,15 +98,20 @@ function setScholasticRecordInfo(tblLen, gradeLevel) {
 
 
 modal_button.addEventListener('click', function() {
-    this.style.backgroundColor = '';
-    let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName@Birthday@Gender';
-    let theadHTML = 'LRN Number@Last Name@Extension@First Name@Middle Name@Birthday@Gender';
-    CreateInput('SearchStudent', 'search', modal_body);
-    document.querySelector('#SearchStudent').className = 'modal-search';
-    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Birthday@Gender');
+    let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
+    let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+    CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
+
+    let cat = document.querySelector('#modal-body select');
+    let hiddenCol = 'Birthday@Gender';
+    const searchStudent = document.querySelector('#SearchStudent');
+    theadID += '@' + hiddenCol;
+    theadHTML += '@' + hiddenCol;
+    CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
     document.querySelector('thead').className = 'dark';
     openModal('Select Student', 'Student');
-    const searchStudent = document.querySelector('#SearchStudent');
+
 
     let Search = function() {
         let query = '';
@@ -116,9 +122,12 @@ modal_button.addEventListener('click', function() {
         query += 'FROM student_backup  ';
         query += 'LEFT JOIN student_section_backup ON student_backup.LRNNum = student_section_backup.LRNNum ';
         query += 'ORDER BY student_backup.DateCreated DESC ';
-        query += 'LIMIT 18446744073709551615 ';
+        query += 'LIMIT 18446744073709551615 '; // https://stackoverflow.com/questions/255517/mysql-offset-infinite-rows
         query += ') AS sub ';
         query += 'GROUP BY sub.LRNNum ';
+        if (searchStudent.value !== '') {
+            query += 'HAVING ' + cat.options[cat.selectedIndex].value + ' LIKE "' + searchStudent.value + '%"';
+        }
 
         SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
     }
@@ -177,11 +186,10 @@ function PickStudent(xhttp) {
 
             clearStudentData();
 
-            let gradeLevel = 7;
-            for (let i = 0; i < 4; i++) {
-                setScholasticRecordInfo(i, gradeLevel)
-                setGradeSubjDB(i, i, gradeLevel);
-                gradeLevel++;
+            let gradeLevels = [7, 8, 9, 10];
+            for (let i = 0; i < gradeLevels.length; i++) {
+                setScholasticRecordInfo(i, gradeLevels[i])
+                setGradeSubjDB(i, i, gradeLevels[i]);
             }
         });
 
@@ -271,9 +279,7 @@ let setSubjectListDB = function(tblLen, iArrSubjCode, gradeLevel) {
         let jsonSubject;
 
         try {
-
             jsonSubject = JSON.parse(xhttp.responseText);
-
             createTBodySubj(tblLen, jsonSubject, gradeLevel);
 
         } catch (err) {
@@ -337,13 +343,16 @@ function setGradeSubjDB(tblLen, iArrSubjCode, gradeLevel) {
 
     let query = '';
 
-    query += 'SELECT SubjectCode, Quarter, GradeRating ';
+    query += 'SELECT * ';
+    query += 'FROM ( ';
+    query += 'SELECT GradeID, SubjectCode, Quarter, GradeRating ';
     query += 'FROM grade_subject_backup ';
     query += 'WHERE LRNNum IN (' + txt_LRN.textContent + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
-    // query += 'GROUP BY Quarter ';
-    query += 'ORDER BY DateCreated ASC ';
-    // query += 'LIMIT 1 ';
+    query += 'ORDER BY DateCreated DESC ';
+    query += 'LIMIT 18446744073709551615 '; // https://stackoverflow.com/questions/255517/mysql-offset-infinite-rows
+    query += ') AS sub ';
+    query += 'GROUP BY sub.GradeID ';
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
 }
