@@ -14,7 +14,7 @@ var input = document.querySelectorAll("body input"); //Gets all input tags
 var select = document.querySelectorAll("body select");
 var output = document.querySelector("output");
 var parent_id = "Student";
-
+var submitForm = document.getElementById("submitForm");
 
 function SeePicture(){
 	// console.log(input_std_picture.files[0]);
@@ -41,10 +41,10 @@ if(studentInfo != null){
 	std_picture.src = "..\\pictures\\student\\" + studentInfo[input.length-1];
 	disabled = document.createAttribute("disabled");
 	input_std_picture.setAttributeNode(disabled);
+	submitForm.innerHTML = "UPDATE";
 }
 // studentInfo = null;
 sessionStorage.removeItem('StudentInfo');
-var submitForm = document.getElementById("submitForm");
 // submitForm.addEventListener("click", ValidateForm.bind(null, "StdReg"));
 submitForm.addEventListener("click", function(event){
 	event.preventDefault();
@@ -116,7 +116,7 @@ function InsertInfo(){
 			parent_id, 
 			content, 
 			0, 
-			CheckIfUpdated
+			isUpdated
 		);
 	}
 	else{
@@ -134,12 +134,13 @@ function InsertInfo(){
 	// console.log(UploadPhoto(imageToUpload));
 }
 
-function CheckIfUpdated(xhttp){
+function isUpdated(xhttp){
 	if(xhttp.responseText != "Successful"){
 		console.log(xhttp.responseText);
 	}
 	else{
 		alert("UPDATED");
+		location.reload(false);
 	}
 }
 function CheckIfRegistered(xhttp){
@@ -154,6 +155,7 @@ function CheckIfRegistered(xhttp){
 	} 	
 	else{
 		alert("REGISTERED");
+		location.reload(false);
 	}
 }
 

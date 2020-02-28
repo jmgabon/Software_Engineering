@@ -24,8 +24,17 @@
     </div>
     <div class="secondCol col col-xl-8">
         <p class="h5 pb-2">List of Rooms
+
+        <!-- <label class="float-right" for="SearchRoom"> -->
         <label class="float-right" for="SearchRoom">
-            <input placeholder="Search for rooms.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchRoom">
+        <select class="mt-1 form-control rounded-0 bg-light" id="Category">
+            <option value="RoomNum" selected="selected">Room Number</option>
+            <option value="RoomName">Room Name</option>
+            <option value="Floor">Floor</option>
+            <option value="Type">Type</option>
+        </select>
+        <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="SearchRoom">
+        <!-- <input placeholder="Search for rooms.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchRoom" style=""> -->
         </label></p>
         <table id="SearchRoomTable">
             <thead class="dark">

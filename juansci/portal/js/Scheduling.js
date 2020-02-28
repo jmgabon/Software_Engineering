@@ -21,7 +21,7 @@ var searchSubjectCode;
 var Search;
 var button = document.querySelectorAll("button");
 openSectionModal = button[0];
-
+var cat;
 // button[1].addEventListener("click", function(){ //SUBMIT BUTTON
 // 	alert("SUBMITTED");
 // });
@@ -53,30 +53,18 @@ for(var i = 1; i < tr.length+1; i++){
 
 openSectionModal.addEventListener("click", function(){
 	this.style.backgroundColor = "";
-	theadID = "SectionNum@SectionName@GradeLevel@Adviser";
-	theadHTML = "Section Number@Section Name@Grade Level@Adviser";
-	CreateInput("SearchSection", "search", modal_body);
-	document.querySelector("#SearchSection").className = "modal-search";
+	theadID = "SectionName@GradeLevel@Adviser";
+	theadHTML = "Section Name@Grade Level@Adviser";
+	// CreateInput("SearchSection", "search", modal_body);
+	CreateSearchBox(theadID, theadHTML, '@', 'SearchSection', 'search', modal_body);
+	theadID = "SectionNum@" + theadID;
+	theadHTML = "Section Number@" + theadHTML;
+	cat = document.querySelector("#modal-body select");
+	// document.querySelector("#SearchSection").className = "modal-search";
 	CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, "SectionNum");
 	document.querySelector("thead").className = "dark";
 	openModal("Section", "Section");
 	searchSection = document.getElementById("SearchSection");
-	// function SearchWithQuery(table1, table2, columnNames, correction, whatJoin, compare, searchbox, otherQuery, callback){
-	/*		
-	Search = function(){
-		SearchWithQuery(
-			"Section",
-			"Teacher", 
-			GetID(document.querySelectorAll("#SearchSectionTable thead td"), 0),
-			"Adviser=Teacher.Name", //Adviser is equivalent to TeacherName field 
-			"LEFT JOIN",
-			"teacher.SectionNum = section.SectionNum",
-			document.getElementById("SearchSection"),
-			null,
-			PickSection
-		);
-	}
-	*/
 	Search = function(){
 		var query = "";
 		var crud = "";
@@ -85,36 +73,11 @@ openSectionModal.addEventListener("click", function(){
 		var content;
 		// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
 		query += "SELECT section.SectionNum,section.SectionName, GradeLevel, ";
-		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
+		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
 		query += "FROM section LEFT JOIN employee ON employee.EmployeeNum = section.EmployeeNum ";
-
-		// query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
+		query += "GROUP BY section.SectionNum ";
+		query += "HAVING " + cat.options[cat.selectedIndex].value + " LIKE '" + searchSection.value + "%'";
 		crud = "SELECT";
-		console.log(query);
-		basequery = query;
-		nospaces;
-		content;
-		nospaces = (searchSection.value).trim();
-		content = nospaces.split("=");
-		if(content.length > 1){
-			content[0] = content[0].replace(/ /g, "");
-			content[0] = content[0].replace("Number" , "Num");
-			content[1] = content[1].trim();
-				// console.log(content[0].toLowerCase() == "adviser");
-			if(content[0].toLowerCase() != "teacher" && content[0].toLowerCase() != "adviser"){
-				query += " WHERE " + "section." +content[0] + " LIKE '" + content[1]+ "%'";
-			}
-			else{
-				query += " WHERE " + "teacher.Name LIKE'" + content[1]+ "%'";
-			}
-		}
-		else if(content.length == 1){
-			// query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
-			query += "";
-		}
-		// query += "GROUP BY section.SectionNum";
-		// query = basequery;
-		// console.log(query);
 		SimplifiedQuery(crud, query, searchSection, PickSection);
 	}
 	Search();
@@ -278,7 +241,9 @@ function Get1stRowCell(i, j){
 		else{ //If null, you can INSERT; MODAL IS DISPLAYED
 			theadID = "SubjectCode@SubjectDescription@GradeLevel@Frequency";
 			theadHTML = "Subject Code@Description@Grade Level@Units";
-			CreateInput("SearchSubjectCode", "search", modal_body);
+			CreateSearchBox(theadID, theadHTML, '@', 'SearchSubjectCode', 'search', modal_body);
+			// CreateInput("SearchSubjectCode", "search", modal_body);
+			cat = document.querySelector("#modal-body select");
 			CreateTable("SearchSubjectCodeTable", theadID, theadHTML, "@", modal_body, 0, null);
 
 			searchSubjectCode = document.getElementById("SearchSubjectCode");
@@ -292,7 +257,7 @@ function Get1stRowCell(i, j){
 					"Units=Frequency",
 					null,
 					null,
-					searchSubjectCode,
+					cat.options[cat.selectedIndex].value + "=" + searchSubjectCode.value,
 					"subjectcode.GradeLevel =" + txt_GradeLevel.innerHTML,
 					PickSubjectCode
 				);

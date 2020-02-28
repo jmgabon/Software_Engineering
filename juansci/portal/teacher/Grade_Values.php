@@ -1,0 +1,425 @@
+<?php
+     session_start();
+     if($_SESSION['id'] === null || $_SESSION['access'] != "teacher"){
+         header('Location: ../');
+     }
+
+     include '../php/Header_User.php';
+
+    // check if adviser (if not, logout)
+    $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
+    $stmt->bindValue(1, $_SESSION['id']);
+    $stmt->execute();
+    $row = $stmt->fetch();
+    $stmt->closeCursor();
+
+    if (empty($row[0])) {
+        header('Location: ../');
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Values Grades</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/modal.css" />
+    <link rel="stylesheet" type="text/css" href="../css/all.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
+    <link rel="icon" href="../pictures/logo.png" />
+</head>
+
+<body>
+    <img src="../pictures/logodesign.jpg" class="logodesign">
+
+    <div class="header mb-3">
+        <legend class="h4 pl-0 pt-3 mb-0">REPORT ON LEARNER'S OBSERVED VALUES</legend>
+        <div class="menu">
+        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
+        </div>
+
+    </div>
+
+    <div class="room-container">
+        <div id="modal">
+            <div id="modal-content">
+                <span id="close" onclick="closeModal(document.getElementById('modal-body'));">&times;</span>
+                <div id="modal-header">
+                    <h2 id="modal-title"></h2>
+                </div>
+
+                <div id="modal-body">
+                </div>
+
+                <div id="modal-footer">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="float-right">
+            <input type="text" id="txt_LRNNum" style="display: none;" />
+            <label for="">Select Student: <input class="ml-2 sec-name" type="text" id="txt_StudentModal" required disabled/></label>
+            <button class="modal-button"><i class="far fa-window-restore"></i></button>
+        </div>
+
+        <br /><br /><br /><br />
+        <p><b>Section Name: </b><span id="txt_SectionName"></span></p>
+        <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
+        <p><b>Student Name: </b><span id="txt_Student"></span></p>
+
+        <div class="row">
+            <div class="col-9 p-0 m-0">
+                <table id="gradeTable" class="g-table">
+                    <thead class="dark">
+                        <tr>
+                            <th rowspan="2">Core Values</th>
+                            <th rowspan="2">Behavior Statement</th>
+                            <th colspan="4">Quarter</th>
+                        </tr>
+                        <tr>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td rowspan="2"><b>1. Maka-Diyos</b></td>
+                            <td>Expresses one's spiritual beliefs while respecting the spiritual beliefs of others</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Shows adherence to ethical principles by upholding truth</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2"><b>2. Makatao</b></td>
+                            <td>Is sensitive to individual, social, and cultural differences</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Demonstrates contributions towards solidarity</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2"><b>3. Makakalikasan</b></td>
+                            <td>Cares for the environment and utilizes resources wisely, judiciously, and economically</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Demonstrates pride in being a Filipino; exercises the right and responsibilities of Filipino citizen</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><b>4. Makabansa</b></td>
+                            <td>Demonstrates appropriate behavior in carrying out activities in the school community, and country</td>
+                            <td>
+                                <select class="grValQ1">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ2">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ3">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="grValQ4">
+                                    <option selected value="--" disabled>--</option>
+                                    <option value="AO">AO</option>
+                                    <option value="SO">SO</option>
+                                    <option value="RO">RO</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button id="save1">SAVE</button>
+                            </td>
+                            <td>
+                                <button id="save2">SAVE</button>
+                            </td>
+                            <td>
+                                <button id="save3">SAVE</button>
+                            </td>
+                            <td>
+                                <button id="save4">SAVE</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-0 mt-3">
+                <pre style="font-size: 20px">
+                    <b>Marking          Non-numerical Rating</b>
+                    <b> AO</b> -            Always Observed
+                    <b> SO</b> -            Sometimes Observed
+                    <b> RO</b> -            Rarely Observed
+                    <b> NO</b> -            Not Observed
+                </pre>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p class="footer-text">© 2020 - San Juan Science High School. All Rights Reserved</p>
+        </div>
+
+    </div>
+
+    <script>let EmployeeNum = <?php echo $_SESSION['id']?></script>
+    <script src="../js/ajax.js" type="text/javascript"></script>
+    <script src="../js/utility.js" type="text/javascript"></script>
+    <script src="../js/cms.js" type="text/javascript"></script>
+    <script src="../js/modal.js" type="text/javascript"></script>
+    <script src="../js/Grade_Values.js" type="text/javascript"></script>
+</body>
+
+</html>

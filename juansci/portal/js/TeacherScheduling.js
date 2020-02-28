@@ -4,7 +4,7 @@ var txt_TeacherName = document.getElementById("txt_TeacherName");
 var txt_TeacherEmployeeNum = document.getElementById("txt_TeacherEmployeeNum");
 var tr = document.querySelectorAll("tbody tr"); //
 var table = document.querySelector("table"); //
-
+var cat;
 var parent_id;
 var saved_id;
 var theadID;
@@ -40,11 +40,15 @@ buttons[2].addEventListener("click", function(){
 
 buttons[0].addEventListener("click", function(){
 	buttons[0].style.backgroundColor = '';
-	theadID = "EmployeeNum@Name";
-	theadHTML = "Employee Number@Name";
-	CreateInput("SearchTeacher", "search", modal_body);
-	CreateTable("SearchTeacherTable", theadID, theadHTML, "@", modal_body, 0, null);
+	theadID = "EmployeeNum@LastName@Extension@FirstName@MiddleName";
+	theadHTML = "Employee Number@Last Name@Extension@First Name@Middle Name";
+	CreateSearchBox(theadID, theadHTML, '@', 'SearchTeacher', 'search', modal_body);
+	hiddenCol = "Name";
+	theadID += "@" + hiddenCol;
+	theadHTML += "@" + hiddenCol;
+	CreateTable("SearchTeacherTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
 	openModal("List of Teachers", "Teacher");
+	cat = document.querySelector("#modal-body select");
 	var searchTeacher = document.getElementById('SearchTeacher'); 
 	// console.log(GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0));
 	Search = function(){
@@ -54,37 +58,13 @@ buttons[0].addEventListener("click", function(){
 		var nospaces;
 		var content;
 		// query += "SELECT section.SectionNum,section.SectionName, RoomNum, teacher.EmployeeNum, teacher.Name, ";
-		query += "SELECT EmployeeNum, ";
-		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', Extension), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', Extension), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
+		query += "SELECT EmployeeNum, LastName, Extension, FirstName, MiddleName, ";
+		query += "IF(MiddleName IS NULL, CONCAT(LastName , IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, '' , ''), CONCAT(LastName, IF(Extension is NULL, '', CONCAT(' ', Extension)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Name ";
 		query += "FROM employee ";
+		query += "GROUP BY employee.EmployeeNum ";
+		query += "HAVING " + cat.options[cat.selectedIndex].value + " LIKE '" + searchTeacher.value + "%'";
 
-		// query += "LEFT JOIN student_section ON student_section.SectionNum = section.SectionNum ";
 		crud = "SELECT";
-		console.log(query);
-		basequery = query;
-		nospaces;
-		content;
-		nospaces = (searchTeacher.value).trim();
-		content = nospaces.split("=");
-		if(content.length > 1){
-			content[0] = content[0].replace(/ /g, "");
-			content[0] = content[0].replace("Number" , "Num");
-			content[1] = content[1].trim();
-				// console.log(content[0].toLowerCase() == "adviser");
-			if(content[0].toLowerCase() != "teacher" && content[0].toLowerCase() != "adviser"){
-				query += " WHERE " + "section." +content[0] + " LIKE '" + content[1]+ "%'";
-			}
-			else{
-				query += " WHERE " + "teacher.Name LIKE'" + content[1]+ "%'";
-			}
-		}
-		else if(content.length == 1){
-			// query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
-			query += "";
-		}
-		// query += "GROUP BY section.SectionNum";
-		// query = basequery;
-		// console.log(query);
 		SimplifiedQuery(crud, query, searchTeacher, PickTeacher);
 	}
 	Search();
@@ -105,7 +85,7 @@ function PickTeacher(xhttp){
 		});
 		tbody_tr[i].addEventListener("click", function(){
 			txt_TeacherEmployeeNum.value = this.children[0].innerHTML;
-			txt_TeacherName.value = this.children[1].innerHTML;
+			txt_TeacherName.value = this.children[5].innerHTML;
 			closeModal(modal_body);
 			RetrieveTeacherSchedule();
 		});
@@ -117,10 +97,12 @@ function PickTeacher(xhttp){
 buttons[1].addEventListener("click", function(){
 	if(txt_TeacherEmployeeNum.value != ''){
 		// theadID = "SubjectID@SubjectCode@SectionNum@SectionName";
-		theadID = "SubjectID@SubjectCode@Grade Level@SectionName";
-		theadHTML = "Subject ID@Subject Code@Grade Level@Section Name";
+		theadID = "subject.SubjectID@SubjectDay@SubjectTime@SubjectCode@GradeLevel@SectionName";
+		theadHTML = "Subject ID@Subject Day@Subject Time@Subject Code@Grade Level@Section Name";
 		// theadHTML = "Subject Id@Subject Code@Section Number@Section Name";
-		CreateInput("SearchSubject", "search", modal_body);
+		CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
+		cat = document.querySelector("#modal-body select");	
+		// CreateInput("SearchSubject", "search", modal_body);
 		CreateTable("SearchSubjectTable", theadID, theadHTML, "@", modal_body, 0, null);
 		openModal("List of Subjects", "Subject");
 		var crud = "SELECT";
@@ -129,13 +111,17 @@ buttons[1].addEventListener("click", function(){
 		searchSubject = document.getElementById('SearchSubject'); 
 		Search = function(){
 			// <<<<<<<<<<<<<<<<<<<<<<<PROBLEM
-			query += "SELECT DISTINCT subject.SubjectID, subject.SubjectCode, section.GradeLevel, section.SectionName ";
+			query += "SELECT DISTINCT subject.SubjectID, ";
+			query += "SubjectDay, SubjectTime, subject.SubjectCode,";
+			query += "section.GradeLevel, section.SectionName "; 
 			query += "FROM sched RIGHT JOIN subject ON subject.SubjectID = sched.SubjectID ";
 			query += "INNER JOIN section ON subject.SectionNum = section.SectionNum "
 			query += "WHERE subject.EmployeeNum IS NULL AND NOT(SubjectTime IN (SELECT SubjectTime FROM subject ";
 			query += "INNER JOIN sched ON subject.SubjectID = sched.SubjectID " 
+			// query += "WHERE subject.EmployeeNum = '"+txt_TeacherEmployeeNum.value+"') "; 
 			query += "WHERE subject.EmployeeNum = '"+txt_TeacherEmployeeNum.value+"') "; 
 			query += "AND SubjectDay IN (SELECT SubjectDay FROM subject INNER JOIN sched "; 
+			// query += "ON subject.SubjectID = sched.SubjectID WHERE subject.EmployeeNum = '"+txt_TeacherEmployeeNum.value+"')) ";
 			query += "ON subject.SubjectID = sched.SubjectID WHERE subject.EmployeeNum = '"+txt_TeacherEmployeeNum.value+"')) ";
 
 			SimplifiedQuery(crud, query, searchSubject, PickSubject);
@@ -144,38 +130,43 @@ buttons[1].addEventListener("click", function(){
 		}
 		Search();
 		searchSubject.addEventListener('change', function(){
-			var basequery = query;
-			var nospaces;
-			var content;
-			nospaces = (searchSubject.value).trim();
-			nospaces = nospaces.replace(/ /g, "");
-			// subquery = nospaces.split("AND");
-
-
-			// subquery.map(arr => {
-			// 	arr.split("=");
-			// 	arr.map(a => console.log(a));
-			// });
-
-			
-			content = nospaces.split("=");
-			if(content.length > 1){
-				console.log(content);
-				content[0] = content[0].replace(/ /g, "");
-				content[1] = content[1].trim();
-				// query += "AND " + "subject." +content[0] + " LIKE '" + content[1]+ "%'";
-			}
-			else if(content.length == 1){
-				query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
-			}
-
-			SimplifiedQuery(crud, query, searchSubject, PickSubject);
-			
-			console.log(query);
-			query = basequery;
-			console.log(query);
-			// console.log("HEY");
+			let searchboxQuery = "AND " + cat.options[cat.selectedIndex].value + " LIKE '" + searchSubject.value + "%'";
+			searchboxQuery = query + searchboxQuery;
+			SimplifiedQuery(crud, searchboxQuery, searchSubject, PickSubject);	
+			console.log(searchboxQuery);
 		});
+		// 	var basequery = query;
+		// 	var nospaces;
+		// 	var content;
+		// 	nospaces = (searchSubject.value).trim();
+		// 	nospaces = nospaces.replace(/ /g, "");
+		// 	// subquery = nospaces.split("AND");
+
+
+		// 	// subquery.map(arr => {
+		// 	// 	arr.split("=");
+		// 	// 	arr.map(a => console.log(a));
+		// 	// });
+
+			
+		// 	content = nospaces.split("=");
+		// 	if(content.length > 1){
+		// 		console.log(content);
+		// 		content[0] = content[0].replace(/ /g, "");
+		// 		content[1] = content[1].trim();
+		// 		// query += "AND " + "subject." +content[0] + " LIKE '" + content[1]+ "%'";
+		// 	}
+		// 	else if(content.length == 1){
+		// 		query += "AND " + "subject.SubjectID LIKE '" + content[0]+ "%'";	
+		// 	}
+
+		// 	SimplifiedQuery(crud, query, searchSubject, PickSubject);
+			
+		// 	console.log(query);
+		// 	query = basequery;
+		// 	console.log(query);
+		// 	// console.log("HEY");
+		// });
 	}
 	else{
 		alert("Please select a teacher first");

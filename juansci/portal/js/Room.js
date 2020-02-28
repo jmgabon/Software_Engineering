@@ -2,14 +2,16 @@
 var searchRoom = document.getElementById("SearchRoom");
 var createRoom = document.getElementById("CreateRoom");
 var resetRoom = document.getElementById("ResetRoom");
+var cat = document.querySelector("#Category");
 // var createSection = document.getElementById("CreateSection");
 
 var parent_id = "Room";
 var tableName = 'room';
 var Search = function(){
+	// console.log(typeof searchRoom.value);
 	SearchWithoutQuery(
 		parent_id,
-		searchRoom, 
+		cat.options[cat.selectedIndex].value + "=" + searchRoom.value, 
 		GetID(document.querySelectorAll("#SearchRoomTable thead td"), 1),
 		null
 	);

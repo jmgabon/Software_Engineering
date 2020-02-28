@@ -21,14 +21,6 @@ const wrapperGradeViewMain = (function(wrapSubj, wrapVal) {
 //
 
 
-let parent_id;
-// let parent_id = 'student';
-
-// if (accessRole === 'teacher') {
-//     console.log('yo')
-//     let LRNNum;
-// }
-
 
 let schoolYear;
 let studentName;
@@ -41,16 +33,13 @@ let principalName;
 let adviserName;
 let numFailed;
 
+let parent_id;
 let trTableGrade;
+let arrSubjCode = [];
 
 const modal_body = document.querySelector('#modal-body');
 const modal_button = document.querySelector('.modal-button');
-
-let arrSubjCode = [];
-
-console.log(accessRole)
-
-let objMAPEH = [
+const objMAPEH = [
     // Subject Code : Subject Description
     {
         'MUSIC 7': 'Music 7',
@@ -79,6 +68,108 @@ let objMAPEH = [
         'HEALTH 10': 'Health 10',
     }
 ];
+
+
+
+if (accessRole === 'teacher') {
+    modal_button.addEventListener('click', function() {
+        let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
+        let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+        CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
+
+        let cat = document.querySelector('#modal-body select');
+        let hiddenCol = '';
+        const searchStudent = document.querySelector('#SearchStudent');
+        theadID += '@' + hiddenCol;
+        theadHTML += '@' + hiddenCol;
+        CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
+        document.querySelector('thead').className = 'dark';
+        openModal('Select Student', 'Student');
+
+
+        let Search = function() {
+            let query = '';
+
+            query += 'SELECT student.LRNNum, LastName, Extension, FirstName, MiddleName, Age, Gender ';
+            query += 'FROM student ';
+            query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
+            query += 'WHERE student_section.SectionNum IN (' + sectionNum + ')';
+
+            if (searchStudent.value !== '') {
+                let queryAnd;
+                let queryNull;
+
+                if (cat.options[cat.selectedIndex].value === 'LRNNum') {
+                    queryAnd = 'AND student.';
+                } else {
+                    queryAnd = 'AND '
+                }
+
+                if (searchStudent.value === ' ') {
+                    queryNull = ' IS NULL';
+                } else {
+                    queryNull = ' LIKE "' + searchStudent.value + '%"';
+                }
+
+                query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
+            }
+
+            SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
+        }
+        Search();
+
+        cat.addEventListener('change', () => {
+            searchStudent.value = '';
+            Search();
+        });
+        searchStudent.addEventListener('change', Search);
+    });
+}
+
+
+function PickStudent(xhttp) {
+    console.log(JSON.parse(xhttp.responseText));
+    CreateTBody(xhttp, PickStudent);
+    const tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
+
+    for (let i = 0; i < tbody_tr.length; i++) {
+        tbody_tr[i].addEventListener('click', function() {
+            const txt_StudentModal = document.querySelector('#txt_StudentModal');
+            document.querySelector('#SearchStudent').value = '';
+            closeModal(modal_body);
+
+            let extName = this.childNodes[2].innerHTML;
+
+            if (extName !== '') {
+                extName = ' ' + extName;
+            }
+
+            LRNNum = this.childNodes[0].textContent;
+            txt_StudentName.textContent = this.childNodes[1].textContent;
+            txt_StudentName.textContent += extName + ', ';
+            txt_StudentName.textContent += this.childNodes[3].textContent + ' ';
+            txt_StudentName.textContent += this.childNodes[4].textContent;
+            txt_StudentModal.value = txt_StudentName.textContent;
+            studentName = txt_StudentName.textContent
+
+            studentAge = this.childNodes[4].textContent;
+            studentSex = this.childNodes[5].textContent;
+
+            setGradeSubjDB();
+            setGradeValDB();
+        });
+        tbody_tr[i].addEventListener('mouseover', function() {
+            this.style.backgroundColor = 'maroon';
+            this.style.color = 'white';
+        });
+        tbody_tr[i].addEventListener('mouseout', function() {
+            this.style.backgroundColor = '';
+            this.style.color = '';
+        });
+    }
+}
+
 
 function AddPostData() {
     const formData = document.forms['postData'];
@@ -120,7 +211,11 @@ let createTBodySubj = function(subj) {
             td = document.createElement('td');
 
             if (i < subj.length) {
-                td.innerHTML = (j == 0) ? subj[i]['SubjectDescription'] : '';
+                if (subj[i]['SubjectDescription'] !== null) {
+                    td.innerHTML = (j == 0) ? subj[i]['SubjectDescription'] : '';
+                } else {
+                    td.innerHTML = (j == 0) ? (subj[i]['SubjectCode'] + ': NULL') : '';
+                }
             } else {
                 td.textContent = (j == 0) ? 'AVERAGE' : '';
                 tr.setAttribute('style', 'font-weight:bold');
@@ -174,6 +269,7 @@ let setSubjectListDB = function(grLvl) {
     SimplifiedQuery('SELECT', query, '', getSubjectListDB);
 }
 
+
 let getSubjectListDB = function(xhttp) {
     let jsonSubject;
 
@@ -189,35 +285,48 @@ let getSubjectListDB = function(xhttp) {
 }
 
 let setStudentInfo = function() {
-    let columnNames = {
-        0: 'LRNNum',
-        1: 'LastName',
-        2: 'FirstName',
-        3: 'MiddleName',
-        4: 'Age',
-        5: 'Gender'
-    };
+    let query = '';
 
-    SearchWithoutQuery('student', LRNNum, columnNames, getStudentInfo);
+    query += 'SELECT LastName, Extension, FirstName, MiddleName, Age, Gender, GradeLevel ';
+    query += 'FROM student ';
+    query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
+
+    SimplifiedQuery('SELECT', query, '', getStudentInfo);
 }
 
 let getStudentInfo = function(xhttp) {
     let jsonStudentInfo = JSON.parse(xhttp.responseText);
+    console.log(jsonStudentInfo)
 
     try {
-        txt_StudentName.textContent = jsonStudentInfo[0][1] + ', ';
-        txt_StudentName.textContent += jsonStudentInfo[0][2] + ' ';
-        if (jsonStudentInfo[0][3] !== null) {
-            txt_StudentName.textContent += jsonStudentInfo[0][3];
+        let extName = jsonStudentInfo[0]['Extension'];
+        let midName = jsonStudentInfo[0]['MiddleName'];
+
+        if (midName === null) {
+            midName = '';
         }
+
+        if (extName === null) {
+            extName = '';
+        } else {
+            extName = ' ' + extName;
+        }
+
+
+        txt_StudentName.textContent = jsonStudentInfo[0]['LastName'];
+        txt_StudentName.textContent += extName + ', ';
+        txt_StudentName.textContent += jsonStudentInfo[0]['FirstName'] + ' ';
+        txt_StudentName.textContent += midName;
         studentName = txt_StudentName.textContent;
 
-        studentAge = jsonStudentInfo[0][4];
-        studentSex = jsonStudentInfo[0][5];
+        studentAge = jsonStudentInfo[0]['Age'];
+        studentSex = jsonStudentInfo[0]['Gender'];
 
-        setGradeSubjDB();
-        setGradeValDB();
-        console.log(jsonStudentInfo);
+        gradeLevel = jsonStudentInfo[0]['GradeLevel'];
+        txt_GradeLevel.textContent = gradeLevel;
+
+        setSubjectListDB(gradeLevel);
+        setIfSectionAssigned();
 
     } catch (err) {
         alert('CANNOT FIND');
@@ -225,6 +334,40 @@ let getStudentInfo = function(xhttp) {
         console.log(err);
     }
 }
+
+
+let setIfSectionAssigned = function() {
+    let query = '';
+
+    query += 'SELECT SectionNum ';
+    query += 'FROM student_section ';
+    query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
+    query += 'AND GradeLevel IN ("' + gradeLevel + '") ';
+
+    SimplifiedQuery('SELECT', query, '', getIfSectionAssigned);
+}
+
+
+let getIfSectionAssigned = function(xhttp) {
+    let jsonSection = JSON.parse(xhttp.responseText);
+    console.log(jsonSection);
+
+    try {
+        if (jsonSection.length === 0) {
+            alert('Student does not have section yet. Please contact administrator.');
+        } else {
+            setSectionInfo();
+            setGradeSubjDB();
+            setGradeValDB();
+        }
+
+    } catch (err) {
+        alert('CANNOT FIND');
+        console.log(xhttp.responseText);
+        console.log(err);
+    }
+}
+
 
 function setSectionInfo() {
     let query = '';
@@ -246,10 +389,13 @@ function setSectionInfo() {
         query += 'JOIN employee ';
         query += 'ON section.EmployeeNum = employee.EmployeeNum ';
         query += 'WHERE student_section.LRNNum IN (' + LRNNum + ') ';
+        query += 'ORDER BY student_section.DateCreated DESC ';
+        query += 'LIMIT 1 ';
     }
 
     SimplifiedQuery('SELECT', query, '', getSectionInfo);
 }
+
 
 function getSectionInfo(xhttp) {
     try {
@@ -263,20 +409,17 @@ function getSectionInfo(xhttp) {
         sectionNum = jsonSecInfo[0]['SectionNum'];
         adviserName = jsonSecInfo[0]['Adviser'];
         sectionName = jsonSecInfo[0]['SectionName'];
-        gradeLevel = jsonSecInfo[0]['GradeLevel'];
 
-        // adviserName = adviserName.split(', ')
-        // adviserName = adviserName[1] + ' ' + adviserName[0]
+        if (accessRole === 'teacher') {
+            gradeLevel = jsonSecInfo[0]['GradeLevel'];
+            setSubjectListDB(gradeLevel);
+        }
 
         txt_AdviserName.textContent = adviserName;
         txt_SectionName.textContent = sectionName;
         txt_GradeLevel.textContent = gradeLevel;
 
-        setSubjectListDB(gradeLevel);
 
-        if (accessRole === 'student') {
-            setStudentInfo();
-        }
 
     } catch (err) {
         alert('CANNOT FIND');
@@ -284,6 +427,16 @@ function getSectionInfo(xhttp) {
         console.log(err);
     }
 }
+
+
+function clearTBodySubj() {
+    for (let i = 0; i < trTableGrade.length; i++) {
+        for (let j = 1; j <= 6; j++) {
+            trTableGrade[i].cells[j].textContent = '';
+        }
+    }
+}
+
 
 function setGradeSubjDB() {
     let query = '';
@@ -294,26 +447,8 @@ function setGradeSubjDB() {
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
-
-    // let columnNames = {
-    //     0: 'GradeID',
-    //     1: 'LRNNum',
-    //     2: 'GradeLevel',
-    //     3: 'SubjectCode',
-    //     4: 'Quarter',
-    //     5: 'GradeRating'
-    // };
-
-    // SearchWithoutQuery('grade_subject', LRNNum, columnNames, getGradeSubjDB);
 }
 
-function clearTBodySubj() {
-    for (let i = 0; i < trTableGrade.length; i++) {
-        for (let j = 1; j <= 6; j++) {
-            trTableGrade[i].cells[j].textContent = '';
-        }
-    }
-}
 
 function getGradeSubjDB(xhttp) {
     let jsonGradeSubj;
@@ -342,8 +477,8 @@ function getGradeSubjDB(xhttp) {
     }
 }
 
-function getAveMAPEH() {
 
+function getAveMAPEH() {
     for (let i = 0; i < trTableGrade.length; i++) {
 
         if (trTableGrade[i].textContent === 'MAPEH 7' ||
@@ -459,7 +594,7 @@ function calculateAverage() {
     trTableGrade[trTableGrade.length - 1].cells[6].textContent = remarksGWA;
 }
 
-//Grade Values
+
 function setGradeValDB() {
     let query = '';
 
@@ -471,6 +606,7 @@ function setGradeValDB() {
     SimplifiedQuery('SELECT', query, '', getGradesValDB);
 }
 
+
 function getGradesValDB(xhttp) {
     let jsonGradeVal = JSON.parse(xhttp.responseText);
     console.log(jsonGradeVal);
@@ -480,6 +616,7 @@ function getGradesValDB(xhttp) {
             document.querySelectorAll('.grValQ' + i)[j].textContent = '';
         }
     }
+
 
     try {
         for (let i = 0; i < jsonGradeVal.length; i++) {
@@ -491,6 +628,7 @@ function getGradesValDB(xhttp) {
     }
 }
 
+
 function getParentCol(child) {
     if (child.includes('1a')) return 0;
     else if (child.includes('1b')) return 1;
@@ -501,76 +639,17 @@ function getParentCol(child) {
     else if (child.includes('4a')) return 6;
 }
 
+
 function printInnerReportCard() {
     window.print();
 }
 
 
-//STUDENT
 
-
-if (accessRole === 'teacher') {
-    modal_button.addEventListener('click', function() {
-        this.style.backgroundColor = '';
-        let theadID = 'LRNNum@LastName@FirstName@MiddleName@Age@Gender';
-        let theadHTML = 'LRN Number@Last Name@First Name@Middle Name@Age@Gender';
-        CreateInput('SearchStudent', 'search', modal_body);
-        document.querySelector('#SearchStudent').className = 'modal-search';
-        CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum@Age@Gender');
-        document.querySelector('thead').className = 'dark';
-        openModal('Select Student', 'Student');
-        const searchStudent = document.querySelector('#SearchStudent');
-
-        let Search = function() {
-            let query = '';
-
-            query += 'SELECT student.LRNNum, LastName, FirstName, MiddleName, Age, Gender ';
-            query += 'FROM student ';
-            query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
-            query += 'WHERE student_section.SectionNum IN (' + sectionNum + ')';
-
-            SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
-        }
-        Search();
-
-        searchStudent.addEventListener('change', Search);
-    });
-}
-
-
-function PickStudent(xhttp) {
-    console.log(JSON.parse(xhttp.responseText));
-    CreateTBody(xhttp, PickStudent);
-    const tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
-
-    for (let i = 0; i < tbody_tr.length; i++) {
-        tbody_tr[i].addEventListener('click', function() {
-            const txt_StudentModal = document.querySelector('#txt_StudentModal');
-            document.querySelector('#SearchStudent').value = '';
-            closeModal(modal_body);
-
-            LRNNum = this.childNodes[0].textContent;
-            txt_StudentName.textContent = this.childNodes[1].textContent + ', ';
-            txt_StudentName.textContent += this.childNodes[2].textContent + ' ';
-            txt_StudentName.textContent += this.childNodes[3].textContent;
-            txt_StudentModal.value = txt_StudentName.textContent;
-            studentName = txt_StudentName.textContent
-
-            studentAge = this.childNodes[4].textContent;
-            studentSex = this.childNodes[5].textContent;
-
-            setGradeSubjDB();
-            setGradeValDB();
-        });
-        tbody_tr[i].addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'maroon';
-            this.style.color = 'white';
-        });
-        tbody_tr[i].addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
-            this.style.color = '';
-        });
+let init = (function() {
+    if (accessRole === 'teacher') {
+        setSectionInfo();
+    } else if (accessRole === 'student') {
+        setStudentInfo();
     }
-}
-
-setSectionInfo();
+})();

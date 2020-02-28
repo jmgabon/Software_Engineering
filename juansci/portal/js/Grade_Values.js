@@ -5,20 +5,18 @@
 
 
 
-
 let parent_id;
-let jsonGradeVal;
-let GradeValID;
-let BehaviorID;
-let GradeValRating;
-
-let gradeLevel;
 let SectionNum;
-let Quarter;
-
-let LRNNum;
-
+let jsonGradeVal;
 let quarterSelected;
+
+let GradeValID;
+let LRNNum;
+let gradeLevel;
+let BehaviorID;
+let Quarter;
+let GradeValRating;
+let trLen = document.querySelectorAll('#gradeTable tbody tr').length - 1;
 
 
 
@@ -35,7 +33,7 @@ const wrapperUIValues = (function() {
 
     let clearGrades = function() {
         for (let i = 1; i <= 4; i++) {
-            for (let j = 0; j <= 6; j++) {
+            for (let j = 0; j < trLen; j++) {
                 document.querySelectorAll('.grValQ' + i)[j].value = '--';
             }
         }
@@ -168,54 +166,67 @@ const wrapperGradeValues = (function() {
         }
     }
 
+    let checkIfAllFilled = function() {
+        for (let i = 0; i < trLen; i++) {
+            GradeValRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
+            if (GradeValRating === '--') {
+                return false;
+            }
+        }
+        return true
+    }
 
     let checkGradeVal = function() {
-        for (let i = 0; i <= 6; i++) {
-            GradeValID = 0;
-            GradeValRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
+        if (checkIfAllFilled()) {
+            for (let i = 0; i < trLen; i++) {
+                GradeValID = 0;
+                GradeValRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
 
-            switch (i) {
-                case 0:
-                    BehaviorID = '1a';
-                    break;
-                case 1:
-                    BehaviorID = '1b';
-                    break;
-                case 2:
-                    BehaviorID = '2a';
-                    break;
-                case 3:
-                    BehaviorID = '2b';
-                    break;
-                case 4:
-                    BehaviorID = '3a';
-                    break;
-                case 5:
-                    BehaviorID = '3b';
-                    break;
-                case 6:
-                    BehaviorID = '4a';
-                    break;
-            }
+                switch (i) {
+                    case 0:
+                        BehaviorID = '1a';
+                        break;
+                    case 1:
+                        BehaviorID = '1b';
+                        break;
+                    case 2:
+                        BehaviorID = '2a';
+                        break;
+                    case 3:
+                        BehaviorID = '2b';
+                        break;
+                    case 4:
+                        BehaviorID = '3a';
+                        break;
+                    case 5:
+                        BehaviorID = '3b';
+                        break;
+                    case 6:
+                        BehaviorID = '4a';
+                        break;
+                }
 
-            for (let j = 0; j < jsonGradeVal.length; j++) {
-                if (jsonGradeVal[j]['BehaviorID'] === BehaviorID) {
-                    if (jsonGradeVal[j]['Quarter'] === Quarter) {
-                        GradeValID = jsonGradeVal[j]['GradeValID'];
+                for (let j = 0; j < jsonGradeVal.length; j++) {
+                    if (jsonGradeVal[j]['BehaviorID'] === BehaviorID) {
+                        if (jsonGradeVal[j]['Quarter'] === Quarter) {
+                            GradeValID = jsonGradeVal[j]['GradeValID'];
+                        }
                     }
+                }
+
+                if (GradeValRating !== '--') {
+                    updateGradeDB();
+                } else {
+                    deleteGradeDB();
                 }
             }
 
-            if (GradeValRating !== '--') {
-                updateGradeDB();
-            } else {
-                deleteGradeDB();
-            }
+            alert('QUARTER ' + Quarter + ' GRADES SAVED');
+            console.log('QUARTER ' + Quarter + ' GRADES SAVED');
+            setGradesValDB();
+        } else {
+            alert('Invalid input! Check all grades.');
         }
-
-        alert('QUARTER ' + Quarter + ' GRADES SAVED');
-        console.log('QUARTER ' + Quarter + ' GRADES SAVED');
-        setGradesValDB();
     }
 
 
@@ -256,8 +267,6 @@ const mainController = (function(wrapUI, wrapVal) {
     const modal_button = document.querySelector('.modal-button');
 
     const setupEventListeners = function() {
-        // let DOM = UICtrl.getDOMStrings();
-
         let activateSave = function(q) {
             if (studentSelected) {
                 Quarter = q;
@@ -273,33 +282,62 @@ const mainController = (function(wrapUI, wrapVal) {
         wrapVal.saveButton.save4.addEventListener('click', () => activateSave(4));
 
         modal_button.addEventListener('click', function() {
-            this.style.backgroundColor = '';
-            let theadID = 'LRNNum@LastName@FirstName@MiddleName';
-            let theadHTML = 'LRN Number@Last Name@First Name@Middle Name';
-            CreateInput('SearchStudent', 'search', modal_body);
-            document.querySelector('#SearchStudent').className = 'modal-search';
-            CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, 'LRNNum');
+            let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
+            let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+            CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
+
+            let cat = document.querySelector('#modal-body select');
+            let hiddenCol = '';
+            const searchStudent = document.querySelector('#SearchStudent');
+            theadID += '@' + hiddenCol;
+            theadHTML += '@' + hiddenCol;
+            CreateTable('SearchStudentTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
             document.querySelector('thead').className = 'dark';
             openModal('Select Student', 'Student');
-            const searchStudent = document.querySelector('#SearchStudent');
+
 
             let Search = function() {
                 let query = '';
 
-                query += 'SELECT student.LRNNum, LastName, FirstName, MiddleName, Age, Gender ';
+                query += 'SELECT student.LRNNum, LastName, Extension, FirstName, MiddleName ';
                 query += 'FROM student ';
                 query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
                 query += 'WHERE student_section.SectionNum IN (' + SectionNum + ')';
+
+                if (searchStudent.value !== '') {
+                    let queryAnd;
+                    let queryNull;
+
+                    if (cat.options[cat.selectedIndex].value === 'LRNNum') {
+                        queryAnd = 'AND student.';
+                    } else {
+                        queryAnd = 'AND ';
+                    }
+
+                    if (searchStudent.value === ' ') {
+                        queryNull = ' IS NULL';
+                    } else {
+                        queryNull = ' LIKE "' + searchStudent.value + '%"';
+                    }
+
+                    query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
+                }
 
                 SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
             }
             Search();
 
+            cat.addEventListener('change', () => {
+                searchStudent.value = '';
+                Search();
+            });
             searchStudent.addEventListener('change', Search);
         });
 
 
         let PickStudent = function(xhttp) {
+            console.log(JSON.parse(xhttp.responseText));
             CreateTBody(xhttp);
             let tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
             for (let i = 0; i < tbody_tr.length; i++) {
@@ -308,10 +346,17 @@ const mainController = (function(wrapUI, wrapVal) {
                     document.querySelector('#SearchStudent').value = '';
                     closeModal(modal_body);
 
+                    let extName = this.childNodes[2].innerHTML;
+
+                    if (extName !== '') {
+                        extName = ' ' + extName;
+                    }
+
                     LRNNum = this.childNodes[0].innerHTML;
-                    txt_Student.innerHTML = this.childNodes[1].innerHTML + ', ';
-                    txt_Student.innerHTML += this.childNodes[2].innerHTML + ' ';
-                    txt_Student.innerHTML += this.childNodes[3].innerHTML;
+                    txt_Student.innerHTML = this.childNodes[1].innerHTML;
+                    txt_Student.innerHTML += extName + ', ';
+                    txt_Student.innerHTML += this.childNodes[3].innerHTML + ' ';
+                    txt_Student.innerHTML += this.childNodes[4].innerHTML;
                     txt_StudentModal.value = txt_Student.innerHTML;
                     studentSelected = true;
 

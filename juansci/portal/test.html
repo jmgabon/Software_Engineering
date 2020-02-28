@@ -4,9 +4,33 @@
 	<title>test</title>
 </head>
 <body>
-	<input type="text" name=""/>
+	<!-- <input type="text" name=""/> -->
 	<script type="text/javascript">
-		console.log(document.querySelector('input').id == '');
+	var theadID = "RoomNum@RoomName@Capacity";
+	var theadHTML = "Room Number@Room Name@Capacity";
+
+	CreateSelect(theadID, theadHTML, '@', document.querySelector("body"));
+	function CreateSelect(thead_id, theadHTML, seperator, parentNode){
+		thead_id = thead_id.split(seperator);
+		theadHTML = theadHTML.split(seperator);
+
+		let select = document.createElement("select");
+		for(let i = 0; i < thead_id.length; i++){
+			let option = document.createElement("option");
+			let optionSelected = document.createElement("selected");
+			if(i == 0){
+				optionSelected.value = "selected";
+				option.appendChild(optionSelected);
+			}
+			option.text = theadHTML[i];
+			option.value = thead_id[i];
+			console.log(option);
+			select.appendChild(option);
+		}
+		console.log(thead_id);
+		console.log(theadHTML);
+		parentNode.appendChild(select);
+	}
 	</script>
 </body>
 </html>

@@ -9,6 +9,14 @@
 	<div class="secondCol col-xl-12">
 		<p class="h5 pb-2">
 			<label class="float-right" for="SearchStudent">
+				<select id="Category" class="mt-1 form-control rounded-0 bg-light">
+					<option value="LRNNum">LRN Number</option>
+					<option value="LastName">Last Name</option>
+					<option value="Extension">Extension</option>
+					<option value="FirstName">First Name</option>
+					<option value="MiddleName">Middle Name</option>
+					<option value="GradeLevel">Grade Level</option>
+				</select>
 				<input placeholder="Search for students.." type="search" class="mt-1 form-control rounded-0 bg-light" id="SearchStudent">
 			</label></p>
 		<table id="SearchStudentTable">
