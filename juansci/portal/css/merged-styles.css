@@ -293,6 +293,9 @@
             .secondCol {
                 margin-top: 20px;
             }
+            .room-container{
+                width: 80%;
+            }
         }
         /* .pgn-first{
 	/* border:2px solid maroon;

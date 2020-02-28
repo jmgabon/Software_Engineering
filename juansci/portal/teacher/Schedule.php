@@ -6,31 +6,11 @@
 
     include '../php/Header_User.php';
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Schedule</title>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Subject Grades</title>
-
-    <link rel="stylesheet" type="text/css" href="../css/modal.css" />
-    <link rel="stylesheet" type="text/css" href="../css/all.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
-    <link rel="icon" href="../pictures/logo.png" />
-</head>
-<body>
-	<img src="../pictures/logodesign.jpg" class="logodesign">
-
-    <div class="header mb-3">
-        <legend class="h4 pl-0 pt-3 mb-0">SCHEDULE</legend>
-        <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
-        </div>
-    </div>
-    <div class="room-container">
+<?php include 'partials/header.php'; ?>
+	<script type="text/javascript">
+		$('#lead').text('Check Schedule');
+	</script>     
+    <div class="room-container mt-5">
     <div class="s-table">
 	<table>
 		<thead class="dark">
