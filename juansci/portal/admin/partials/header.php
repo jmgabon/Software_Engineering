@@ -24,7 +24,6 @@
       <nav class="sticky-top navbar shadow bg-dark text-light navbar-expand-lg">
         <div class="container-fluid">
           <p id="demo" class="m-0 p-0"></p>
-          
           <a class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user p-0 m-0"></i>
