@@ -90,9 +90,17 @@ openSubjectModal.addEventListener('click', function() {
         query += 'JOIN employee ';
         query += 'ON subject.EmployeeNum = employee.EmployeeNum ';
         query += 'WHERE subject.EmployeeNum = ' + EmployeeNum + ' ';
+
         if (searchSubject.value !== '') {
-            let addQuery = (cat.options[cat.selectedIndex].value === 'Adviser') ? 'HAVING ' : 'AND ';
-            query += addQuery + cat.options[cat.selectedIndex].value + ' LIKE "' + searchSubject.value + '%"';
+            let queryHaving;
+
+            if (cat.options[cat.selectedIndex].value === 'Adviser') {
+                queryHaving = 'HAVING ';
+            } else {
+                queryHaving = 'AND ';
+            }
+
+            query += queryHaving + cat.options[cat.selectedIndex].value + ' LIKE "' + searchSubject.value + '%"';
         }
 
         SimplifiedQuery('SELECT', query, searchSubject, getSubject);
@@ -100,6 +108,10 @@ openSubjectModal.addEventListener('click', function() {
     Search();
 
     searchSubject.addEventListener('change', Search);
+    cat.addEventListener('change', () => {
+        searchSubject.value = '';
+        Search();
+    });
 });
 
 
@@ -158,7 +170,7 @@ function getSubject(xhttp) {
 function setStudentListDB() {
     let query = '';
 
-    query += 'SELECT student.LRNNum, student.LastName, student.FirstName, student.MiddleName ';
+    query += 'SELECT student.LRNNum, student.LastName, student.Extension, student.FirstName, student.MiddleName ';
     query += 'FROM student ';
     query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
     query += 'WHERE student_section.SectionNum IN (' + SectionNum + ') ';
@@ -278,11 +290,20 @@ function tBodyGrade(xhttp) {
                             td.innerHTML = i + 1;
                     } else if (j == 1) {
                         if (i != jsonStudent.length) {
-                            if (jsonStudent[i][3] == null) {
-                                jsonStudent[i][3] = "";
+                            let extName = jsonStudent[i]['Extension'];
+
+
+                            if (jsonStudent[i]['MiddleName'] === null) {
+                                jsonStudent[i]['MiddleName'] = '';
                             }
-                            td.innerHTML = jsonStudent[i][1] + ', ' +
-                                jsonStudent[i][2] + ' ' + jsonStudent[i][3];
+                            if (extName === null) {
+                                extName = '';
+                            } else {
+                                extName = ' ' + extName;
+                            }
+
+                            td.innerHTML = jsonStudent[i]['LastName'] + extName + ', ' +
+                                jsonStudent[i]['FirstName'] + ' ' + jsonStudent[i]['MiddleName'];
                         }
                     } else if (j == 2) {
                         if (i != jsonStudent.length)

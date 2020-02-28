@@ -304,15 +304,34 @@ const mainController = (function(wrapUI, wrapVal) {
                 query += 'FROM student ';
                 query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
                 query += 'WHERE student_section.SectionNum IN (' + SectionNum + ')';
+
                 if (searchStudent.value !== '') {
-                    let addQuery = (cat.options[cat.selectedIndex].value === 'LRNNum') ? 'AND student.' : 'AND ';
-                    query += addQuery + cat.options[cat.selectedIndex].value + ' LIKE "' + searchStudent.value + '%"';
+                    let queryAnd;
+                    let queryNull;
+
+                    if (cat.options[cat.selectedIndex].value === 'LRNNum') {
+                        queryAnd = 'AND student.';
+                    } else {
+                        queryAnd = 'AND ';
+                    }
+
+                    if (searchStudent.value === ' ') {
+                        queryNull = ' IS NULL';
+                    } else {
+                        queryNull = ' LIKE "' + searchStudent.value + '%"';
+                    }
+
+                    query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
                 }
 
                 SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
             }
             Search();
 
+            cat.addEventListener('change', () => {
+                searchStudent.value = '';
+                Search();
+            });
             searchStudent.addEventListener('change', Search);
         });
 
@@ -327,10 +346,17 @@ const mainController = (function(wrapUI, wrapVal) {
                     document.querySelector('#SearchStudent').value = '';
                     closeModal(modal_body);
 
+                    let extName = this.childNodes[2].innerHTML;
+
+                    if (extName !== '') {
+                        extName = ' ' + extName;
+                    }
+
                     LRNNum = this.childNodes[0].innerHTML;
-                    txt_Student.innerHTML = this.childNodes[1].innerHTML + ', ';
-                    txt_Student.innerHTML += this.childNodes[2].innerHTML + ' ';
-                    txt_Student.innerHTML += this.childNodes[3].innerHTML;
+                    txt_Student.innerHTML = this.childNodes[1].innerHTML;
+                    txt_Student.innerHTML += extName + ', ';
+                    txt_Student.innerHTML += this.childNodes[3].innerHTML + ' ';
+                    txt_Student.innerHTML += this.childNodes[4].innerHTML;
                     txt_StudentModal.value = txt_Student.innerHTML;
                     studentSelected = true;
 

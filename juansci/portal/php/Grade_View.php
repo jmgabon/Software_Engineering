@@ -113,7 +113,7 @@
                         Outstanding                 90-100      Passed
                         Very Satisfactory           85-89       Passed
                         Satisfactory                80-84       Passed
-                        Faily Satisfactory          75-79       Passed
+                        Fairly Satisfactory          75-79       Passed
                         Did Not Meet Expectations   Below-75    Failed
                     </pre>
                 </div>

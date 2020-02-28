@@ -126,13 +126,25 @@ modal_button.addEventListener('click', function() {
         query += ') AS sub ';
         query += 'GROUP BY sub.LRNNum ';
         if (searchStudent.value !== '') {
-            query += 'HAVING ' + cat.options[cat.selectedIndex].value + ' LIKE "' + searchStudent.value + '%"';
+            let queryNull;
+
+            if (searchStudent.value === ' ') {
+                queryNull = ' IS NULL';
+            } else {
+                queryNull = ' LIKE "' + searchStudent.value + '%"';
+            }
+
+            query += 'HAVING ' + cat.options[cat.selectedIndex].value + queryNull
         }
 
         SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
     }
     Search();
 
+    cat.addEventListener('change', () => {
+        searchStudent.value = '';
+        Search();
+    });
     searchStudent.addEventListener('change', Search);
 });
 
