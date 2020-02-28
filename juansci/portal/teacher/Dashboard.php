@@ -11,38 +11,44 @@
     $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
-    $row = $stmt->fetch();
+    $secNum = $stmt->fetch();
     $stmt->closeCursor();
 ?>
 
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>JuanSci Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../css/newDashboard.css" />
-    <link rel="icon" href="../pictures/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
-
-<body>
-    <center><img src="../pictures/logodesign.jpg" class="logo" /></center>
-    <div class="mycontainer">
-
-        <div class="header float-right">
-			<a href="#" class="header-link float-right">HELP</a>
-			<span class="separator">|</span>
-            <a href="#" class="header-link float-right">POLICY</a>
-            <span class="separator">|</span>
-            <a href="../" class="header-link float-right">LOGOUT</a>
-			<br/>
-			<p class="h5 mb-1 float-right bd">JuanSci Portal - MAIN MENU</p><br/>
-			<p class="header-text float-right"><span class="name" id="name">
-                <?php echo 'Welcome, ' . $honorific . $fullname?></span></p>
+<?php include 'partials/header.php'; ?>
+<script type="text/javascript">
+    $('#lead').text('Main Menu');
+</script>     
+    <div class="newcontainer">
+        <div class="row mt-5">
+            <div class="col mt-5 text-center">
+                <a class="text-secondary" href="Schedule.php">
+                    <img src="../pictures/sched.png" width="100px">
+                    <p class="h6 mt-2">Check Schedule</p>
+                </a>
+            </div>
+            <div class="col mt-5 text-center">
+                <a class="text-secondary" href="Grade_Subject.php">
+                    <img src="../pictures/edit-grade2.png" width="100px">
+                    <p class="h6 mt-2">Grade Students on Subjects</p>
+                </a>
+            </div>
+            <div class="col mt-5 text-center">
+                <a class="text-secondary" href="Grade_Values.php">
+                    <img src="../pictures/edit-grade.png" width="100px">
+                    <p class="h6 mt-2">Grade Students on Values</p>
+                </a>
+            </div>
+            <div class="col mt-5 text-center">
+                <a class="text-secondary" href="Grade_oView.php">
+                    <img src="../pictures/view-grade.png" width="100px">
+                    <p class="h6 mt-2">View Student Grades</p>
+                </a>
+            </div>
         </div>
-        </br>
-        <div class="row content">
+    </div>
+       
+        <!-- <div class="row content">
             <div class="col option">
                 <a href="Schedule.php">
                     <img src="../pictures/sched.png" class="img-opt">
@@ -55,7 +61,7 @@
                 </a>
                 <p class="label">Grade Students on Subjects</p>
             </div>
-        <?php if (!empty($row[0])) { ?>
+        <?php //if (!empty($secNum[0])) { ?>
             <div class="col option">
                 <a href="Grade_Values.php">
                    <img src="../pictures/gradevalue.png" class="img-opt">
@@ -68,13 +74,9 @@
                 </a>
                 <p class="label">Print Student Grades</p>
             </div>
-        <?php } ?>
+        <?php //} ?>
         </div>
-    </div>
+    </div> -->
 
-    <div class="footer">
-		<p class="footer-text">© 2020 - San Juan Science High School. All Rights Reserved</p>
-	</div>
-</body>
 
-</html>
+    <?php include 'partials/footer.php'; ?>
