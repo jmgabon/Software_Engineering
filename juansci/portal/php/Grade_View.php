@@ -15,28 +15,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>View Grades</title>
+    <title>JuanSci Portal</title>
 
     <link rel="stylesheet" type="text/css" href="../css/modal.css" />
     <link rel="stylesheet" type="text/css" href="../css/all.css" />
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
-    <link rel="icon" href="../pictures/logo.png" />
+    <link rel="stylesheet" type="text/css" href="../css/newdb.css">
+    <link rel="icon" href="../pictures/logo-new.png" />
 </head>
 
-<body>
-    <img src="../pictures/logodesign.jpg" class="logodesign hide-on-print">
-
-    <div class="hide-on-print header mb-3">
-        <legend class="h4 pl-0 pt-3 mb-0"><?php echo strtoupper($_SESSION['access'])?>'S VIEW: STUDENT GRADE</legend>
-
-        <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="../<?php echo $_SESSION['access']?>/Dashboard.php">Menu</a>|<a href="../">Logout</a>
+<script src="../js/jquery-3.4.1.js"></script>
+    
+<nav class="sticky-top navbar shadow bg-dark text-light navbar-expand-lg">
+        <div class="container-fluid">
+          <p id="demo" class="m-0 p-0 d-none d-md-block"></p>
+          <a class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user p-0 m-0"></i>
+              <span class="text-capitalize ml-1"><?php echo $fullname?></span>
+            </a>
+            <div class="d-none" id="divDropdown">
+                <a href="" class="dropdown-item">Profile</a>
+                <a href="../" class="dropdown-item">Logout</a>
+            </div>
+          </a>
+          
+          <script type="text/javascript">
+            
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var today  = new Date();
+            var d = today.toLocaleDateString("en-US", options);
+            document.getElementById("demo").innerHTML = d;
+            // var user = "<?php //echo($_SESSION['access']);?>";
+            // document.getElementById("user").innerHTML = user;
+            
+          </script>
+        </div>
+      </nav>
+      <div class="header-img bg-white shadow row">
+        <img src="../pictures/logo-new.png" class="pl-1 pt-3 pb-3 pr-0 auto-margin-left">
+        <div class="col">
+          <div class="row mt-3">
+            <p class='mb-0'>
+              <span class="head-text text-maroon"><em>JUAN</span><span class="head-text text-secondary">SCI</em>
+              <span class="h4 mt-0"> PORTAL</p>
+          </div>
+          <nav class="d-none d-md-block row navbar pt-0 w-75">
+          <a class="lead p-0" id="lead"></a>
+          <div class="float-right mt-2" id="back-to-menu">
+            <a href="../teacher/dashboard.php" class="text-danger h6 mr-5">
+            <i class="fa fa-caret-left"></i> Back to Menu</a>
+          </div>
+          </nav>
         </div>
 
-    </div>
+      </div>
 
-    <div class="grade-container">
+    <div class="grade-container mt-5">
         <div id="modal">
             <div id="modal-content">
                 <span id="close" onclick="closeModal(document.getElementById('modal-body'));">&times;</span>
@@ -45,22 +81,6 @@
                 </div>
 
                 <div id="modal-body">
-                </div>
-
-                <div class="ml-3 mr-3 mt-0">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item"><a class="page-link maroon" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link maroon" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link maroon" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link maroon" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
 
                 <div id="modal-footer">
@@ -89,7 +109,7 @@
         </div>
         <div class="row">
             <div class="col-6 p-0 m-0">
-                <table id="tableSubject" class="g-table"><h5 class="legend">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h5>
+                <table id="tableSubject" class="g-table"><h5 class="">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h5>
                     <thead class="dark">
                         <tr>
                             <th rowspan="2">Learning Areas</th>
@@ -120,7 +140,7 @@
             </div>
 
             <div class="col-6">
-                <table id="tableValues" class="g-table"><h5 class="legend">REPORT ON LEARNER'S OBSERVED VALUES</h5>
+                <table id="tableValues" class="g-table"><h5 class="">REPORT ON LEARNER'S OBSERVED VALUES</h5>
                     <thead class="dark">
                         <tr>
                             <th rowspan="2" class="w-25">Core Values</th>
@@ -209,10 +229,44 @@
             </div>
         </div>
 
-        <div class="hide-on-print text-right">
-            <?php if($_SESSION['access'] === 'teacher') { ?>
+        <form id="postData" action="../teacher/Grade_oView.php" method="post" target="_blank">
+                <input type="hidden" name="LRNNum" value="">
+                <input type="hidden" name="schoolYear" value="">
+                <input type="hidden" name="studentName" value="">
+                <input type="hidden" name="studentAge" value="">
+                <input type="hidden" name="studentSex" value="">
+                <input type="hidden" name="gradeLevel" value="">
+                <input type="hidden" name="sectionName" value="">
+                <input type="hidden" name="principalName" value="">
+                <input type="hidden" name="adviserName" value="">
+       
+
+        <?php if($_SESSION['access'] === 'teacher') { ?>
+        <div class="hide-on-print float-right d-inline-block mb-5">
+            <select id="print-select" class="form-control-sm">
+            <option>Outer Page</option>
+            <option>Inner Page</option>
+            </select>
+            <button id='print-btn' class="btn btn-sm btn-danger mb-1">Print</button>
+        <?php } ?>
+        <script type="text/javascript">
+        var selected = 'Outer Page';
+            $('#print-select').change(function(){
+               selected = $('#print-select').val();
+            });
+            $('#print-btn').click(function(){    
+                if(selected == 'Outer Page'){
+                    printInnerReportCard();
+                }
+                else if(selected == 'Inner Page'){
+                    AddPostData();
+                }
+            }) 
+        </script>
+         </form>
+            <!-- <?php //if($_SESSION['access'] === 'teacher') { ?>
                 <button class="btn btn-dark" onclick="printInnerReportCard()">PRINT INNER PAGE OF FORM 138</button>
-            <?php } ?>
+            <?php //} ?>
             
             <form id="postData" action="../teacher/Grade_oView.php" method="post" target="_blank">
                 <input type="hidden" name="LRNNum" value="">
@@ -225,19 +279,17 @@
                 <input type="hidden" name="principalName" value="">
                 <input type="hidden" name="adviserName" value="">
 
-                <?php if($_SESSION['access'] === 'teacher') { ?>
+                <?php //if($_SESSION['access'] === 'teacher') { ?>
                     <input type="submit" class="btn btn-dark" value="PRINT OUTER PAGE OF FORM 138" onclick="AddPostData()">
-                <?php } ?>
-            </form>
+                <?php //} ?>
+            </form> -->
         </div>
 
-        <div class="hide-on-print footer">
-            <p class="footer-text">© 2020 - San Juan City Science High School. All Rights Reserved</p>
-        </div>
     </div>
 
 
     <script>
+        $('#lead').text("View Student's Grade");
         let LRNNum;
         let employeeNum;
         let accessRole = '<?php echo $_SESSION['access']?>';
