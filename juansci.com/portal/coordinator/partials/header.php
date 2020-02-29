@@ -1,8 +1,8 @@
 <?php
-  session_start();
-  if($_SESSION['id'] === null || $_SESSION['access'] != "admin"){
-    header('Location: ../');
-  }
+  // session_start();
+  // if($_SESSION['id'] === null || $_SESSION['access'] != "admin"){
+  //   header('Location: ../');
+  // }
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,8 +41,8 @@
             var today  = new Date();
             var d = today.toLocaleDateString("en-US", options);
             document.getElementById("demo").innerHTML = d;
-            var user = "<?php echo($_SESSION['access']);?>";
-            document.getElementById("user").innerHTML = user;
+            // var user = "echo($_SESSION['access']"
+            // document.getElementById("user").innerHTML = user;
           </script>
         </div>
       </nav>

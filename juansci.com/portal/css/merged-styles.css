@@ -1,4 +1,4 @@
-        input[type="text"] {
+        input[type="text"], input[type = 'email'], select, input[type="date"]{
             height: 25px;
             width: 200px;
             float: right;
@@ -11,9 +11,9 @@
         }
         
         input[type="date"] {
-            height: 25px !important;
-            width: 180px !important;
-            box-sizing: border-box;
+            /*height: 25px !important;*/
+            /*width: 180px !important;*/
+            /*box-sizing: border-box;*/
             border: 1px solid #b5b5b5;
         }
         
@@ -166,7 +166,8 @@
         }
         
         #FirstCol {
-            width: 350px;
+            /*width: 350px;*/
+            width: 80%;
             float: left;
             font-size: 14px;
         }
