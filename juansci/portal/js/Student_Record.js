@@ -50,6 +50,22 @@ const objMAPEH = [
 
 
 
+let promptData = function() {
+    const inputName = document.querySelectorAll('.withPromptData');
+    const inputValue = document.querySelectorAll('.withPromptData span');
+
+    for (let i = 0; i < inputName.length; i++) {
+        inputName[i].addEventListener('click', function() {
+            let promptValue = prompt(inputName[i].textContent);
+
+            if (promptValue !== null) {
+                inputValue[i].textContent = promptValue;
+            }
+        })
+    }
+}
+
+
 function setScholasticRecordInfo(tblLen, gradeLevel) {
     function getScholasticRecordInfo(xhttp) {
         try {
@@ -246,7 +262,11 @@ let setSubjectListDB = function(tblLen, iArrSubjCode, gradeLevel) {
                 td = document.createElement('td');
 
                 if (i < subj.length) {
-                    td.innerHTML = (j == 0) ? subj[i]['SubjectDescription'] : '';
+                    if (subj[i]['SubjectDescription'] !== null) {
+                        td.innerHTML = (j == 0) ? subj[i]['SubjectDescription'] : '';
+                    } else {
+                        td.innerHTML = (j == 0) ? (subj[i]['SubjectCode'] + ': NULL') : '';
+                    }
                 } else {
                     td.textContent = (j == 0) ? 'AVERAGE' : '';
                     tr.setAttribute('style', 'font-weight:bold');
@@ -488,6 +508,10 @@ function calculateAverage(iArrSubjCode, gradeLevel) {
 }
 
 
+let printPermanentRecord = function() {
+    window.print();
+}
+
 
 let init = (function() {
     let gradeLevels = [7, 8, 9, 10];
@@ -501,4 +525,6 @@ let init = (function() {
     for (let i = 0; i < gradeLevels.length; i++) {
         setSubjectListDB(i, i, gradeLevels[i]);
     }
+
+    promptData();
 })();

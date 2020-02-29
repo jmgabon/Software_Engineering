@@ -89,6 +89,7 @@
     <script src="../js/cms.js" type="text/javascript"></script>
     <script src="../js/modal.js" type="text/javascript"></script>
     <script src="../js/Grade_Subject.js" type="text/javascript"></script>
+    <?php include 'partials/footer.php'; ?>
 </body>
 
 </html>

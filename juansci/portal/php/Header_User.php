@@ -4,14 +4,14 @@
     if($_SESSION['access'] != 'student') {
         $stmt = $db->prepare(
             // 'SELECT IF(MiddleName IS NULL, CONCAT(FirstName, " " , LastName), CONCAT(FirstName, " " , LEFT(MiddleName, 1), ". ", LastName)) , Gender
-            'SELECT FirstName, MiddleName, LastName, Gender
+            'SELECT FirstName, MiddleName, LastName, Extension, Gender
             FROM employee
             WHERE EmployeeNum = ?'
         );
     } else {
         $stmt = $db->prepare(
             // 'SELECT IF(MiddleName IS NULL, CONCAT(FirstName, " " , LastName), CONCAT(FirstName, " " , LEFT(MiddleName, 1), ". ", LastName)) , Gender
-            'SELECT FirstName, MiddleName, LastName, Gender
+            'SELECT FirstName, MiddleName, LastName, Extension, Gender
             FROM student
             WHERE LRNNum = ?'
         );
@@ -33,11 +33,11 @@
         }
     }
 
-    $fullname = $row[0] . ' ' . $middleInitial . ' ' . $row[2];
+    $fullname = $row[0] . ' ' . $middleInitial . ' ' . $row[2] . ' ' . $row[3];
 
 
     $honorific = '';
     if($_SESSION['access'] != 'student'){
-        $honorific = ($row[3] == 'Male') ? 'Sir ' : 'Ma\'am ';
+        $honorific = ($row[4] == 'Male') ? 'Sir ' : 'Ma\'am ';
     }
 ?>

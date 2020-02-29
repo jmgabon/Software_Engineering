@@ -18,34 +18,11 @@
     }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Values Grades</title>
-
-    <link rel="stylesheet" type="text/css" href="../css/modal.css" />
-    <link rel="stylesheet" type="text/css" href="../css/all.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
-    <link rel="icon" href="../pictures/logo.png" />
-</head>
-
-<body>
-    <img src="../pictures/logodesign.jpg" class="logodesign">
-
-    <div class="header mb-3">
-        <legend class="h4 pl-0 pt-3 mb-0">REPORT ON LEARNER'S OBSERVED VALUES</legend>
-        <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
-        </div>
-
-    </div>
-
-    <div class="room-container">
+<?php include 'partials/header.php'; ?>
+    <script type="text/javascript">
+        $('#lead').text('Student Grading on Subjects');
+    </script>     
+    <div class="room-container mt-5">
         <div id="modal">
             <div id="modal-content">
                 <span id="close" onclick="closeModal(document.getElementById('modal-body'));">&times;</span>
@@ -408,10 +385,6 @@
 
         </div>
 
-        <div class="footer">
-            <p class="footer-text">© 2020 - San Juan Science High School. All Rights Reserved</p>
-        </div>
-
     </div>
 
     <script>let EmployeeNum = <?php echo $_SESSION['id']?></script>
@@ -420,6 +393,7 @@
     <script src="../js/cms.js" type="text/javascript"></script>
     <script src="../js/modal.js" type="text/javascript"></script>
     <script src="../js/Grade_Values.js" type="text/javascript"></script>
+    <?php include 'partials/footer.php'; ?>
 </body>
 
 </html>

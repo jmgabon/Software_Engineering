@@ -101,9 +101,10 @@ function CreateModal(header, title){ //Shows modal in html that is hidden then c
 		theadID = "employee.EmployeeNum@LastName@Extension@FirstName@Middle Name";
 		theadHTML = "Employee Number@Last Name@Extension@First Name@Middle Name";
 		CreateSearchBox(theadID, theadHTML, '@', 'SearchTeacher', 'search', modal_body);
+		hiddenCol = "Name";
 		theadHTML += "@" + hiddenCol;
 		theadID += "@" + hiddenCol;
-		hiddenCol = "Name";
+		
 		// CreateInput("SearchTeacher", "search", modal_body);
 		CreateTable("SearchTeacherTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
 		columnIDS = GetID(document.querySelectorAll("#SearchTeacherTable thead td"), 0);

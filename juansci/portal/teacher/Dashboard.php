@@ -11,13 +11,14 @@
     $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
     $stmt->bindValue(1, $_SESSION['id']);
     $stmt->execute();
-    $secNum = $stmt->fetch();
+    $col = $stmt->fetch();
     $stmt->closeCursor();
 ?>
 
 <?php include 'partials/header.php'; ?>
 <script type="text/javascript">
     $('#lead').text('Main Menu');
+    $('#back-to-menu').addClass('d-none');
 </script>     
     <div class="newcontainer">
         <div class="row mt-5">
@@ -33,6 +34,7 @@
                     <p class="h6 mt-2">Grade Students on Subjects</p>
                 </a>
             </div>
+            <?php if (!empty($col[0])) { ?>
             <div class="col mt-5 text-center">
                 <a class="text-secondary" href="Grade_Values.php">
                     <img src="../pictures/edit-grade.png" width="100px">
@@ -40,11 +42,12 @@
                 </a>
             </div>
             <div class="col mt-5 text-center">
-                <a class="text-secondary" href="Grade_oView.php">
+                <a class="text-secondary" href="../php/Grade_View.php">
                     <img src="../pictures/view-grade.png" width="100px">
                     <p class="h6 mt-2">View Student Grades</p>
                 </a>
             </div>
+            <?php } ?>
         </div>
     </div>
        
@@ -61,7 +64,7 @@
                 </a>
                 <p class="label">Grade Students on Subjects</p>
             </div>
-        <?php //if (!empty($secNum[0])) { ?>
+        <?php //if (!empty($col[0])) { ?>
             <div class="col option">
                 <a href="Grade_Values.php">
                    <img src="../pictures/gradevalue.png" class="img-opt">
