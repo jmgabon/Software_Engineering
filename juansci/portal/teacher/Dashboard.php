@@ -18,6 +18,7 @@
 <?php include 'partials/header.php'; ?>
 <script type="text/javascript">
     $('#lead').text('Main Menu');
+    $('#back-to-menu').addClass('d-none');
 </script>     
     <div class="newcontainer">
         <div class="row mt-5">

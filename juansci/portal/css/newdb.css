@@ -36,3 +36,12 @@
 .option{
     width: 200px !important;
 }
+#divDropdown{
+    position: absolute !important;
+    right: 0;
+    margin-right: 5px;
+    top: 50px;
+    padding: 5px;
+    width: 120px;
+    background-color: white;
+  }

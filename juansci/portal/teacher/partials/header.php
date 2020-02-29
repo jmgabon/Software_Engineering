@@ -19,11 +19,11 @@
       
       <nav class="sticky-top navbar shadow bg-dark text-light navbar-expand-lg">
         <div class="container-fluid">
-          <p id="demo" class="m-0 p-0"></p>
+          <p id="demo" class="m-0 p-0 d-none d-md-block"></p>
           <a class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user p-0 m-0"></i>
-              <span id="user" class="text-capitalize ml-1"></span>
+              <span class="text-capitalize ml-1"><?php echo $fullname?></span>
             </a>
             <div class="d-none" id="divDropdown">
                 <a href="" class="dropdown-item">Profile</a>
@@ -38,6 +38,7 @@
             document.getElementById("demo").innerHTML = d;
             // var user = "<?php //echo($_SESSION['access']);?>";
             // document.getElementById("user").innerHTML = user;
+            
           </script>
         </div>
       </nav>
@@ -49,11 +50,12 @@
               <span class="head-text text-maroon"><em>JUAN</span><span class="head-text text-secondary">SCI</em>
               <span class="h4 mt-0"> PORTAL</p>
           </div>
-          <nav class="d-none d-md-block row navbar pt-0 mr-5">
+          <nav class="d-none d-md-block row navbar pt-0 w-75">
           <a class="lead p-0" id="lead"></a>
-            <div class="d-inline-block float-right">
-            
-            </div>
+          <div class="float-right mt-2" id="back-to-menu">
+            <a href="dashboard.php" class="text-danger h6 mr-5">
+            <i class="fa fa-caret-left"></i> Back to Menu</a>
+          </div>
           </nav>
         </div>
 
