@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <img src="../pictures/logodesign.jpg" class="logodesign hide-on-print">
+    <!-- <img src="../pictures/logodesign.jpg" class="logodesign hide-on-print"> -->
 
     <div class="hide-on-print header mb-3">
         <legend class="h4 pl-0 pt-3 mb-0">LEARNER'S PERMANENT RECORD</legend>
@@ -110,23 +110,22 @@
             <br />
 
             <h5>ELIGIBILITY FOR JHS ENROLMENT</h5>
-            <div>
-                <p>Elementary School Completer <span id=""></span></p>
-                <p>General Average: <span id=""></span></p>
-                <p>Citation (if Any): <span id=""></span></p>
-                <p>Name of Elementary School:: <span id=""></span></p>
-                <p>School ID: <span id=""></span></p>
-                <p>Address of School: <span id=""></span></p>
+            <div id="eligibilityJHS">
+                <label><input type="checkbox"> Elementary School Completer</label>
+                <p class="withPromptData">General Average: <span id=""></span></p>
+                <p class="withPromptData">Citation (if Any): <span id=""></span></p>
+                <p class="withPromptData">Name of Elementary School: <span id=""></span></p>
+                <p class="withPromptData">School ID: <span id=""></span></p>
+                <p class="withPromptData">Address of School: <span id=""></span></p>
 
                 <p>Other Credential Presented </p>
-
-                <p>PEPT Passer <span id=""></span></p>
-                <p>Rating: <span id=""></span></p>
-                <p>ALS A & E Passer <span id=""></span></p>
-                <p>Rating: <span id=""></span></p>
-                <p>Others (Pls. Specify): <span id=""></span></p>
-                <p>Date of Examination/Assessment (mm/dd/yyyy) <span id=""></span></p>
-                <p>Name and Address of Testing Center: <span id=""></span></p>
+                <label><input type="checkbox"> PEPT Passer</label>
+                <p class="withPromptData">Rating: <span id=""></span></p>
+                <label><input type="checkbox"> ALS A & E Passer</label>
+                <p class="withPromptData">Rating: <span id=""></span></p>
+                <label><input type="checkbox"> Others (Pls. Specify):</label>
+                <p class="withPromptData">Date of Examination/Assessment (mm/dd/yyyy) <span id=""></span></p>
+                <p class="withPromptData">Name and Address of Testing Center: <span id=""></span></p>
             </div>
             <br />
             <br />
@@ -206,10 +205,10 @@
             <div>
                 <p>I CERTIFY that this is a true record of <span id="txt_StudentName"></span></p>
                 <p>with LRN <span id="txt_LRN"></span></p>
-                <p>and that he/she is eligible for admission to Grade <span id=""></span></p>
-                <p>Name of School: <span id=""></span></p>
-                <p>School ID: <span id=""></span></p>
-                <p>Last School Year Attended: <span id=""></span></p>
+                <p class="withPromptData">and that he/she is eligible for admission to Grade <span id=""></span></p>
+                <p class="withPromptData">Name of School: <span id=""></span></p>
+                <p class="withPromptData">School ID: <span id=""></span></p>
+                <p class="withPromptData">Last School Year Attended: <span id=""></span></p>
                 <p>Date <span id=""></span></p>
                 <p>Signature of Principal/School Head over Printed Name <span id=""></span></p>
                 <p>(Affix School Seal Here) <span id=""></span></p>
@@ -217,6 +216,11 @@
             </div>
         </div>
 
+        <div class="hide-on-print text-right">
+            <?php if($_SESSION['access'] === 'admin') { ?>
+                <button class="btn btn-dark" onclick="printPermanentRecord()">PRINT PERMANENT RECORD</button>
+            <?php } ?>
+        </div>
 
         <div class="hide-on-print footer">
             <p class="footer-text">© 2020 - San Juan City Science High School. All Rights Reserved</p>
