@@ -57,6 +57,7 @@
         <table id="ResultsTable">
             <thead class="dark">
                 <tr>
+                <td scope="col" id="ControlNum">Request Number</td>
                 <td scope="col" id="RoomNum">Room Number</td>
                 <td scope="col" id="RoomName">Room Name</td>
                 <td scope="col" id="Building">Building</td>
@@ -76,6 +77,7 @@
 </div>
 <?php include 'partials/footer.php'; ?>
 <script type="text/javascript">
+    Search(window.location.href, "", null);
     let resetRoom = document.querySelector("#ResetRoom");
     let createRoom = document.querySelector("#CreateRoom");
     initialValue = null;
@@ -86,9 +88,25 @@
 
     createRoom.addEventListener("click", function(event){
         event.preventDefault();
+        let content = GetContent("#Room");
+
+        if(userID !== null){
+            content["CreatedBy"] = userID; 
+        }
+        content["Status"] = "WAITING";
+        content["Action"] = "INSERT";
+
+        Create(window.location.href, content, requestCreated);
+
+        function requestCreated(xhttp){
+            if(xhttp.responseText == "Successful"){
+                alert("Room request created!");
+                location.reload(true);
+            }
+        }
         // Create("")
-        console.log(GetContent("#Room"));
-    })
+        // console.log(GetContent("#Room"));
+    });
     // Create(window.location.href, )
 </script>
 	<!-- <script type="text/javascript" src="../js/Room.js"></script> -->
