@@ -11,11 +11,13 @@ include 'partials/header.php';
         <label class="float-right" for="Results">
             <select id="Category" class="mt-1 form-control rounded-0 bg-light">
                 <option value="ControlNum" selected = "selected">Request Number</option>
+                <option value="LRNNum">LRN Number</option>
                 <option value="LastName">Last Name</option>
                 <option value="FirstName">First Name</option>
                 <option value="MiddleName">Middle Name</option>
-                <option value="Action">Action</option>
-                <option value="Status">Status</option>
+                <option value="Type">Type</option>
+                <option value="Action_">Action</option>
+                <option value="Status_">Status</option>
             </select>   
             <input placeholder="Search" type="search" class="mt-1 form-control rounded-0 bg-light" id="Results">
         </label>
@@ -25,13 +27,16 @@ include 'partials/header.php';
             <tr>
             <!-- <td>Section Number</td> -->
             <td id="ControlNum">Request Number</td>
+            <td id="LRNNum">LRN Number</td>
             <td id="LastName">Last Name</td>
             <!-- <td id="Extension">Extension</td> -->
             <td id="FirstName">First Name</td>
             <td id="MiddleName">Middle Name</td>
-            <td id="Action">Action</td>
-			<td id="Status">Status</td>
+            <td id="Type">Type</td>
             <td id="URL_Picture" style="display: none;"></td>
+            <td id="DateCreated">Date Requested</td>
+            <td id="Action_">Action</td>
+            <td id="Status_">Status</td>
             </tr>
         </thead>
         <tbody>

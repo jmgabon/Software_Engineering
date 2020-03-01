@@ -51,8 +51,8 @@ function InsertInfo(){
 	if(userID !== null){
 		content["CreatedBy"] = userID; 
 	}
-	content["Status"] = "PENDING";
-	content["Action"] = "INSERT";
+	content["Status_"] = "PENDING";
+	content["Action_"] = "INSERT";
 
 	for(var i=0; i < select.length; i++){
 		content[select[i].id] = select[i].options[select[i].selectedIndex].value;

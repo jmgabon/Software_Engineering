@@ -50,7 +50,7 @@
             var d = today.toLocaleDateString("en-US", options);
             document.getElementById("demo").innerHTML = d;
             var user = "<?php echo($_SESSION['AccessType']) ?>"; 
-            var userID = "<?php echo($_SESSION['TeacherNum']) ?>"; 
+            var userID = "<?php echo($_SESSION['TeacherNum'])?>"; 
             // var user = "echo($_SESSION['access']"
             document.getElementById("user").innerHTML = user;
           </script>
@@ -116,6 +116,12 @@
                     <i class="fas fa-chalkboard mr-2"></i>
                     Rooms
                 </a>
+            </li>
+            <li class="nav-item">
+              <a id="subject" class="nav-link" href="SubjectCodeCreation.php">
+                <i class="fas fa-book mr-2 "></i>
+                Subjects
+              </a>
             </li>
             <!-- <li class="nav-item">
               <a id="employee" class="nav-link dropdown-toggle" href="#" 

@@ -7,12 +7,12 @@
     <div class="col-12 col-xl-11" id="Room">
         <style type="text/css">
             #Room input, #Room select{
-                width: 25% !important;
+                width: 30% !important;
                 float:right !important;
-                margin-right: 30% !important;
+                margin-right: 35% !important;
             }
             #Buttons{
-                margin-right: 25% !important;   
+                margin-right: 31% !important;   
                 margin-top: 2% !important;
             }
         </style>
@@ -38,10 +38,10 @@
         </form>
     </div>
     <div class="col col-xl-12" style="margin-top: 10% !important;">
-        <p class="h4 pb-2">List of Rooms
+        <p class="h4 pb-2">List of Requests
 
         <!-- <label class="float-right" for="SearchRoom"> -->
-        <label class="float-right" for="SearchRoom">
+        <label class="float-right" for="Results">
         <select class="mt-1 form-control rounded-0 bg-light" id="Category">
             <option value="ControlNum"  selected="selected">Request Number</option>
             <option value="RoomNum"">Room Number</option>
@@ -49,8 +49,8 @@
             <option value="Building">Building</option>
             <option value="Floor">Floor</option>
             <option value="Type">Type</option>
-            <option value="Action">Action</option>
-            <option value="Action">Status</option>
+            <option value="Action_">Action</option>
+            <option value="Status_">Status</option>
         </select>
         <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="Results">
         <!-- <input placeholder="Search for rooms.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchRoom" style=""> -->
@@ -64,8 +64,9 @@
                 <td scope="col" id="Building">Building</td>
                 <td scope="col" id="Floor">Floor</td>
                 <td scope="col" id="Type">Type</td>
-                <td scope="col" id="Action">Action</td>
-                <td scope="col" id="Status">Status</td>
+                <td scope="col" id="DateCreated">Date Requested</td>
+                <td scope="col" id="Action_">Action</td>
+                <td scope="col" id="Status_">Status</td>
                 <!-- <td scope="col"></td> -->
                 </tr>
             </thead>
@@ -100,8 +101,8 @@
         if(userID !== null){
             content["CreatedBy"] = userID; 
         }
-        content["Status"] = "PENDING";
-        content["Action"] = "INSERT";
+        content["Status_"] = "PENDING";
+        content["Action_"] = "INSERT";
 
         Create(window.location.href, content, requestCreated);
 
@@ -111,10 +112,6 @@
                 location.reload(true);
             }
         }
-        // Create("")
-        // console.log(GetContent("#Room"));
     });
-    // Create(window.location.href, )
 </script>
-	<!-- <script type="text/javascript" src="../js/Room.js"></script> -->
  
