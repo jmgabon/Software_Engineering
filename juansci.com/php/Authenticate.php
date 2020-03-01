@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	include '../../php/ConnectToDB.php';
+	include 'ConnectToDB.php';
 	$username = $_POST['username'];
 	$password = $_POST['pass'];
 	$state = $_POST['state'];
@@ -15,11 +15,15 @@
 		$stmt->closeCursor();	
 
 		if($row != null){
-			if($row[4] == 1){
-				$_SESSION['TeacherNum'] = $row[0];
-				$_SESSION['AccessType'] = $row[3];
-				// $_SESSION['access'] = $row[2];
-				echo $row[3];
+			if($row[3] == 1){
+				if($row[2] == 'student'){
+					$_SESSION['id'] = $row[0];
+				}
+				else{
+					$_SESSION['id'] = explode("-", $row[0])[0];
+				}
+				$_SESSION['access'] = $row[2];
+				echo $row[2];
 			}
 			else{
 				echo "BLOCKED";

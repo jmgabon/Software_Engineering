@@ -1,6 +1,10 @@
 <?php
 include 'partials/header.php';
 ?>
+<script type="text/javascript">
+    // $('#lead').text('Teachers Registration');
+    $('#teacher').addClass('active');
+</script>
 <style type="text/css">
 	input,select{
 		width: 60% !important;
@@ -11,38 +15,42 @@ include 'partials/header.php';
 		margin-right: -25% !important;
 	}
 </style>
-<div class="content-main mt-4" id="Student">
+<div class="content-main mt-4" id="Teacher">
   	<form>
    	<div id = "FirstCol">
-   	<div id="ApplicantSection"><p><h2 class="pt-3 pb-2"><b>APPLICANT'S SECTION</b></h2>
+   	<div id="ApplicantSection"><p><h2 class="pt-3 pb-2"></h2>
+         <!-- <b>APPLICANT'S SECTION</b> -->
    	<!-- <p>* - REQUIRED</p> -->
   	<div class="photo-div">
-		<p><label class="h5 m-0" for="file">*Upload Student's Photo</label></p>
+		<p><label class="h5 m-0" for="file">*Upload Teacher's Photo</label></p>
 		<center><p><img src="../../pictures/faceless.png" id="profile" style="width: 200px; height: 200px" class="photo-upload shadow" ></p>
 		<input type="file" id="file" name="file" accept=".gif,.jpg,.jpeg,.png" required>
 		</center>
 	</div>
-   <h4 class="pt-3 pb-2">Student Information</h4>
-   <p><label for="LRNNum"><b>*LRN: </b></label><input type="text" id = "LRNNum" name = "LRNNum" required minlength="12" maxlength="12" required/></p>
-   	<p>
-		<label for="GradeLevel">Grade Level: </label>
-		<select id="GradeLevel">
-		<option selected="selected">7</option>
-		<option>8</option>
-		<option>9</option>
-		<option>10</option>
-		<!-- <option>11</option> -->
-		<!-- <option>12</option> -->
-		</select>
-    </p>
+   <h4 class="pt-3 pb-2">Teacher Information</h4>
+   <!-- <p><label for="LRNNum"><b>*LRN: </b></label><input type="text" id = "LRNNum" name = "LRNNum" required minlength="12" maxlength="12" required/></p> -->
 	<p>
-		<label for="Type">Type: </label>
-		<select id="Type">
-		<option selected="selected">New</option>
-		<option>Transferee</option>
+		<label for="Shift">Shift: </label>
+		<select id="Shift" name="Shift">
+		<option selected="selected" value="AM">AM Shift</option>
+		<option value="PM">PM Shift</option>
+		</select>
+   </p>
+	<p>
+		<label for="Major">Major: </label>
+		<select id="Major" name="Major">
+		<option selected="selected" value="AP">Araling Panlipunan</option>
+		<option value="ENG">English</option>
+      <option value="ESP">Edukasyon sa Pagpapakatao</option>
+      <option value="FIL">Filipino</option>
+      <option value="MAPEH">Music, Arts, Physical Education, Health</option>
+      <option value="MATH">Mathematics</option>
+      <option value="RESEARCH">Research</option>
+      <option value="SCI">Science</option>
+      <option value="TLE">Technology and Livelihood Education</option>
 		</select>
     </p>
-   <p class="h5 pb-2">Student's Name</p>
+   <p class="h5 pb-2">Teacher's Name</p>
 	<p><label for="LastName">*Last Name: </label><input type="text" id = "LastName" name = "LastName" required/></p>
    <p><label for="Extension">Extended Name: </label><input type="text" id = "ExtendedName" name = "ExtendedName"/></p>
 	<p><label for="FirstName">*First Name: </label><input type="text" id = "FirstName" name = "FirstName" required/></p>
@@ -585,100 +593,8 @@ include 'partials/header.php';
 			<option>Female</option>
       	</select>
 	</p>
+   <button class="rounded-pill" id = "submitForm" name = "submitForm" style="margin-bottom: 2% !important;">SUBMIT</button>
 	</div>
-
-	<p class="h5 pb-2">Current School Information</p>
-	<p>
-		<label for="Present_SchoolName">*Present School Name</label>
-		<input type="text" id = "Present_SchoolName" name = "Present_SchoolName" required/>
-	</p>
-	<p>
-		<label for="Present_SchoolAddress">Present School Address</label>
-		<input type="text" id = "Present_SchoolAddress" name = "Present_SchoolAddress"/></p>
-	<p>
-		<label for="Present_SchoolContact">Contact No.</label>
-		<input type="text" id = "Present_SchoolContact" name = "Present_SchoolContact"/>
-	</p>
-	
-   	</div>
-	<div id="ParentSection" style="margin-top: 1.5rem">
-		<h2 class="pt-3 pb-2"><b>PARENT/GUARDIAN'S SECTION</b></h2>
-		<h4 class="pt-3 pb-2">Mother's Information</h4>
-			<p>
-				<label for="MotherName">Name:</label>
-				<input type="text" id = "MotherName" name = "MotherName"/>
-			</p>	
-			<p>
-				<label for="MotherContact">Contact No.:</label>
-				<input type="text" id = "MotherContact" name = "MotherContact"/>
-			</p>
-			<p>
-				<label for="MotherEducation">Educational Attainment:</label>
-				<input type="text" id = "MotherEducation" name = "MotherEducation"/>
-			</p>
-			<p>
-				<label for="MotherOccupation">Occupation:</label>
-				<input type="text" id = "MotherOccupation" name = "MotherOccupation"/>
-			</p>	
-		<h4 class="pt-3 pb-2">Father's Information</h4>
-			<p>	
-				<label for="FatherName">Name:</label>
-				<input type="text" id = "FatherName" name = "FatherName"/>
-			</p>
-			<p>
-				<label for="FatherContact">Contact No.:</label>
-				<input type="text" id = "FatherContact" name = "FatherContact"/>
-			</p>	
-			<p>
-				<label for="FatherEducation">Educational Attainment:</label>
-				<input type="text" id = "FatherEducation" name = "FatherEducation"/>
-			</p>
-			<p>
-				<label for="FatherOccupation">Occupation:</label>
-				<input type="text" id = "FatherOccupation" name = "FatherOccupation"/>
-			</p>	
-		<h4 class="pt-3 pb-2">Guardian's Information</h4>
-			<p>
-				<label for="GuardianName">Name:</label>
-				<input type="text" id = "GuardianName" name = "GuardianName"/>
-			</p>	
-			<p>
-				<label for="GuardianContact">Contact No.:</label>
-				<input type="text" id = "GuardianContact" name = "GuardianContact"/>
-			</p>
-			<p>
-				<label for="GuardianRelationship">Relation to the Applicant:</label>
-				<input type="text" id = "GuardianRelationship" name = "GuardianRelationship"/>
-			</p>	
-			<p>
-				<label for="GuardianOccupation">Occupation:</label>
-				<input type="text" id = "GuardianOccupation" name = "GuardianOccupation"/>
-			</p>	
-	</div>
-	<div id= "DeclarationSection">
-		
-	</div>
-
-	<div id= "ApplicationSection" style="margin-top: 1.5rem">
-		<h2 class="pt-3 pb-2"><b>APPLICATION SECTION</b></h2>
-		<h5 class="pt-3 pb-2">Submitted Requirements</h5>
-
-		<p><input type="checkbox" name="FirstReq"/><label for="FirstReq">Accomplished Application Form</label></p>
-		<p><input type="checkbox" name="SecondReq"/><label for="SecondReq">2 pcs 1.5" x 1.5" colored ID pictures(white background)</label></p>
-		<p><input type="checkbox" name="ThirdReq"/><label for="ThirdReq">Recommendation letter by the school principal</label></p>
-		<p><input type="checkbox" name="FourthReq"/><label for="FourthReq">Report Card(Form 138) -All grades in Science, Math, and English must not lower than 85%</label></p>
-		<p style="margin-left: 15% !important;">in any grading period and no grades lower than 80% in all other subjects</p>
-		<p style="margin-left: 15% !important;margin-top: 0.5rem !important;">Proof/s of Residency</p>
-		<div style="margin-left: 15% !important">
-			<p><input type="checkbox" name="FifthReq1"/><label for="FifthReq1">Billing Statement</label></p>
-			<p><input type="checkbox" name="FifthReq2"/><label for="FifthReq2">Driver's License</label></p>
-			<p><input type="checkbox" name="FifthReq3"/><label for="FifthReq3">Voter's ID</label></p>
-		</div>
-	</div>
-	<p style="margin-bottom: 0%!important;">NOTE:</p>
-	<p style="margin-left: 10% !important;">* - REQUIRED</p>
-	<button class="rounded-pill" id = "submitForm" name = "submitForm" style="margin-bottom: 2% !important;">SUBMIT</button>
-   </div>
 </form>
 <?php
 include 'partials/footer.php';
@@ -723,4 +639,4 @@ include 'partials/footer.php';
 		Permanent_Address.style.display = 'block';
 	}
 </script>
-<script type="text/javascript" src="js/StudentRegistration.js"></script>
+<script type="text/javascript" src="js/TeacherRegistration.js"></script>

@@ -33,7 +33,8 @@ function CheckIfUpdated(xhttp){ //Can be used however Please initialized Search 
 	}
 }
 
-function ResetInput(initialValue){//whatToReset - resets the button
+function ResetInput(initialValue, parent_id){//whatToReset - resets the button
+	// let parent_id = "Results";
 	var disabled;
 	var input = document.querySelectorAll("#" + parent_id + " input");
 	var select = document.querySelectorAll("#" + parent_id + " select");
@@ -73,6 +74,7 @@ function ResetInput(initialValue){//whatToReset - resets the button
 function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of sql)
 	try{
 	// var json;
+	parent_id = "Results";
 	var td;
 	var tr;
 	var btn_Edit;
@@ -96,9 +98,9 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	// console.log(results.length);
 	console.log(results);
 
-	var thead_td = document.querySelectorAll("#Search" + parent_id + "Table thead tr td");
-	var colNum = document.querySelector("#Search" + parent_id + "Table thead tr").childElementCount;//childElementCount counts child of parent
-	var tbody = document.querySelector("#Search" + parent_id + "Table tbody");
+	var thead_td = document.querySelectorAll("#" + parent_id + "Table thead tr td");
+	var colNum = document.querySelector("#" + parent_id + "Table thead tr").childElementCount;//childElementCount counts child of parent
+	var tbody = document.querySelector("#" + parent_id + "Table tbody");
 	// console.log(parent_id);
 	var main_body = tbody.parentNode.parentNode;
 	// console.log(main_body);

@@ -8,15 +8,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JuanSci Portal</title>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="css/newportal.css" />
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="../css/newportal.css" />
 	<link href="https://fonts.googleapis.com/css?family=Righteous|Russo+One&display=swap" rel="stylesheet">
     <link rel="icon" href="pictures/logo.png">
 </head>
 <body>
 	<div class="col-12 col-md-6 col-lg-6 col-xl-4 rounded ml-auto mr-auto mt-4 text-light p-3">
 		<div class="text-center text-uppercase">
-			<img src="pictures/logo-new.png" width="180px">
+			<img src="../pictures/logo-new.png" width="180px">
 			<h1 class="mb-0 mt-3">San Juan City</h1>
 			<h3>Science High School</h3>
 			<p class="lead mt-2">Official School Portal</p>
@@ -48,8 +48,8 @@
             </form>
         </div>
     </div>
-<script type="text/javascript" src="js/ajax.js"></script>
-<script type="text/javascript" src="js/cms.js"></script>
+<script type="text/javascript" src="../js/ajax.js"></script>
+<script type="text/javascript" src="../js/cms.js"></script>
 <script type="text/javascript" src="js/Authenticate.js"></script>
 </body>
 </html>

@@ -1,17 +1,17 @@
 <?php include 'partials/header.php'; 
-require "../php/ConnectToDB.php";
+require "../../php/ConnectToDB.php";
 
-$stmt = $db->prepare("SELECT COUNT(LRNNum) FROM student");
+$stmt = $db->prepare("SELECT COUNT(LRNNum) FROM temp_studentregistration");
 $stmt->execute();
 $numberOfStudents = $stmt->fetch()[0];
 
-$stmt = $db->prepare("SELECT COUNT(SectionNum) FROM section");
-$stmt->execute();
-$numberOfSections = $stmt->fetch()[0];
+// $stmt = $db->prepare("SELECT COUNT(SectionNum) FROM section");
+// $stmt->execute();
+// $numberOfSections = $stmt->fetch()[0];
 
-$stmt = $db->prepare("SELECT COUNT(RoomNum) FROM room");
-$stmt->execute();
-$numberOfRooms = $stmt->fetch()[0];
+// $stmt = $db->prepare("SELECT COUNT(RoomNum) FROM room");
+// $stmt->execute();
+// $numberOfRooms = $stmt->fetch()[0];
 
 $stmt->closeCursor();
 // echo $numberOfStudents;

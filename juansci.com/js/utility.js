@@ -153,6 +153,33 @@ function CreateSelect(thead_id, theadHTML, seperator, parentNode){
 	parentNode.appendChild(select);
 }
 
+function GetContent(parent_id){
+	let ifblank = 0;
+	let form = document.querySelector(parent_id + " form");
+	let input = document.querySelectorAll(parent_id + " input");
+	let select = document.querySelectorAll(parent_id + " select");
+	var content = {};
+	for(var i = 0; i < input.length; i++){
+		if(!input[i].checkValidity()){
+			ifblank++;
+			form.reportValidity();
+		}
+	}
+	if(ifblank == 0){
+		for(var i = 0; i < input.length; i++){
+			if(input[i].type == "checkbox"){
+				content[input[i].name] = input[i].checked;
+			}
+			else{
+				content[input[i].id] = input[i].value;
+			}
+		}
+		for(var i=0; i < select.length; i++){
+			content[select[i].id] = select[i].options[select[i].selectedIndex].value;
+		}
+		return content;
+	}
+}
 function EmptyNode(node){
 	for(var i = 0; i < node.length; i++){
 		node[i].innerHTML = "";
@@ -211,4 +238,23 @@ function GetParentRow(child){ //Can be edited to make time dynamic
 	else if(child == "3:00-4:00"){
 		return 11;
 	}
+}
+
+function UploadPhoto(file, url, cback){
+	const formData = new FormData();
+	//SIZE OF IMAGE IS NOT YET CONSIDERED
+	let out;
+	let callback = null;
+	if(typeof cback == "function"){
+		out = true;
+		callback = cback;
+	} 
+	else{
+		out = false;
+	}
+	for(const fileToUpload of file.files){
+		formData.append("files[]", fileToUpload);
+	}
+	AJAX_FILES(formData, out, "post", url, true, callback);
+	// alert("UPLOADED");
 }
