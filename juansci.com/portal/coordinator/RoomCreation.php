@@ -43,7 +43,8 @@
         <!-- <label class="float-right" for="SearchRoom"> -->
         <label class="float-right" for="SearchRoom">
         <select class="mt-1 form-control rounded-0 bg-light" id="Category">
-            <option value="RoomNum" selected="selected">Room Number</option>
+            <option value="ControlNum"  selected="selected">Request Number</option>
+            <option value="RoomNum"">Room Number</option>
             <option value="RoomName">Room Name</option>
             <option value="Building">Building</option>
             <option value="Floor">Floor</option>
@@ -80,12 +81,18 @@
     Search(window.location.href, "", null);
     let resetRoom = document.querySelector("#ResetRoom");
     let createRoom = document.querySelector("#CreateRoom");
+    let results_input = document.querySelector("#Results");
+    let category = document.querySelector("#Category");
     initialValue = null;
     resetRoom.addEventListener("click", function(event){
         event.preventDefault();
         ResetInput(initialValue, "Room");
     });
 
+    results_input.addEventListener("change", function(){
+        let content = category.options[category.selectedIndex].value + "=" + results_input.value;
+        Search(window.location.href, content, null);
+    });
     createRoom.addEventListener("click", function(event){
         event.preventDefault();
         let content = GetContent("#Room");
@@ -93,7 +100,7 @@
         if(userID !== null){
             content["CreatedBy"] = userID; 
         }
-        content["Status"] = "WAITING";
+        content["Status"] = "PENDING";
         content["Action"] = "INSERT";
 
         Create(window.location.href, content, requestCreated);

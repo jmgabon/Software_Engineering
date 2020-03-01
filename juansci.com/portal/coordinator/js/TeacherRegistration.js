@@ -51,7 +51,7 @@ function InsertInfo(){
 	if(userID !== null){
 		content["CreatedBy"] = userID; 
 	}
-	content["Status"] = "WAITING";
+	content["Status"] = "PENDING";
 	content["Action"] = "INSERT";
 
 	for(var i=0; i < select.length; i++){
