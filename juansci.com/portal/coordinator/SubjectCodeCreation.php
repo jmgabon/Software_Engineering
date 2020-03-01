@@ -34,6 +34,7 @@
         </div>
         </form>
 	</div>
+    <!-- <button class="rounded-pill create-button" id="ShowRequests" style="width: 20% !important;">Show Requests</button> -->
     <div class="col col-xl-12" style="margin-top: 10% !important;">
         <p class="h4 pb-2">List of Requests
         <label class="float-right" for="Results">
@@ -74,6 +75,8 @@
 </div>	
 <?php include 'partials/footer.php'; ?>
 <script type="text/javascript">
+    // let a = document.querySelectorAll(".ml-auto d-none d-md-block a");
+
 	Search(window.location.href, "", null);
     let resetSubjectCode = document.querySelector("#ResetSubjectCode");
     let createSubjectCode = document.querySelector("#CreateSubjectCode");
@@ -100,14 +103,8 @@
         content["Status_"] = "PENDING";
         content["Action_"] = "INSERT";
 
-        Create(window.location.href, content, requestCreated);
+        Create(window.location.href, content, requestStatus);
         // console.log(userID);    
-        function requestCreated(xhttp){
-            if(xhttp.responseText == "Successful"){
-                alert("Subject code request created!");
-                location.reload(true);
-            }
-        }
     });
 </script>
 <!-- <script type="text/javascript" src="../js/SubjectCode.js"></script> -->

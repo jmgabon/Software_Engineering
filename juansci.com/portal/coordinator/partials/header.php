@@ -66,7 +66,9 @@
         </a>
         <!-- <p style="text-align: left;">* - REQUIRED</p> -->
           <div class="ml-auto d-none d-md-block">
-            <a href="" class="btn btn-danger text-light">Manage Home</a>
+            <a href="" class="btn btn-danger text-light" style="">Manage Home</a>
+            <a href="" class="btn btn-danger text-light" style="display: none;"></a>
+            <a href="" class="btn btn-danger text-light" style="display: none;"></a>
             <!-- <a href="../" class="btn btn-danger text-light">Manage Home</a> -->
           </div>
       </nav>

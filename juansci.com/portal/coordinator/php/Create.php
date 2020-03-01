@@ -14,12 +14,20 @@ if(strpos($url[count($url)-1], "#") !== false){
 	$table = explode("#", $table)[0];
 }
 $temp_table = strtolower("temp_".str_replace(".php", "", $table));
+$main_table = str_replace("creation", "", $temp_table);
+$main_table = str_replace("registration", "", $main_table);
 // $request_table = strtolower("request_".str_replace(".php", "", $table));
 // $table = strtolower("main_".str_replace(".php", "", $table));
 
 $content = json_decode($_POST['content'], true);
 $preparedStatement = "";
 
+// echo count($content[0]);
+$primary_key = array_keys($content)[0];
+$primary_key_value = array_values($content)[0];
+
+// echo $primary_key;
+// echo $primary_key_value;
 foreach($content as $key => $value){  //Loops for every key-value of $content
 
 	if($value === ""){
@@ -31,27 +39,43 @@ foreach($content as $key => $value){  //Loops for every key-value of $content
 	elseif($value === "true"){
 		$value = true;
 	}
-	if($key !== "User"){
-		$columns .= $key . ",";
-		$toBind .= "?,";	
-		$colVal[$j] = $value;
-		$j++;
+	// if($key !== "User"){
+	$columns .= $key . ",";
+	$toBind .= "?,";	
+	$colVal[$j] = $value;
+	$j++;
+
+	if($key === "Action_"){
+		$Action_Val = $value;
 	}
+	// }
 }
 try{
 	// echo $temp_table;
-	$toBind = substr($toBind, 0, strlen($toBind)- 1);
-	$columns = substr($columns, 0, strlen($columns)- 1);
-	$preparedStatement = "INSERT INTO " . $temp_table . "(" . $columns . ") VALUES(" . $toBind . ")";
-	// echo $preparedStatement;
+	$preparedStatement = "SELECT " . $primary_key . " FROM " . $temp_table . " WHERE ";
+	$preparedStatement .= $primary_key . " = '" . $primary_key_value . "' AND Action_ = '";
+	$preparedStatement .= $Action_Val . "'"; 
 	$stmt = $db->prepare($preparedStatement);
-	for($i = 1; $i < $j+1; $i++){
-		$stmt->bindValue($i, $colVal[$i-1]);
-		// echo $colVal[$i-1] . "<br/>";
-	}
 	$stmt->execute();
-	echo "Successful";
-	$stmt->closeCursor();
+	$row = $stmt->fetchAll();
+
+	if(count($row) == 0){
+		$toBind = substr($toBind, 0, strlen($toBind)- 1);
+		$columns = substr($columns, 0, strlen($columns)- 1);
+		$preparedStatement = "INSERT INTO " . $temp_table . "(" . $columns . ") VALUES(" . $toBind . ")";
+		
+		$stmt = $db->prepare($preparedStatement);
+		for($i = 1; $i < $j+1; $i++){
+			$stmt->bindValue($i, $colVal[$i-1]);
+		}
+		$stmt->execute();
+		echo "Successful";
+		$stmt->closeCursor();
+		// echo $preparedStatement;
+	}
+	else{
+		echo "Duplicate Request";
+	}
 // 	MAKE TIMESTAMP WORKS ON CREATE
 // ALTER TABLE `mytable`
 // CHANGE `mydatefield` `mydatefield`

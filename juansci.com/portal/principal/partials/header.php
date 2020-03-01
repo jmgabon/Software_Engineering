@@ -1,6 +1,8 @@
 <?php
   session_start();
-  if($_SESSION['id'] === null || $_SESSION['access'] != "principal"){
+  $_SESSION['TeacherNum'] = 1;
+  $_SESSION['AccessType'] = "principal";
+  if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] != "principal"){
     header('Location: ../');
   }
 ?>
@@ -9,15 +11,15 @@
     <head>
         <title>JuanSci Portal</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../css/modal.css">
-        <link rel="stylesheet" type="text/css" href="../css/bootstrap.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/merged-styles.css">
-        <link rel="stylesheet" type="text/css" href="../css/dbstyles.css">
-        <link rel="stylesheet" type="text/css" href="../css/all.css"/>
+        <link rel="stylesheet" type="text/css" href="../../css/modal.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
+        <link rel="stylesheet" type="text/css" href="../../css/merged-styles.css">
+        <link rel="stylesheet" type="text/css" href="../../css/dbstyles.css">
+        <link rel="stylesheet" type="text/css" href="../../css/all.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous&display=swap">
-        <link rel="icon" href="../pictures/logo-new.png">
+        <link rel="icon" href="../../pictures/logo-new.png">
     </head>
-    <script src="../js/jquery-3.4.1.js"></script>
+    <script src="../../js/jquery-3.4.1.js"></script>
     <body id="test1" class="bg-light">
       <!---------------TOPNAV--------------->
       
@@ -41,7 +43,9 @@
             var today  = new Date();
             var d = today.toLocaleDateString("en-US", options);
             document.getElementById("demo").innerHTML = d;
-            var user = "<?php echo($_SESSION['access']);?>";
+            var user = "<?php echo($_SESSION['AccessType']) ?>"; 
+            var userID = "<?php echo($_SESSION['TeacherNum'])?>"; 
+            // var user = "echo($_SESSION['access']"
             document.getElementById("user").innerHTML = user;
           </script>
         </div>
@@ -62,7 +66,7 @@
 
       <nav class="d-md-block bg-white sidebar shadow collapse navbar-collapse" id="navbarNav">
         <div class="sidebar-sticky">
-        <img src="../pictures/logo2.png" width="200px" class="ml-2 mt-2 mb-4">
+        <img src="../../pictures/logo2.png" width="200px" class="ml-2 mt-2 mb-4">
           <ul class="nav flex-column">
             <li class="nav-item">
               <a id="dashboard" class="nav-link" href="dashboard.php">

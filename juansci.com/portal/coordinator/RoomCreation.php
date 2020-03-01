@@ -104,14 +104,7 @@
         content["Status_"] = "PENDING";
         content["Action_"] = "INSERT";
 
-        Create(window.location.href, content, requestCreated);
-
-        function requestCreated(xhttp){
-            if(xhttp.responseText == "Successful"){
-                alert("Room request created!");
-                location.reload(true);
-            }
-        }
+        Create(window.location.href, content, requestStatus);
     });
 </script>
  

@@ -34,3 +34,17 @@ function Search(url, content, callback){
 		
 	}
 }
+
+function requestStatus(xhttp){
+	let message = xhttp.responseText;
+    if(message == "Successful"){
+        alert("Request Created!");
+        location.reload(true);
+    }
+    else if (message == "Duplicate Request") {
+        alert(message);
+    }
+    else{
+        console.log(message);
+    }
+}

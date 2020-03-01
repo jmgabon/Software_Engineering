@@ -1,6 +1,6 @@
 <?php 
 include 'partials/header.php'; 
-require "../php/ConnectToDB.php";
+require "../../php/ConnectToDB.php";
 
 // $stmt = $db->prepare("SELECT COUNT(LRNNum) FROM student");
 // $stmt->execute();

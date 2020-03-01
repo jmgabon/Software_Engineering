@@ -1,6 +1,10 @@
 <?php
 include 'partials/header.php';
 ?>
+<script type="text/javascript">
+   $('#lead').text('Registration');
+   $('#student').addClass('active');
+</script>
 <style type="text/css">
 	input,select{
 		width: 60% !important;
