@@ -49,7 +49,12 @@ function test(xhttp){
 				button[0].innerHTML = "Confirm";
 			}
 			else{
-				window.location.href = xhttp.responseText + "/Dashboard.php";
+				let access = xhttp.responseText;
+
+				if(access == ""){
+					access = "teacher"
+				}
+				window.location.href = access + "/Dashboard.php";
 				console.log(xhttp.responseText);
 			}
 		}

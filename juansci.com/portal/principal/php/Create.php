@@ -1,10 +1,16 @@
 <?php
 //REVISIONS WILL BE MADE
 require "../../../php/ConnectToDB.php";
+// $columns = "";
+// $toBind = "";
+// $colVal = array();
+// $j = 0;
+session_start();
+
+$remarks = $_POST['remarks'];
+$decision = $_POST['decision'];
+$controlNum = $_POST['value'];
 $columns = "";
-$toBind = "";
-$colVal = array();
-$j = 0; 
 $url = $_POST['url'];
 $url = explode("/", $url);
 $userType = $url[count($url)-2];
@@ -13,44 +19,64 @@ $table = $url[count($url)-1];
 if(strpos($url[count($url)-1], "#") !== false){
 	$table = explode("#", $table)[0];
 }
-$temp_table = strtolower("temp_".str_replace(".php", "", $table));
-$main_table = str_replace("creation", "", $temp_table);
-$main_table = str_replace("registration", "", $main_table);
-// $request_table = strtolower("request_".str_replace(".php", "", $table));
-// $table = strtolower("main_".str_replace(".php", "", $table));
-
-$content = json_decode($_POST['content'], true);
-$preparedStatement = "";
-
-// echo count($content[0]);
-$primary_key = array_keys($content)[0];
-$primary_key_value = array_values($content)[0];
-
-// echo $primary_key;
-// echo $primary_key_value;
-foreach($content as $key => $value){  //Loops for every key-value of $content
-
-	if($value === ""){
-		$value = NULL;
-	}
-	elseif($value === "false") {
-		$value = false;
-	}
-	elseif($value === "true"){
-		$value = true;
-	}
-	// if($key !== "User"){
-	$columns .= $key . ",";
-	$toBind .= "?,";	
-	$colVal[$j] = $value;
-	$j++;
-
-	if($key === "Action_"){
-		$Action_Val = $value;
-	}
-	// }
+$table = strtolower(str_replace(".php", "", $table));
+//LINK 1
+$main_table = "";
+$temp_table = "";
+if($table == "requests_teacher"){
+	$main_table = "main_teacher";
+	$temp_table = "temp_teacherregistration";
 }
+if($remarks == ""){
+	$remarks = NULL;
+}
+// echo($temp_table);
 try{
+		$preparedStatement = "UPDATE " .$temp_table. " SET  Status_ = ?, ApprovedBy = ?, ApprovalDate = CURRENT_TIMESTAMP, Remarks = ? WHERE ControlNum = ?";
+		$stmt = $db->prepare($preparedStatement);
+		// $stmt->bindValue(1, $temp_table);
+		$stmt->bindValue(1, $decision);
+		$stmt->bindValue(2, $_SESSION['TeacherNum']);
+		$stmt->bindValue(3, $remarks);
+		$stmt->bindValue(4, $controlNum);
+
+		$stmt->execute();
+		// $stmt->closeCursor();
+	if($decision == "REJECTED"){
+		echo("Request No. ". $controlNum . " is REJECTED");
+	}
+	else if($decision == "APPROVED"){
+		$preparedStatement = "SELECT column_name
+		FROM information_schema.columns
+		WHERE table_schema = 'mis'
+		AND table_name = ?;";
+		// $preparedStatement = "DESCRIBE " . $main_table;
+		$stmt = $db->prepare($preparedStatement);
+		$stmt->bindValue(1, $main_table);
+		$stmt->execute();
+		$row = $stmt->fetchAll();
+		for ($i=0; $i < count($row); $i++) { 
+		# code...
+			if(!($row[$i][0] == "DateCreated" || $row[$i][0] == "TeacherNum")){
+				$columns .= $row[$i][0] . ",";
+			}
+		}
+		$columns = substr($columns, 0, -1);
+		$preparedStatement = "INSERT INTO ".$main_table."(".$columns.") SELECT " . $columns . " FROM ".$temp_table." WHERE ControlNum = ?";
+		$stmt = $db->prepare($preparedStatement);
+		$stmt->bindValue(1, $controlNum);
+		$stmt->execute();
+		$stmt->closeCursor();
+		echo("Request No. ". $controlNum . " is APPROVED");
+		// echo($preparedStatement);
+	}
+
+}
+catch(Exception $e){
+	echo $preparedStatement;
+}
+
+/*try{
 	// echo $temp_table;
 	$preparedStatement = "SELECT " . $primary_key . " FROM " . $temp_table . " WHERE ";
 	$preparedStatement .= $primary_key . " = '" . $primary_key_value . "' AND Action_ = '";
@@ -83,5 +109,5 @@ try{
 }
 catch(Exception $e){
 	echo $e;
-}
+}*/
 ?>

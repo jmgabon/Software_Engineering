@@ -61,11 +61,11 @@ include 'partials/footer.php';
     });
 
     function tableUI(xhttp){
-        CreateTBody(xhttp, null, Approval);
+        CreateTBody(xhttp, null, ApprovalButton);
         let tr = document.querySelectorAll("#ResultsTable tbody tr");
         // Hover(tr);
     }
-    function Approval(td, i){
+    function ApprovalButton(td, i){
         console.log(td.innerHTML);
 
         let btn1, btn2, class_btn1, class_btn2;
@@ -90,6 +90,44 @@ include 'partials/footer.php';
         class_btn2.value = "btn_Table";
         btn1.setAttributeNode(class_btn1);
         btn2.setAttributeNode(class_btn2); 
+
+        btn1.addEventListener("click", Approval.bind(null, i, "APPROVED"));
+        btn2.addEventListener("click", Approval.bind(null, i, "REJECTED"));
+    }
+
+    function Approval(i, decision){
+        data = "";
+        remarks = "";
+        data += "url=" + window.location.href;
+        data += "&value=" + results[i]["ControlNum"];
+        data += "&decision=" + decision;
+        if(decision == "REJECTED"){
+            
+        }
+        data += "&remarks=" + remarks;
+        if(results[i]["Action_"] == "UPDATE"){
+            // console.log(data);
+            AJAX(data, true, "post", "php/Update.php", true, messageAlert);
+        }
+        else if(results[i]["Action_"] == "INSERT"){
+            AJAX(data, true, "post", "php/Create.php", true, messageAlert);
+        }
+
+    }
+
+    function messageAlert(xhttp){
+        // console.log(xhttp.responseText);
+        let message = xhttp.responseText;
+
+        if(message.indexOf("Request No.") !== -1){
+            alert(message);
+            location.reload(true);
+        }
+        else{
+            alert(message);
+        }
+        // let content = category.options[category.selectedIndex].value + "=" + results_input.value;
+        // Search(window.location.href, content, GetIDinString(td, 0), tableUI);   
     }
     // cat.options[cat.selectedIndex].value + "=" + searchEmployee.value
     // let results_input = document.querySelector("#Results");
