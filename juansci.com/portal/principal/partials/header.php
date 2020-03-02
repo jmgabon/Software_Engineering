@@ -18,6 +18,13 @@
         <link rel="stylesheet" type="text/css" href="../../css/all.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous&display=swap">
         <link rel="icon" href="../../pictures/logo-new.png">
+
+    <style type="text/css">
+          #Results{
+            width: 100% !important;
+            margin-top: 3rem !important;
+          }
+    </style>
     </head>
     <script src="../../js/jquery-3.4.1.js"></script>
     <body id="test1" class="bg-light">
@@ -58,8 +65,12 @@
         <a id="slide" class="navbar-toggler d-md-none" type="button" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fa fa-bars text-dark"></i>
         </a>
+        <!-- <p style="text-align: left;">* - REQUIRED</p> -->
           <div class="ml-auto d-none d-md-block">
-            <a href="" class="btn btn-danger text-light">Manage Home</a>
+            <a href="" class="btn btn-danger text-light" style="">Manage Home</a>
+            <a href="" class="btn btn-danger text-light" style="display: none;"></a>
+            <a href="" class="btn btn-danger text-light" style="display: none;"></a>
+            <!-- <a href="../" class="btn btn-danger text-light">Manage Home</a> -->
           </div>
       </nav>
       <!---------------SIDEBAR--------------->
@@ -75,40 +86,123 @@
                 Dashboard <span class="sr-only">(current)</span>
               </a>
             </li>
+            <li class="nav-item dropdown">
+              <a id="student" class="nav-link dropdown-toggle" href="#" 
+              id="studentsDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-graduate mr-2 "></i>
+                Students
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="studentsDropdown">
+                <a href="masterlist_student.php" class="dropdown-item">Masterlist</a>
+                <a href="" class="dropdown-item">Requests</a>
+                <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
+                <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a id="teacher" class="nav-link dropdown-toggle" href="#" 
+              id="teachersDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-graduate mr-2 "></i>
+                Teachers
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="teachersDropdown">
+                <a href="masterlist_teacher.php" class="dropdown-item">Masterlist</a>
+                <a href="requests_teacher.php" class="dropdown-item">Requests</a>
+                <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
+                <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a id="room" class="nav-link dropdown-toggle" href="#" 
+              id="roomDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-chalkboard mr-2"></i>
+                Rooms
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="roomDropdown">
+                <a href="" class="dropdown-item">List of Rooms</a>
+                <a href="" class="dropdown-item">Requests</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a id="subject" class="nav-link dropdown-toggle" href="#" 
+              id="subjectDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-book mr-2"></i>
+                Subjects
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="subjectDropdown">
+                <a href="" class="dropdown-item">List of Subjects</a>
+                <a href="" class="dropdown-item">Requests</a>
+              </div>
+            </li>
             <!-- <li class="nav-item">
-              <a id="dashboard" class="nav-link" href="Requests.php">
-                <i class="fas fa-tachometer-alt mr-2"></i>
-                Requests <span class="sr-only">(current)</span>
-              </a>
+                <a id="room" class="nav-link" href="RoomCreation.php">
+                    <i class="fas fa-chalkboard mr-2"></i>
+                    Rooms
+                </a>
             </li> -->
             <!-- <li class="nav-item">
-              <a id="dashboard" class="nav-link" href="UserControl.php">
-                <i class="fas fa-tachometer-alt mr-2"></i>
-                User Control <span class="sr-only">(current)</span>
+              <a id="employee" class="nav-link dropdown-toggle" href="#" 
+                id="employeesDropdown" role="button" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-briefcase mr-2"></i>
+                 Employees
+              </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="employeesDropdown">
+                <a href="employee_reg.php" onclick="RemoveStorage()" class="dropdown-item">Registration</a>
+                <a href="employee_lst.php" class="dropdown-item">Masterlist</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a id="schedule" class="nav-link dropdown-toggle" href="#" 
+                id="schedulesDropdown" role="button" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-clock mr-2"></i>
+                Schedules
+              </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="schedulesDropdown">
+                <a href="sched_sections.php" class="dropdown-item">Sections</a>
+                <a href="sched_teachers.php" class="dropdown-item">Teachers</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a id="subject" class="nav-link" href="subjects.php">
+                <i class="fas fa-book mr-2 "></i>
+                Subjects
               </a>
             </li>
             <li class="nav-item">
-              <a id="section" class="nav-link" href="UserControl.php">
+              <a id="section" class="nav-link" href="sections.php">
                 <i class="fa fa-chalkboard-teacher mr-2 "></i>
                 Sections
               </a>
+            </li>
+            <li class="nav-item">
+                <a id="room" class="nav-link" href="rooms.php">
+                    <i class="fas fa-chalkboard mr-2"></i>
+                    Rooms
+                </a>
+            </li>
+            <li class="nav-item">
+              <a id="setting" class="nav-link dropdown-toggle" href="#" 
+                id="settingsDropdown" role="button" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-clock mr-2"></i>
+                Settings
+              </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
+                <a href="setting_grade.php" class="dropdown-item">Report Card</a>
+                <a href="logs.php" class="dropdown-item">Logs</a>
+              </div>
             </li> -->
-            <li class="nav-item">
-              <a id="section" class="nav-link" href="Requests.php">
-                <i class="fa fa-chalkboard-teacher mr-2 "></i>
-                Requests
-              </a>
-            </li>
-            <li class="nav-item">
-              <a id="subject" class="nav-link" href="UserControl.php">
-                <i class="fas fa-book mr-2 "></i>
-                User Control
-              </a>
-            </li>
+              
           </ul>
-            <!-- <div class="text-center text-light mt-5">
+            <div class="text-center text-light mt-5">
               <a class="btn btn-danger btn-sm pl-4 pr-4"><i class="fas fa-question-circle mr-2"></i>Help</a>
-            </div> -->
+            </div>
         </div>
       </nav>
       <script type="text/javascript">

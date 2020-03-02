@@ -35,6 +35,7 @@ try{
 		}
 		$columns = substr($columns, 0, strlen($columns)- 1);
 		$columns = str_replace("CreatedBy,", "", $columns);
+		$columns = str_replace("RequestedBy,", "", $columns);
 		$preparedStatement = "SELECT " . $columns . " FROM " . $summary_table . $content;
 	}
 	else{

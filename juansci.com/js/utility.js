@@ -10,7 +10,9 @@ function GetID(node, offset){
 function GetIDinString(node){
 	var content = "";
 	for(var i = 0; i < node.length; i++){
-		content += node[i].id + " "; 
+		if(node[i].id != ""){
+			content += node[i].id + ","; 
+		}
 	}
 	return content;
 }
@@ -257,4 +259,17 @@ function UploadPhoto(file, url, cback){
 	}
 	AJAX_FILES(formData, out, "post", url, true, callback);
 	// alert("UPLOADED");
+}
+
+function Hover(node){
+	for(let i = 0; i < node.length; i++){
+		node[i].addEventListener("mouseover", function(){
+			this.style.backgroundColor = "maroon";
+			this.style.color = "white";
+		});
+		node[i].addEventListener("mouseout", function(){
+			this.style.backgroundColor = "";
+			this.style.color = "";
+		});
+	}
 }
