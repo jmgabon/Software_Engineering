@@ -37,6 +37,10 @@ let parent_id;
 let trTableGrade;
 let arrSubjCode = [];
 
+
+const btn_encode = document.querySelector('#btn_encode');
+
+
 const modal_body = document.querySelector('#modal-body');
 const modal_button = document.querySelector('.modal-button');
 const objMAPEH = [
@@ -445,6 +449,9 @@ function setGradeSubjDB() {
     query += 'FROM grade_subject ';
     query += 'WHERE LRNNum IN (' + LRNNum + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
+    if (accessRole === 'student') {
+        query += 'AND Status = "APPROVED" ';
+    }
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
 }
@@ -577,6 +584,7 @@ function calculateAverage() {
 
     GWA = Number(trTableGrade[trTableGrade.length - 1].cells[5].textContent);
 
+    btn_encode.disabled = true;
     if (GWA == '') {
         remarksGWA = '';
     } else if (GWA >= 75) {
@@ -587,6 +595,8 @@ function calculateAverage() {
         } else {
             remarksGWA = 'RETAINED';
         }
+
+        btn_encode.disabled = false;
     } else {
         remarksGWA = 'RETAINED';
     }
@@ -649,7 +659,27 @@ function printInnerReportCard() {
 let init = (function() {
     if (accessRole === 'teacher') {
         setSectionInfo();
+
+        btn_encode.style.display = 'block';
     } else if (accessRole === 'student') {
         setStudentInfo();
     }
+
+    btn_encode.addEventListener('click', () => {
+        if (confirm("Do you want to store grades to the database?")) {
+            let query = '';
+
+            query += 'UPDATE grade_subject ';
+            query += 'SET Status = "APPROVED" ';
+            query += 'WHERE LRNNum = ' + LRNNum + ' ';
+
+            console.log(query);
+
+            SimplifiedQuery('UPDATE', query, '', () => null);
+
+            alert('Encoding done. Grades are stored to the database!');
+        } else {
+            alert('Cancelled.');
+        }
+    });
 })();
