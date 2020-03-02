@@ -1,7 +1,7 @@
 <?php
   session_start();
-  $_SESSION['TeacherNum'] = 2;
-  $_SESSION['AccessType'] = "coordinator";
+  // $_SESSION['TeacherNum'] = 2;
+  // $_SESSION['AccessType'] = "coordinator";
   if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] != "coordinator"){
     header('Location: ../');
   }
