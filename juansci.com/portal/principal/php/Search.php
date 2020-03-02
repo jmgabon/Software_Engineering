@@ -21,6 +21,12 @@ if(strpos($url[count($url)-1], "#") !== false){
 // }
 // $main_table = str_replace("masterlist", "main", $table);
 $table = str_replace("requests_teacher", "summary_teacherregistration", $table);
+$table = str_replace("regrequests_student", "summary_studentregistration", $table);
+$table = str_replace("requests_room", "summary_roomcreation", $table);
+$table = str_replace("requests_subjectcode", "summary_subjectcodecreation", $table);
+$table = str_replace("masterlist_student", "main_student", $table);
+$table = str_replace("masterlist_room", "main_room", $table);
+$table = str_replace("masterlist_subjectcode", "main_subjectcode", $table);
 // $table = str_replace("stureg", "studentregistration", $table);
 // $summary_table = strtolower(str_replace(".php", "", $table));
 $table = strtolower(str_replace(".php", "", $table));

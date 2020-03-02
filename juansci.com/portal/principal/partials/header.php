@@ -1,7 +1,7 @@
 <?php
   session_start();
-  // $_SESSION['TeacherNum'] = 1;
-  // $_SESSION['AccessType'] = "principal";
+  $_SESSION['TeacherNum'] = 1;
+  $_SESSION['AccessType'] = "principal";
   if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] != "principal"){
     header('Location: ../');
   }
@@ -95,7 +95,7 @@
                 </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="studentsDropdown">
                 <a href="masterlist_student.php" class="dropdown-item">Masterlist</a>
-                <a href="" class="dropdown-item">Requests</a>
+                <a href="regrequests_student.php" class="dropdown-item">Requests</a>
                 <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
                 <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
               </div>
@@ -122,8 +122,8 @@
                 Rooms
                 </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="roomDropdown">
-                <a href="" class="dropdown-item">List of Rooms</a>
-                <a href="" class="dropdown-item">Requests</a>
+                <a href="masterlist_room.php" class="dropdown-item">List of Rooms</a>
+                <a href="requests_room.php" class="dropdown-item">Requests</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -134,8 +134,8 @@
                 Subjects
                 </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="subjectDropdown">
-                <a href="" class="dropdown-item">List of Subjects</a>
-                <a href="" class="dropdown-item">Requests</a>
+                <a href="masterlist_subjectcode.php" class="dropdown-item">List of Subjects</a>
+                <a href="requests_subjectcode.php" class="dropdown-item">Requests</a>
               </div>
             </li>
             <!-- <li class="nav-item">

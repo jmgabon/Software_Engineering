@@ -26,7 +26,7 @@ include 'partials/header.php';
         <thead class="dark">
             <tr>
             <!-- <td>Section Number</td> -->
-            <td id="ControlNum">Request Number</td>
+            <!-- <td id="ControlNum">Request Number</td> -->
             <td id="LRNNum">LRN Number</td>
             <td id="LastName">Last Name</td>
             <!-- <td id="Extension">Extension</td> -->
@@ -37,7 +37,7 @@ include 'partials/header.php';
             <td id="DateCreated">Date Requested</td>
             <!-- <td id="Action_">Action</td>
             <td id="Status_">Status</td> -->
-            <td></td>
+            <!-- <td></td> -->
             </tr>
         </thead>
         <tbody>
@@ -49,17 +49,26 @@ include 'partials/header.php';
 include 'partials/footer.php';
 ?>
 <script type="text/javascript">
-    // cat.options[cat.selectedIndex].value + "=" + searchEmployee.value
-    // let results_input = document.querySelector("#Results");
-    // let category = document.querySelector("#Category");
-    // Search(window.location.href, "", null);
-    // results_input.addEventListener("change", function(){
-    //     let content = category.options[category.selectedIndex].value + "=" + results_input.value;
-    //     Search(window.location.href, content, null);
-    // });
+    let td = document.querySelectorAll("#ResultsTable tr td");
+    let results_input = document.querySelector("#Results");
+    let category = document.querySelector("#Category");
 
-    // function print(xhttp){
-    //     console.log(xhttp.responseText);
-    // }
+    Search(window.location.href, "", GetIDinString(td, 0), tableUI);
+    //EventListener
+    results_input.addEventListener("change", function(){
+        let content = category.options[category.selectedIndex].value + "=" + results_input.value;
+        Search(window.location.href, content, GetIDinString(td, 0), tableUI);
+    });
+    
+    function tableUI(xhttp){
+        CreateTBody(xhttp, null, null);
+        let tr = document.querySelectorAll("#ResultsTable tbody tr");
+    }
+
+    function messageAlert(xhttp){
+        alert(xhttp.responseText);
+        let content = category.options[category.selectedIndex].value + "=" + results_input.value;
+        Search(window.location.href, content, GetIDinString(td, 0), tableUI);   
+    }
     
 </script>

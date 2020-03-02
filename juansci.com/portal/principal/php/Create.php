@@ -27,6 +27,18 @@ if($table == "requests_teacher"){
 	$main_table = "main_teacher";
 	$temp_table = "temp_teacherregistration";
 }
+if($table == "regrequests_student"){
+	$main_table = "main_student";
+	$temp_table = "temp_studentregistration";
+}
+if($table == "requests_room"){
+	$main_table = "main_room";
+	$temp_table = "temp_roomcreation";
+}
+if($table == "requests_subjectcode"){
+	$main_table = "main_subjectcode";
+	$temp_table = "temp_subjectcodecreation";
+}
 if($remarks == ""){
 	$remarks = NULL;
 }
