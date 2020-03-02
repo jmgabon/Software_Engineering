@@ -109,6 +109,8 @@
         </div>
         <div class="row">
             <div class="col-6 p-0 m-0">
+                <button id="btn_encode" style="display: none" disabled>ENCODE</button>
+
                 <table id="tableSubject" class="g-table"><h5 class="">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h5>
                     <thead class="dark">
                         <tr>

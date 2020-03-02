@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if($_SESSION['id'] === null || $_SESSION['access'] != 'teacher'){
+    if($_SESSION['id'] === null || !($_SESSION['access'] === 'principal' xor $_SESSION['access'] === 'coordinator' xor $_SESSION['access'] === 'teacher')){
         header('Location: ../');
     }
 
@@ -54,6 +54,9 @@
         <p><b>Adviser Name: </b><span id="txt_Adviser"></span></p>
         <p><b>Subject Code: </b><span id="txt_SubjectCode"></span></p>
 
+        <br /><br />
+        <p><b>Status: </b><span id="txt_gradeCaseStatus"></span></p>
+
         <div class="row">
             <div class="col-9 p-0 m-0">
                 <table id="CreateGradeTable" class="g-table">
@@ -66,10 +69,10 @@
                             <th id="remark" rowspan="2">Remarks</th>
                         </tr>
                         <tr>
-                            <th>First</td>
-                            <th id="GradeLevel">Second</th>
-                            <th id="SubjectName">Third</th>
-                            <th id="Quarter">Fourth</th>
+                            <th>First</th>
+                            <th>Second</th>
+                            <th>Third</th>
+                            <th>Fourth</th>
                         </tr>
                     </thead>
 
@@ -77,13 +80,17 @@
 
                     </tbody>
                 </table>
-            </div>
-        </div>
 
-    
+                <button id="btn_approve" style="display: none" disabled>APPROVE</button>
+                <button id="btn_disapprove" style="display: none" disabled>NEEDS CORRECTION</button>
+            </div>
+        </div>    
     </div>
 
-    <script>let EmployeeNum = <?php echo $_SESSION['id']?></script>
+    <script>
+        let EmployeeNum = <?php echo $_SESSION['id']?>;
+        let accessRole = '<?php echo $_SESSION['access']?>';
+    </script>
     <script src="../js/ajax.js" type="text/javascript"></script>
     <script src="../js/utility.js" type="text/javascript"></script>
     <script src="../js/cms.js" type="text/javascript"></script>

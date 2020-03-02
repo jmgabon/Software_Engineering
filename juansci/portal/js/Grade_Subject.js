@@ -16,7 +16,11 @@ const wrapperGradeViewMain = (function(wrapSubj) {
 
 
 let quarterSelected;
+let teacherEmployeeNum;
 let jsonQuarter;
+let gradeCaseValue;
+
+let newGradeCaseValue;
 
 let SectionNum;
 let Quarter;
@@ -37,6 +41,10 @@ const modal_body = document.querySelector('#modal-body');
 const button = document.querySelectorAll('button');
 const labelMAPEH = document.querySelector('#labelMAPEH');
 
+const btn_approve = document.querySelector('#btn_approve');
+const btn_disapprove = document.querySelector('#btn_disapprove');
+
+console.log('accessRole: ' + accessRole);
 
 function setAdviserNameDB() {
     let query = '';
@@ -68,7 +76,7 @@ openSubjectModal.addEventListener('click', function() {
     CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
 
     let cat = document.querySelector('#modal-body select');
-    let hiddenCol = 'SectionNum';
+    let hiddenCol = 'SectionNum@EmployeeNum';
     const searchSubject = document.querySelector('#SearchSubject');
     theadID += '@' + hiddenCol;
     theadHTML += '@' + hiddenCol;
@@ -83,13 +91,18 @@ openSubjectModal.addEventListener('click', function() {
         query += 'SELECT subject.SubjectCode, section.SectionName, section.GradeLevel, ';
         query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
         query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
-        query += 'section.SectionNum ';
+        query += 'section.SectionNum, subject.EmployeeNum ';
         query += 'FROM subject ';
         query += 'INNER JOIN section ';
         query += 'ON subject.SectionNum = section.SectionNum ';
         query += 'JOIN employee ';
         query += 'ON subject.EmployeeNum = employee.EmployeeNum ';
-        query += 'WHERE subject.EmployeeNum = ' + EmployeeNum + ' ';
+
+        if (accessRole === 'teacher') {
+            query += 'WHERE subject.EmployeeNum = ' + EmployeeNum + ' ';
+        } else {
+            query += 'ORDER BY Adviser ASC';
+        }
 
         if (searchSubject.value !== '') {
             let queryHaving;
@@ -115,6 +128,29 @@ openSubjectModal.addEventListener('click', function() {
 });
 
 
+let displayAfterClickModal = function() {
+    setGradeCase();
+
+    if (input_SubjectCode.value === 'MAPEH 7' ||
+        input_SubjectCode.value === 'MAPEH 8' ||
+        input_SubjectCode.value === 'MAPEH 9' ||
+        input_SubjectCode.value === 'MAPEH 10') {
+        labelMAPEH.style.display = 'block';
+        selectMAPEH.value = selectMAPEH.options[0].value;
+        RemoveChildNodes(tbody);
+        setQuarterDB();
+        setAdviserNameDB();
+
+    } else {
+        labelMAPEH.style.display = 'none';
+        RemoveChildNodes(tbody);
+        setQuarterDB();
+        setAdviserNameDB();
+        setStudentListDB();
+    }
+}
+
+
 function getSubject(xhttp) {
     console.log(JSON.parse(xhttp.responseText));
     CreateTBody(xhttp, getSubject);
@@ -126,6 +162,8 @@ function getSubject(xhttp) {
             closeModal(modal_body);
 
             SectionNum = this.childNodes[4].innerHTML;
+            teacherEmployeeNum = this.childNodes[5].innerHTML;
+            console.log('teacherEmployeeNum: ' + teacherEmployeeNum)
             SubjectCode = this.childNodes[0].innerHTML;
             txt_Section.innerHTML = this.childNodes[1].innerHTML;
             txt_GradeLevel.innerHTML = this.childNodes[2].innerHTML;
@@ -133,23 +171,7 @@ function getSubject(xhttp) {
             input_SubjectCode.value = SubjectCode;
             txt_SubjectCode.innerHTML = SubjectCode;
 
-            if (input_SubjectCode.value === 'MAPEH 7' ||
-                input_SubjectCode.value === 'MAPEH 8' ||
-                input_SubjectCode.value === 'MAPEH 9' ||
-                input_SubjectCode.value === 'MAPEH 10') {
-                labelMAPEH.style.display = 'block';
-                selectMAPEH.value = selectMAPEH.options[0].value;
-                RemoveChildNodes(tbody);
-                setQuarterDB();
-                setAdviserNameDB();
-
-            } else {
-                labelMAPEH.style.display = 'none';
-                RemoveChildNodes(tbody);
-                setQuarterDB();
-                setAdviserNameDB();
-                setStudentListDB();
-            }
+            displayAfterClickModal();
 
             console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
         });
@@ -215,7 +237,12 @@ function setSubMAPEH() {
 
 
 function enablerQuarter(q) {
-    if (q == quarterSelected) {
+    if (accessRole === 'principal' || accessRole === 'coordinator') {
+        return true
+    }
+
+    if (q == quarterSelected &&
+        (gradeCaseValue == 1 || gradeCaseValue == 2 || gradeCaseValue == 3)) {
         return false
     }
     return true
@@ -263,26 +290,29 @@ function tBodyGrade(xhttp) {
                     }
 
                     function setSaveButton(i) {
-                        button_save = document.createElement('button');
-                        button_save.disabled = enablerQuarter(i);
+                        if (accessRole === 'teacher') {
+                            button_save = document.createElement('button');
+                            button_save.disabled = enablerQuarter(i);
 
-                        switch (i) {
-                            case 1:
-                                button_save.setAttribute('id', 'save1');
-                                break;
-                            case 2:
-                                button_save.setAttribute('id', 'save2');
-                                break;
-                            case 3:
-                                button_save.setAttribute('id', 'save3');
-                                break;
-                            case 4:
-                                button_save.setAttribute('id', 'save4');
-                                break;
+                            switch (i) {
+                                case 1:
+                                    button_save.setAttribute('id', 'save1');
+                                    break;
+                                case 2:
+                                    button_save.setAttribute('id', 'save2');
+                                    break;
+                                case 3:
+                                    button_save.setAttribute('id', 'save3');
+                                    break;
+                                case 4:
+                                    button_save.setAttribute('id', 'save4');
+                                    break;
+                            }
+
+                            button_save.innerHTML = 'SAVE';
+                            td.appendChild(button_save);
                         }
 
-                        button_save.innerHTML = 'SAVE';
-                        td.appendChild(button_save);
                     }
 
                     if (j == 0) {
@@ -336,30 +366,33 @@ function tBodyGrade(xhttp) {
 
             setGradeDB();
 
-            const save1 = document.querySelector('#save1');
-            const save2 = document.querySelector('#save2');
-            const save3 = document.querySelector('#save3');
-            const save4 = document.querySelector('#save4');
+            if (accessRole === 'teacher') {
+                const save1 = document.querySelector('#save1');
+                const save2 = document.querySelector('#save2');
+                const save3 = document.querySelector('#save3');
+                const save4 = document.querySelector('#save4');
 
-            save1.addEventListener('click', function() {
-                Quarter = 1;
-                saveGrade();
-            });
+                save1.addEventListener('click', function() {
+                    Quarter = 1;
+                    saveGrade();
+                });
 
-            save2.addEventListener('click', function() {
-                Quarter = 2;
-                saveGrade();
-            });
+                save2.addEventListener('click', function() {
+                    Quarter = 2;
+                    saveGrade();
+                });
 
-            save3.addEventListener('click', function() {
-                Quarter = 3;
-                saveGrade();
-            });
+                save3.addEventListener('click', function() {
+                    Quarter = 3;
+                    saveGrade();
+                });
 
-            save4.addEventListener('click', function() {
-                Quarter = 4;
-                saveGrade();
-            });
+                save4.addEventListener('click', function() {
+                    Quarter = 4;
+                    saveGrade();
+                });
+            }
+
         } else {
             alert('No enrolled students yet.');
             console.log('No enrolled students yet.');
@@ -514,10 +547,58 @@ function saveGrade() {
         alert('QUARTER ' + Quarter + ' GRADES SAVED');
         console.log('QUARTER ' + Quarter + ' GRADES SAVED');
         setGradeDB();
+
+        //
+        changeGradeCase();
+        textCaseStatus(newGradeCaseValue);
+
+        save1.disabled = true;
+        save2.disabled = true;
+        save3.disabled = true;
+        save4.disabled = true;
+        //
     } else {
         alert('Invalid input! Check all grades.');
     }
 }
+
+
+let changeGradeCase = function() {
+    switch (gradeCaseValue) {
+        case 0:
+            break;
+        case 1:
+            newGradeCaseValue = 4;
+            break;
+        case 2:
+            newGradeCaseValue = 4;
+            break;
+        case 3:
+            newGradeCaseValue = 5;
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+    }
+
+    let query = '';
+
+    query += 'UPDATE grade_case ';
+    query += 'SET CaseValue = ' + newGradeCaseValue + ' ';
+    if (accessRole === 'teacher') {
+        query += 'WHERE EmployeeNum = ' + EmployeeNum + ' ';
+        query += 'AND SubjectCode = "' + SubjectCode + '" ';
+    } else if (accessRole === 'principal' || accessRole === 'coordinator') {
+        query += 'WHERE EmployeeNum = ' + teacherEmployeeNum + ' ';
+        query += 'AND SubjectCode = "' + SubjectCode + '" ';
+    }
+
+    console.log(query);
+
+    SimplifiedQuery('UPDATE', query, '', () => null);
+}
+
 
 function getFinalAndRemark() {
     let finalRating;
@@ -553,3 +634,130 @@ function getFinalAndRemark() {
         }
     }
 }
+
+
+let textCaseStatus = function(val) {
+    let txt_gradeCaseStatus = document.querySelector('#txt_gradeCaseStatus');
+
+    switch (val) {
+        case 0:
+            txt_gradeCaseStatus.textContent = 'CODE0: ENCODING OF GRADES NOT STARTED YET.';
+            break;
+        case 1:
+            txt_gradeCaseStatus.textContent = 'CODE1: SUBJECT TEACHERS ARE GRADING FOR THE FIRST TIME.';
+            break;
+        case 2:
+            txt_gradeCaseStatus.textContent = 'CODE2: ALREADY EVALUATED BY THE COORDINATOR, BUT NEEDS CORRECTION.';
+            break;
+        case 3:
+            txt_gradeCaseStatus.textContent = 'CODE3: ALREADY EVALUATED BY THE PRINCIPAL, BUT NEEDS CORRECTION.';
+            break;
+        case 4:
+            txt_gradeCaseStatus.textContent = 'CODE4: COORDINATOR IS EVALUATING.';
+            break;
+        case 5:
+            txt_gradeCaseStatus.textContent = 'CODE5: PRINCIPAL IS EVALUATING.';
+            break;
+        case 6:
+            txt_gradeCaseStatus.textContent = 'CODE6: COORDINATOR AND PRINCIPAL APPROVED. WAITING FOR THE END OF QUARTER.';
+            break;
+    }
+}
+
+
+let setGradeCase = function() {
+    let query = '';
+
+    query += 'SELECT CaseValue ';
+    query += 'FROM grade_case ';
+    if (accessRole === 'teacher') {
+        query += 'WHERE EmployeeNum = ' + EmployeeNum + ' ';
+        query += 'AND SubjectCode = "' + SubjectCode + '" ';
+    } else if (accessRole === 'principal' || accessRole === 'coordinator') {
+        query += 'WHERE EmployeeNum = ' + teacherEmployeeNum + ' ';
+        query += 'AND SubjectCode = "' + SubjectCode + '" ';
+    }
+
+    SimplifiedQuery('SELECT', query, '', getGradeCase);
+};
+
+
+let getGradeCase = function(xhttp) {
+    try {
+        jsonGradeCase = JSON.parse(xhttp.responseText);
+        gradeCaseValue = jsonGradeCase[0]['CaseValue'];
+
+        if (accessRole === 'coordinator') {
+            if (gradeCaseValue === 4) {
+                btn_approve.disabled = false;
+                btn_disapprove.disabled = false;
+            } else {
+                btn_approve.disabled = true;
+                btn_disapprove.disabled = true;
+            }
+        } else if (accessRole === 'principal') {
+            if (gradeCaseValue === 5) {
+                btn_approve.disabled = false;
+                btn_disapprove.disabled = false;
+            } else {
+                btn_approve.disabled = true;
+                btn_disapprove.disabled = true;
+            }
+        }
+
+        textCaseStatus(gradeCaseValue);
+    } catch (err) {
+        alert('CANNOT FIND');
+        console.log(xhttp.responseText);
+        console.log(err);
+    }
+}
+
+
+
+let init = (function() {
+    // 0	DISABLED T. ENCODING OF GRADES NOT STARTED YET.
+    // 1	ENABLED T. SUBJECT TEACHERS GRADING FOR THE FIRST TIME. IF SAVED, DISABLE. GOTO 4.
+    // 2	ENABLED T. ALREADY VIEWED BY AC, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 4.
+    // 3	ENABLED T. ALREADY VIEWED BY P, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 5.
+    // 4	DISABLED AC. AC IS EVALUATING. IF NEEDS CORRECTION, GOTO 2. ELSE, GOTO 5.
+    // 5	DISABLED P. P IS EVALUATING. IF NEEDS CORRECTION, GOTO 3. ELSE, GOTO 6.
+    // 6	DISABLED T. GRADES ARE NOW ACCESSIBLE. PENDING -> APPROVED (`grade_subject`/`Status`).
+
+    if (accessRole === 'principal' || accessRole === 'coordinator') {
+        btn_approve.style.display = 'block';
+        btn_disapprove.style.display = 'block';
+
+
+        btn_approve.addEventListener('click', () => {
+            if (accessRole === 'principal') {
+                newGradeCaseValue = 6;
+            } else if (accessRole === 'coordinator') {
+                newGradeCaseValue = 5;
+            }
+
+            changeGradeCase();
+            alert('Approved!');
+
+            textCaseStatus(newGradeCaseValue);
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+        });
+
+        btn_disapprove.addEventListener('click', () => {
+            if (accessRole === 'principal') {
+                newGradeCaseValue = 3;
+            } else if (accessRole === 'coordinator') {
+                newGradeCaseValue = 2;
+            }
+
+            changeGradeCase();
+            alert('Needs Correction!');
+
+            textCaseStatus(newGradeCaseValue);
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+        });
+
+    }
+})();
