@@ -59,7 +59,7 @@ try{
 	$stmt->execute();
 	$row = $stmt->fetchAll();
 
-	if(count($row) == 0){
+	if(count($row) == 0 || $primary_key_value == NULL){
 		$toBind = substr($toBind, 0, strlen($toBind)- 1);
 		$columns = substr($columns, 0, strlen($columns)- 1);
 		$preparedStatement = "INSERT INTO " . $temp_table . "(" . $columns . ") VALUES(" . $toBind . ")";
@@ -69,8 +69,9 @@ try{
 			$stmt->bindValue($i, $colVal[$i-1]);
 		}
 		$stmt->execute();
-		echo "Successful";
+		
 		$stmt->closeCursor();
+		echo "Successful";
 		// echo $preparedStatement;
 	}
 	else{

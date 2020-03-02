@@ -37,17 +37,29 @@ submitForm.addEventListener("click", function(event){
 function InsertInfo(){
 	var content = {};
 	
+	// for(var i = 0; i < input.length; i++){
+	// 	if(input[i].type == "file"){
+	// 		content["URL_Picture"] = input[i].files[0]['name'];
+	// 	}
+	// 	else if(input[i].type == "checkbox"){
+	// 		content[input[i].name] = input[i].checked;
+	// 	}
+	// 	else{
+	// 		content[input[i].id] = input[i].value;
+	// 	}
+	// }
 	for(var i = 0; i < input.length; i++){
-		if(input[i].type == "file"){
-			content["URL_Picture"] = input[i].files[0]['name'];
-		}
-		else if(input[i].type == "checkbox"){
+		// if(input[i].type == "file"){
+		// 	content["URL_Picture"] = input[i].files[0]['name'];
+		// }
+		if(input[i].type == "checkbox"){
 			content[input[i].name] = input[i].checked;
 		}
-		else{
+		else if(input[i].type != 'file'){
 			content[input[i].id] = input[i].value;
 		}
 	}
+	content["URL_Picture"] = imageToUpload.files[0]['name'];
 
 	if(userID !== null){
 		content["CreatedBy"] = userID; 

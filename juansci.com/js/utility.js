@@ -261,7 +261,7 @@ function UploadPhoto(file, url, cback){
 	// alert("UPLOADED");
 }
 
-function Hover(node){
+function AllHover(node){
 	for(let i = 0; i < node.length; i++){
 		node[i].addEventListener("mouseover", function(){
 			this.style.backgroundColor = "maroon";
@@ -272,4 +272,15 @@ function Hover(node){
 			this.style.color = "";
 		});
 	}
+}
+function Hover(node){
+	node.addEventListener("mouseover", function(){
+		this.style.backgroundColor = "maroon";
+		this.style.color = "white";
+	});
+	node.addEventListener("mouseout", function(){
+		this.style.backgroundColor = "";
+		this.style.color = "";
+	});
+
 }

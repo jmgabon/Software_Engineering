@@ -66,7 +66,6 @@ include 'partials/footer.php';
     function tableUI(xhttp){
         CreateTBody(xhttp, null, Blocking);
         let tr = document.querySelectorAll("#ResultsTable tbody tr");
-        Hover(tr);
     }
     function Blocking(td, i){
         console.log(td.innerHTML);

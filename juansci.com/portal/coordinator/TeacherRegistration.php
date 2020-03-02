@@ -617,6 +617,7 @@ include 'partials/footer.php';
 				input_current_address[i].reportValidity();
 			}
 		}
+      console.log(input_current_address);
 		if(ifblank == 0){
 			for(let i = 0; i < input_current_address.length; i++){
 				input_permanent_address[i].value = input_current_address[i].value;

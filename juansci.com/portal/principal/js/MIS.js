@@ -36,6 +36,10 @@ function Search(url, content, content2, callback){
 	}
 }
 
+function Update(){
+	
+}
+
 function requestStatus(xhttp){
 	let message = xhttp.responseText;
     if(message == "Successful"){

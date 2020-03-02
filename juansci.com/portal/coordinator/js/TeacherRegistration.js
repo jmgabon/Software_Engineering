@@ -36,18 +36,19 @@ submitForm.addEventListener("click", function(event){
 
 function InsertInfo(){
 	var content = {};
-	
+	content["TeacherNum"] = null;
 	for(var i = 0; i < input.length; i++){
-		if(input[i].type == "file"){
-			content["URL_Picture"] = input[i].files[0]['name'];
-		}
-		else if(input[i].type == "checkbox"){
+		// if(input[i].type == "file"){
+		// 	content["URL_Picture"] = input[i].files[0]['name'];
+		// }
+		if(input[i].type == "checkbox"){
 			content[input[i].name] = input[i].checked;
 		}
-		else{
+		else if(input[i].type != 'file'){
 			content[input[i].id] = input[i].value;
 		}
 	}
+	content["URL_Picture"] = imageToUpload.files[0]['name'];
 	if(userID !== null){
 		content["CreatedBy"] = userID; 
 	}
@@ -57,7 +58,7 @@ function InsertInfo(){
 	for(var i=0; i < select.length; i++){
 		content[select[i].id] = select[i].options[select[i].selectedIndex].value;
 	}
-	console.log(content);
+	// console.log(content);
 	// UploadPhoto(imageToUpload, "../../php/UploadTeacherPhoto.php", null);
 	UploadPhoto(imageToUpload, "../../php/UploadTeacherPhoto.php", null);
 	Create(window.location.href, content, Registered);
@@ -68,8 +69,11 @@ function Registered(xhttp){
 		alert("REGISTERED");
 		location.reload(false);
 	}
+	else{
+		console.log(xhttp.responseText);
+	}
 }
 
 function Uploaded(xhttp){
-	console.log(xhttp.responseText);
+	// console.log(xhttp.responseText);
 }

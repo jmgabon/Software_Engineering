@@ -14,7 +14,8 @@ function closeModal(modalContent){
 	currentpage = saved_page;
 
 	if(parent_id != undefined && document.querySelector("table").id != ''){
-		CreateTBody(null, null, button_function);
+		CreateTBody(null);
+		// CreateTBody(null, null, button_function);
 	}
 	
 	// console.log("Parent: " + parent_id);

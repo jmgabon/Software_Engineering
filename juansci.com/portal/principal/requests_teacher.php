@@ -14,6 +14,8 @@ include 'partials/header.php';
                 <option value="TeacherNum">Teacher ID</option>
                 <option value="LastName">Last Name</option>
                 <option value="FirstName">First Name</option>
+                <option value="CreatedBy">Creator ID</option>
+                <option value="RequestedBy">Name</option>
                 <option value="MiddleName">Middle Name</option>
                 <option value="Action_">Action</option>
                 <option value="Status_">Status</option>
@@ -37,7 +39,7 @@ include 'partials/header.php';
             <td id="DateCreated">Date Requested</td>
             <td id="Action_">Action</td>
             <td id="Status_">Status</td>
-            <td></td>
+            <td style="width: 2% !important;"></td>
             </tr>
         </thead>
         <tbody>
@@ -50,11 +52,44 @@ include 'partials/footer.php';
 ?>
 <script type="text/javascript">
     Search(window.location.href, "", "", tableUI);
+    let results_input = document.querySelector("#Results");
+    let category = document.querySelector("#Category");
+
+    results_input.addEventListener("change", function(){
+        let content = category.options[category.selectedIndex].value + "=" + results_input.value;
+        Search(window.location.href, content, "", tableUI);
+    });
 
     function tableUI(xhttp){
-        CreateTBody(xhttp, null, null);
+        CreateTBody(xhttp, null, Approval);
         let tr = document.querySelectorAll("#ResultsTable tbody tr");
-        Hover(tr);
+        // Hover(tr);
+    }
+    function Approval(td, i){
+        console.log(td.innerHTML);
+
+        let btn1, btn2, class_btn1, class_btn2;
+        // console.log(td);
+        btn1 = document.createElement('button');
+        btn2 = document.createElement('button');
+        // btn_Block.innerHTML = "Block";
+        // btn_Privilege.innerHTML = "Set as Coordinator";
+        btn1.innerHTML = "Approve";
+        btn2.innerHTML = "Reject";
+
+        // btn1.style.width = "100% !important";
+        // btn2.style.width = "100% !important";
+        if(results[i]["Status_"] == "PENDING"){
+            td.appendChild(btn1);
+            td.appendChild(btn2);
+        }
+        // // td.appendChild(btn_Delete);
+        class_btn1 = document.createAttribute("class");
+        class_btn2 = document.createAttribute("class");
+        class_btn1.value = "btn_Table";
+        class_btn2.value = "btn_Table";
+        btn1.setAttributeNode(class_btn1);
+        btn2.setAttributeNode(class_btn2); 
     }
     // cat.options[cat.selectedIndex].value + "=" + searchEmployee.value
     // let results_input = document.querySelector("#Results");

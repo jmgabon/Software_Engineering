@@ -151,6 +151,7 @@ function CreateTBody(xhttp, cfunction, cfunction2){ //Create Table Body (Imitate
 				td.style.display = "none";
 			}	
 			tr.appendChild(td);
+			Hover(tr);
 		}
  		tbody.appendChild(tr);
 	}
@@ -189,7 +190,8 @@ function CreateTBody(xhttp, cfunction, cfunction2){ //Create Table Body (Imitate
 				cfunction(xhttp);
 			}
 			else{
-				CreateTBody(xhttp);		
+				CreateTBody(xhttp, cfunction, cfunction2);	
+				console.log("EH");	
 			}
 		}
 		// console.log(results.length);
@@ -207,7 +209,8 @@ function CreateTBody(xhttp, cfunction, cfunction2){ //Create Table Body (Imitate
 				cfunction(xhttp);
 			}
 			else{
-				CreateTBody(xhttp);		
+				CreateTBody(xhttp, cfunction, cfunction2);		
+				console.log("EH");
 			}
 			// CreateTBody(xhttp);
 			// console.log(currentpage);
