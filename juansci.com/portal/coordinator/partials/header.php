@@ -95,6 +95,7 @@
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="studentsDropdown">
                 <a href="StudentRegistration.php" class="dropdown-item">Registration</a>
                 <a href="summary_stureg.php" class="dropdown-item">Requests</a>
+                <a href="../teacher/Grade_Subject.php" class="dropdown-item">Evaluate Grade Subjects</a>
                 <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
                 <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
               </div>
