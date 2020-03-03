@@ -72,9 +72,10 @@ function ResetInput(initialValue, parent_id){//whatToReset - resets the button
 
 //Function to Create Table 
 function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of sql)
+	console.log(parent_id);
 	try{
 	// var json;
-	parent_id = "Results";
+	// parent_id = "Results";
 	var td;
 	var tr;
 	var btn_Edit;
@@ -149,6 +150,7 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 				td.style.display = "none";
 			}	
 			tr.appendChild(td);
+			Hover(tr);
 		}
  		tbody.appendChild(tr);
 	}

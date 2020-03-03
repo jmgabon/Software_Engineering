@@ -74,3 +74,12 @@
   border-top: solid 0.2em #aaa;
   /*bottom: 0;*/
 }
+
+#modal-body select{
+  float: left !important;
+  width: 20% !important;
+  max-width: 20%;
+}
+#modal-body input{
+  width: 80% !important;
+}

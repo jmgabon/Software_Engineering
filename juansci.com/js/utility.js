@@ -96,6 +96,7 @@ function CreateSearchBox(thead_id, theadHTML, seperator, input_id, type, parentN
 	// }
 
 	let select = document.createElement("select");
+	select.style.float = "left! important;";
 	for(let i = 0; i < thead_id.length; i++){
 		let option = document.createElement("option");
 		let optionSelected = document.createElement("selected");
@@ -167,6 +168,7 @@ function GetContent(parent_id){
 			form.reportValidity();
 		}
 	}
+	ifblank = 0;
 	if(ifblank == 0){
 		for(var i = 0; i < input.length; i++){
 			if(input[i].type == "checkbox"){

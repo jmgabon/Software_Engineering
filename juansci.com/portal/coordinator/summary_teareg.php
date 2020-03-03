@@ -32,6 +32,8 @@ include 'partials/header.php';
             <td id="FirstName">First Name</td>
             <td id="MiddleName">Middle Name</td>
             <td id="URL_Picture" style="display: none;"></td>
+            <td style="display: none;"></td>
+            <td style="display: none;"></td>
             <td id="DateCreated">Date Requested</td>
             <td id="Action_">Action</td>
             <td id="Status_">Status</td>

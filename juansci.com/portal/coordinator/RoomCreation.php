@@ -65,6 +65,8 @@
                 <td scope="col" id="Floor">Floor</td>
                 <td scope="col" id="Type">Type</td>
                 <td scope="col" id="DateCreated">Date Requested</td>
+                <td style="display: none;"></td>
+                <td style="display: none;"></td>
                 <td scope="col" id="Action_">Action</td>
                 <td scope="col" id="Status_">Status</td>
                 <!-- <td scope="col"></td> -->

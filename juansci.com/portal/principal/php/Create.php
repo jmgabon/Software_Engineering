@@ -73,8 +73,8 @@ try{
 				$columns .= $row[$i][0] . ",";
 			}
 		}
-		$columns = substr($columns, 0, -1);
-		$preparedStatement = "INSERT INTO ".$main_table."(".$columns.") SELECT " . $columns . " FROM ".$temp_table." WHERE ControlNum = ?";
+		// $columns = substr($columns, 0, -1);
+		$preparedStatement = "INSERT INTO ".$main_table."(".$columns."DateCreated) SELECT " . $columns . "ApprovalDate FROM ".$temp_table." WHERE ControlNum = ?";
 		$stmt = $db->prepare($preparedStatement);
 		$stmt->bindValue(1, $controlNum);
 		$stmt->execute();

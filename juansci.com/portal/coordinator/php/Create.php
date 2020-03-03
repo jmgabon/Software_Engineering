@@ -39,6 +39,7 @@ foreach($content as $key => $value){  //Loops for every key-value of $content
 	elseif($value === "true"){
 		$value = true;
 	}
+	$key = str_replace("txt_", "", $key);
 	// if($key !== "User"){
 	$columns .= $key . ",";
 	$toBind .= "?,";	

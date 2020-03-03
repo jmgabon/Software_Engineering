@@ -1,7 +1,7 @@
 <?php include 'partials/header.php'; 
 require "../../php/ConnectToDB.php";
 
-$stmt = $db->prepare("SELECT COUNT(LRNNum) FROM temp_studentregistration");
+$stmt = $db->prepare("SELECT COUNT(LRNNum) FROM main_student");
 $stmt->execute();
 $numberOfStudents = $stmt->fetch()[0];
 

@@ -1,7 +1,7 @@
         <!-- <script type="text/javascript" src="../js/pagination.js"></script> -->
         <script type="text/javascript">
             // var user = "echo($_SESSION['access']);?>";
-
+            var parent_id = "Results";
 
             // console.log(user);
         </script>

@@ -1,7 +1,7 @@
 <?php
   session_start();
-  // $_SESSION['TeacherNum'] = 2;
-  // $_SESSION['AccessType'] = "coordinator";
+  $_SESSION['TeacherNum'] = 2;
+  $_SESSION['AccessType'] = "coordinator";
   if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] != "coordinator"){
     header('Location: ../');
   }
@@ -11,11 +11,11 @@
     <head>
         <title>JuanSci Portal</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../../css/modal.css">
         <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css"/>
         <link rel="stylesheet" type="text/css" href="../../css/merged-styles.css">
         <link rel="stylesheet" type="text/css" href="../../css/dbstyles.css">
         <link rel="stylesheet" type="text/css" href="../../css/all.css"/>
+        <link rel="stylesheet" type="text/css" href="../../css/modal.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Righteous&display=swap">
         <link rel="icon" href="../../pictures/logo-new.png">
     </head>
@@ -123,6 +123,12 @@
               <a id="subject" class="nav-link" href="SubjectCodeCreation.php">
                 <i class="fas fa-book mr-2 "></i>
                 Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a id="section" class="nav-link" href="SectionCreation.php">
+                <i class="fa fa-chalkboard-teacher mr-2 "></i>
+                Sections
               </a>
             </li>
             <!-- <li class="nav-item">

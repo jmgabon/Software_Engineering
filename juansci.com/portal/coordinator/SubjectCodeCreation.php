@@ -59,6 +59,8 @@
                 <td scope="col" id="Frequency">Units</td>
                 <td scope="col" id="GradeLevel">Grade Level</td>
                 <td scope="col" id="DateCreated">Date Requested</td>
+                <td scope="col" id="CreatedBy" style="display: none;"></td>
+                <td scope="col" id="RequestedBy" style="display: none;"></td>
                 <td scope="col" id="Action_">Action</td>
                 <td scope="col" id="Status_">Status</td>
                 <!-- <td scope="col"></td> -->
