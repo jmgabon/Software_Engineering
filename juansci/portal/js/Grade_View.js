@@ -671,7 +671,7 @@ let init = (function() {
 
             query += 'UPDATE grade_subject ';
             query += 'SET Status = "APPROVED" ';
-            query += 'WHERE LRNNum = ' + LRNNum + ' ';
+            query += 'WHERE LRNNum = "' + LRNNum + '" ';
 
             console.log(query);
 
