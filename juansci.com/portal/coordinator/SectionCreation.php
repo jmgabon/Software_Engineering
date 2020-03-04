@@ -46,7 +46,7 @@
             <input type="text" name="txt_RoomNum" id="txt_RoomNum" disabled style="width: 75% !important; 
                 float: none !important; 
                 margin-right: 0% !important;"/>
-            <button id="btn_RoomNum">&check;</button>
+            <button class="modal-button" id="btn_RoomNum"><i class="far fa-window-restore"></i></button>
             </span>
         </p>
         <!-- <label class="pl-3" for="txt_Capacity">Capacity: <input class="ml-2 mb-2" type="number" name="txt_Capacity" id="txt_Capacity" min="5" max="50" required/></label></p> -->
@@ -68,7 +68,7 @@
             <input type="text" name="txt_Adviser" id="txt_Adviser" required disabled style="width: 75% !important; 
                 float: none !important; 
                 margin-right: 0% !important;"/>
-            <button id="btn_Adviser" onclick="">&check;</button>
+            <button class="modal-button" id="btn_Adviser" onclick=""><i class="far fa-window-restore"></i></button>
             </span>
             <!-- <input class="" type="text" name="RoomNum" id="RoomNum" required/> -->
         </p>
@@ -93,23 +93,25 @@
         </form>
     </div>
     <div class="col col-xl-12" style="margin-top: 10% !important;">
-        <p class="h4 pb-2">List of Requests
-
+    <div class="form-inline mb-3">
+        <h4 class="mb-2">Lists of Requests</h4>
         <!-- <label class="float-right" for="SearchRoom"> -->
-        <label class="float-right" for="Results">
-        <select class="mt-1 form-control rounded-0 bg-light" id="Category">
-            <option value="ControlNum"  selected="selected">Request Number</option>
-            <option value="SectionNum"">Section Number</option>
-            <option value="SectionName">SectionName</option>
-            <option value="RoomNum">Room Number</option>
-            <option value="GradeLevel">Grade Level</option>
-            <option value="SchoolYear">School Year</option>
-            <option value="Adviser">Adviser</option>
-            <option value="Status_">Status</option>
-        </select>
-        <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="Results">
+        <label class="ml-auto" for="Results">
+
+            <select class="form-control mt-5 form-control-sm rounded-0 bg-dark text-light" id="Category">
+                <option value="ControlNum"  selected="selected">Request Number</option>
+                <option value="SectionNum">Section Number</option>
+                <option value="SectionName">SectionName</option>
+                <option value="RoomNum">Room Number</option>
+                <option value="GradeLevel">Grade Level</option>
+                <option value="SchoolYear">School Year</option>
+                <option value="Adviser">Adviser</option>
+                <option value="Status_">Status</option>
+            </select>
+            <input type="search" name="" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
         <!-- <input placeholder="Search for rooms.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchRoom" style=""> -->
-        </label></p>
+        </label>
+    </div>
         <table id="ResultsTable">
             <thead class="dark">
                 <tr>

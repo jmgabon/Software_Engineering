@@ -51,13 +51,19 @@
               <span class="h4 mt-0"> PORTAL</p>
           </div>
           <nav class="d-none d-md-block row navbar pt-0 w-75">
-          <a class="lead p-0" id="lead"></a>
-          <div class="float-right mt-2" id="back-to-menu">
+          <a class="lead p-0"></a>
+          <div class="float-right mt-2 back-to-menu">
             <a href="dashboard.php" class="text-danger h6 mr-5">
             <i class="fa fa-caret-left"></i> Back to Menu</a>
           </div>
           </nav>
         </div>
-
       </div>
+      <nav class="navbar bg-white shadow d-block d-md-none">
+        <a class="lead p-0"></a>
+        <div class="float-right mt-1 back-to-menu">
+            <a href="dashboard.php" class="text-danger h6 mr-2">
+            <i class="fa fa-caret-left"></i> Back to Menu</a>
+          </div>
+      </nav>
       

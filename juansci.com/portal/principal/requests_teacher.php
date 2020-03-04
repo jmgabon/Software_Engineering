@@ -7,22 +7,22 @@ include 'partials/header.php';
 </script>
 <div class="content-main mt-4">
     <div class="secondCol col-xl-12">
-    <p class="h5 pb-2">
-        <label class="float-right" for="Results">
-            <select id="Category" class="mt-1 form-control rounded-0 bg-light">
-                <option value="ControlNum" selected = "selected">Request Number</option>
-                <option value="TeacherNum">Teacher ID</option>
-                <option value="LastName">Last Name</option>
-                <option value="FirstName">First Name</option>
-                <option value="CreatedBy">Creator ID</option>
-                <option value="RequestedBy">Name</option>
-                <option value="MiddleName">Middle Name</option>
-                <option value="Action_">Action</option>
-                <option value="Status_">Status</option>
-            </select>   
-            <input placeholder="Search" type="search" class="mt-1 form-control rounded-0 bg-light" id="Results">
-        </label>
-    </p>
+        <div class="form-inline mb-3">
+            <label for="Results">
+                <select id="Category" class="form-control mt-5 form-control-sm rounded-0 bg-dark text-light">
+                    <option value="ControlNum" selected = "selected">Request Number</option>
+                    <option value="TeacherNum">Teacher ID</option>
+                    <option value="LastName">Last Name</option>
+                    <option value="FirstName">First Name</option>
+                    <option value="CreatedBy">Creator ID</option>
+                    <option value="RequestedBy">Name</option>
+                    <option value="MiddleName">Middle Name</option>
+                    <option value="Action_">Action</option>
+                    <option value="Status_">Status</option>
+                </select>   
+                <input placeholder="Search" type="search" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
+            </label>
+        </div>
     <table id="ResultsTable">
         <thead class="dark">
             <tr>

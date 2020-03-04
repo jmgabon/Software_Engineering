@@ -67,7 +67,7 @@
         </a>
         <!-- <p style="text-align: left;">* - REQUIRED</p> -->
           <div class="ml-auto d-none d-md-block">
-            
+            <a href="" class="btn btn-danger text-light" style="">Manage Home</a>
             <a href="" class="btn btn-danger text-light" style="display: none;"></a>
             <a href="" class="btn btn-danger text-light" style="display: none;"></a>
             <!-- <a href="../" class="btn btn-danger text-light">Manage Home</a> -->
@@ -147,7 +147,7 @@
                 <a href="requests_section.php" class="dropdown-item">Requests</a>
               </div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-4">
               <a id="schedule" class="nav-link dropdown-toggle" href="#" 
                 id="schedulesDropdown" role="button" data-toggle="dropdown" 
                 aria-haspopup="true" aria-expanded="false">
@@ -206,7 +206,7 @@
                     <i class="fas fa-chalkboard mr-2"></i>
                     Rooms
                 </a>
-            </li>-->
+            </li>
             <li class="nav-item">
               <a id="setting" class="nav-link dropdown-toggle" href="#" 
                 id="settingsDropdown" role="button" data-toggle="dropdown" 
@@ -215,10 +215,10 @@
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
-                <a href="../teacher/setting_grade.php" class="dropdown-item">Report Card</a>
-                <!-- <a href="logs.php" class="dropdown-item">Logs</a> -->
+                <a href="setting_grade.php" class="dropdown-item">Report Card</a>
+                <a href="logs.php" class="dropdown-item">Logs</a>
               </div>
-            </li> 
+            </li> -->
               
           </ul>
             <div class="text-center text-light mt-5">

@@ -21,7 +21,7 @@ include 'partials/header.php';
                 <option value="DateCreated">Date</option>
                 <option value="CreatedBy">Teacher ID</option>
                 <option value="RequestedBy">Name</option>
-                <option value="Action_" style="display: none;">Action</option>
+                <option value="Action_">Action</option>
                 <option value="Status_">Status</option>
             </select>   
             <input placeholder="Search" type="search" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
@@ -42,7 +42,7 @@ include 'partials/header.php';
             <td id="DateCreated">Date</td>
             <td id="CreatedBy">ID</td>
             <td id="RequestedBy">Created By</td>
-            <td id="Action_" style="display: none;">Action</td>
+            <td id="Action_">Action</td>
             <td id="Status_">Status</td>
             <td style="width: 2% !important;"></td>
             </tr>

@@ -7,9 +7,9 @@ include 'partials/header.php';
 </script>
 <div class="content-main mt-4">
     <div class="secondCol col-xl-12">
-    <p class="h5 pb-2">
-        <label class="float-right" for="Results">
-            <select id="Category" class="mt-1 form-control rounded-0 bg-light">
+    <div class="form-inline mb-3">
+        <label for="Results">
+            <select id="Category" class="form-control mt-5 form-control-sm rounded-0 bg-dark text-light">
                 <option value="ControlNum" selected = "selected">Request Number</option>
                 <option value="SubjectCode">Subject Code</option>
                 <option value="SubjectDescription">Subject Description</option>
@@ -22,9 +22,9 @@ include 'partials/header.php';
                 <option value="Action_" style="display: none;">Action</option>
                 <option value="Status_">Status</option>
             </select>   
-            <input placeholder="Search" type="search" class="mt-1 form-control rounded-0 bg-light" id="Results">
+            <input placeholder="Search" type="search" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
         </label>
-    </p>
+    </div>
     <table id="ResultsTable">
         <thead class="dark">
             <tr>

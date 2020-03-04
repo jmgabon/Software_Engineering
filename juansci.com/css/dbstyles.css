@@ -4,7 +4,15 @@ body {
 /*
  * Sidebar
  */
-
+ .topnav{
+   position: fixed;
+   width: 100%;
+   z-index: 999;
+   top:0;
+ }
+.midnav{
+  margin-top:50px;
+}
 .sidebar {
   position: fixed;
   top: 0;
@@ -36,7 +44,7 @@ body {
   margin-left: 240px !important;
 }
 .content{
-  margin-left: 240px !important;
+  margin-left: 230px !important;
 }
 .content-main{
   margin-left: 340px !important;
@@ -147,4 +155,27 @@ body {
   padding: 5px;
   width: 120px;
   background-color: white;
+}
+.bg-red{
+  position: absolute;
+  bottom:0;
+  left:0;
+  height: 200px;
+  background-image: url("../pictures/neww.png");
+  background-size: cover;
+  z-index: -1;
+}
+.text-lg{
+  font-size: 80px;
+  font-weight: 500;
+}
+.text-md{
+  font-size: 50px;
+  font-weight: 500;
+}
+.text-maroon{
+  color: maroon;
+}
+.send-to-front{
+  z-index: 9999;
 }

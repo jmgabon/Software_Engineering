@@ -29,7 +29,7 @@
     <body id="test1" class="bg-light">
       <!---------------TOPNAV--------------->
       
-      <nav class="sticky-top navbar shadow bg-dark text-light navbar-expand-lg">
+      <nav class="topnav navbar shadow bg-dark text-light navbar-expand-lg">
         <div class="container-fluid">
           <p id="demo" class="m-0 p-0"></p>
           
@@ -58,7 +58,7 @@
       </nav>
       
       <!----------------MIDNAV---------------->
-      <nav class="navbar shadow bg-white navbar-expand-lg">
+      <nav class="navbar midnav shadow bg-white navbar-expand-lg">
       
         <p id="lead" class="lead nav-item mr-auto lead-margin mb-0"></p>
         <a id="slide" class="navbar-toggler d-md-none" type="button" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
