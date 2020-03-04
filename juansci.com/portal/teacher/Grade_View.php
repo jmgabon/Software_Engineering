@@ -303,7 +303,7 @@
         if (accessRole === '') {
             accessRole = 'teacher';
         }
-        console.log('accessRole:' + accessRole)
+        console.log('accessRole: ' + accessRole)
 
         <?php if($_SESSION['AccessType'] === '') { ?>
             employeeNum = <?php echo $_SESSION['TeacherNum']?>;

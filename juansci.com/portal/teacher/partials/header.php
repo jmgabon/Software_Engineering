@@ -61,7 +61,13 @@
           <nav class="d-none d-md-block row navbar pt-0 w-75">
           <a class="lead p-0" id="lead"></a>
           <div class="float-right mt-2" id="back-to-menu">
-            <a href="dashboard.php" class="text-danger h6 mr-5">
+            <?php if ($_SESSION['AccessType'] == "principal") { ?>
+              <a href="../principal/dashboard.php" class="text-danger h6 mr-5">
+            <?php } else if ($_SESSION['AccessType'] == "coordinator") { ?>
+              <a href="../coordinator/dashboard.php" class="text-danger h6 mr-5">
+            <?php } else if ($_SESSION['AccessType'] == "") { ?>
+              <a href="dashboard.php" class="text-danger h6 mr-5">
+            <?php } ?>
             <i class="fa fa-caret-left"></i> Back to Menu</a>
           </div>
           </nav>

@@ -9,18 +9,28 @@
     
     // check if adviser (if not, hide Print Student Grades)
     // include 'php/ConnectToDB.php';
-    // $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
+    // $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
     // $stmt->bindValue(1, $_SESSION['TeacherNum']);
     // $stmt->execute();
     // $col = $stmt->fetch();
     // $stmt->closeCursor();
 ?>
 
-<?php include 'partials/header.php'; ?>
+<?php include 'partials/header.php';
+
+    include 'php/ConnectToDB.php';
+    $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
+    $stmt->bindValue(1, $_SESSION['TeacherNum']);
+    $stmt->execute();
+    $col = $stmt->fetch();
+    $stmt->closeCursor();
+?>
 <script type="text/javascript">
     $('#lead').text('Main Menu');
     $('#back-to-menu').addClass('d-none');
-</script>     
+</script>
+<script>console.log('aww')</script>     
+<script>console.log('teachernum: ' + '<?php echo $col[0] ?>')</script>     
     <div class="newcontainer">
         <div class="row mt-5">
             <div class="col mt-5 text-center">
@@ -35,7 +45,7 @@
                     <p class="h6 mt-2">Grade Students on Subjects</p>
                 </a>
             </div>
-            <?php //if (!empty($col[0])) { ?>
+            <?php if (!empty($col[0])) { ?>
             <div class="col mt-5 text-center">
                 <a class="text-secondary" href="Grade_Values.php">
                     <img src="../../pictures/edit-grade.png" width="100px">
@@ -48,7 +58,7 @@
                     <p class="h6 mt-2">View Student Grades</p>
                 </a>
             </div>
-            <?php //} ?>
+            <?php } ?>
         </div>
     </div>
        

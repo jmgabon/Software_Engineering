@@ -44,8 +44,8 @@ const wrapperUIValues = (function() {
         let query = '';
 
         query += 'SELECT SectionNum, SectionName, GradeLevel ';
-        query += 'FROM section ';
-        query += 'WHERE EmployeeNum IN (' + EmployeeNum + ') ';
+        query += 'FROM main_section ';
+        query += 'WHERE Adviser IN (' + EmployeeNum + ') ';
 
         SimplifiedQuery('SELECT', query, '', getSectionInfo);
     };
@@ -282,8 +282,8 @@ const mainController = (function(wrapUI, wrapVal) {
         wrapVal.saveButton.save4.addEventListener('click', () => activateSave(4));
 
         modal_button.addEventListener('click', function() {
-            let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
-            let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+            let theadID = 'LRNNum@LastName@ExtendedName@FirstName@MiddleName';
+            let theadHTML = 'LRN@Last Name@ExtendedName@First Name@Middle Name';
             CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
 
             let cat = document.querySelector('#modal-body select');
@@ -300,10 +300,10 @@ const mainController = (function(wrapUI, wrapVal) {
             let Search = function() {
                 let query = '';
 
-                query += 'SELECT student.LRNNum, LastName, Extension, FirstName, MiddleName ';
-                query += 'FROM student ';
-                query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
-                query += 'WHERE student_section.SectionNum IN (' + SectionNum + ')';
+                query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName ';
+                query += 'FROM main_student ';
+                query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
+                query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
 
                 if (searchStudent.value !== '') {
                     let queryAnd;
