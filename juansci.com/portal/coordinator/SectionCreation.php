@@ -65,7 +65,7 @@
         </p>
         <p><label for="txt_Adviser">Adviser: </label>
             <span class="span-input-btn">
-            <input type="text" name="txt_Adviser" id="txt_Adviser" disabled style="width: 75% !important; 
+            <input type="text" name="txt_Adviser" id="txt_Adviser" required disabled style="width: 75% !important; 
                 float: none !important; 
                 margin-right: 0% !important;"/>
             <button id="btn_Adviser" onclick="">&check;</button>
@@ -78,9 +78,9 @@
 
             let yearFounded = 2016;
             let yearToday = new Date().getFullYear()
-            for(let i = 0; i < yearToday - yearFounded; i++){
+            for(let i = 0; i <= yearToday - yearFounded; i++){
                 let option = document.createElement("option");
-                option.value = yearToday + i;
+                option.value = yearFounded + 1;
                 option.innerHTML = (yearFounded + i) + "-" + (yearFounded + i + 1);
                 schoolyear.appendChild(option);
             }
@@ -122,6 +122,7 @@
                 <td style="display: none;"></td>
                 <td scope="col" id="Adviser">Adviser</td>
                 <td scope="col" id="DateCreated">Date Created</td>
+                <td style="display: none;"></td>
                 <td style="display: none;"></td>
                 <td scope="col" id="Action_">Action</td>
                 <td scope="col" id="Status_">Status</td>

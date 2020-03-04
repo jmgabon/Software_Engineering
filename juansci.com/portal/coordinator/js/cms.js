@@ -72,7 +72,7 @@ function ResetInput(initialValue, parent_id){//whatToReset - resets the button
 
 //Function to Create Table 
 function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of sql)
-	console.log(parent_id);
+	// console.log(parent_id);
 	try{
 	// var json;
 	// parent_id = "Results";
@@ -97,8 +97,8 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	
 	// console.log(firstResult)
 	// console.log(results.length);
-	console.log(results);
-
+	// console.log(results);
+	
 	var thead_td = document.querySelectorAll("#" + parent_id + "Table thead tr td");
 	var colNum = document.querySelector("#" + parent_id + "Table thead tr").childElementCount;//childElementCount counts child of parent
 	var tbody = document.querySelector("#" + parent_id + "Table tbody");
@@ -167,11 +167,11 @@ function CreateTBody(xhttp, cfunction){ //Create Table Body (Imitates result of 
 	//GROUNDS FOR CHANGING
 	if(saved_id != null){
 		document.querySelector("#modal-footer").appendChild(pagination);
-		console.log("MODAL");
+		// console.log("MODAL");
 	}
 	else{
 		main_body.appendChild(pagination);
-		console.log("NO MODAL");
+		// console.log("NO MODAL");
 	}
 
 	pagination.style.textAlign = "center";

@@ -134,7 +134,7 @@
 	<!-- <button>SUBMIT</button> -->
 	<button class="rounded-pill">RESET</button>
 	<script type="text/javascript">
-		var user = "<?php echo($_SESSION['access']);?>";
+		// var user = "php echo($_SESSION['access']);?>";
 		// console.log(user);
 	</script>
 

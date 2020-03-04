@@ -31,7 +31,6 @@ function Search(url, content, callback){
 		AJAX(data, true, "post", "php/Search.php", true, callback);
 	}
 	else{
-		
 	}
 }
 
@@ -43,6 +42,9 @@ function requestStatus(xhttp){
     }
     else if (message == "Duplicate Request") {
         alert(message);
+    }
+    else if (message.indexOf("null")){
+    	alert("Please fill up missing fields");
     }
     else{
         console.log(message);

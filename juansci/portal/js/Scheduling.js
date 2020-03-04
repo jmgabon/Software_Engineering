@@ -277,14 +277,7 @@ function PickSubjectCode(xhttp){
 		tbody_tr[i].addEventListener("click", function(){
 			subjectcode = this.childNodes[0].innerHTML;
 			frequency = this.childNodes[3].innerHTML;
-			// table.rows[parentRow].cells[parentCol].innerHTML = this.childNodes[0].innerHTML;
-			// document.querySelector("#SearchSubjectCode").value = "";
-			// closeModal(modal_body);
-			// subjectcode = this.childNodes[0].innerHTML;
-			// frequency = this.childNodes[3].innerHTML;
-
-			// content['SubjectID'] = txt_SectionNum.value + "-" + this.childNodes[0].innerHTML;
-			// content['SubjectID'] = content['SubjectID'].replace(/ /g, "");
+			
 			var columnNames = {};
 			columnNames[0] = "SubjectID";
 			SearchWithoutQuery(
@@ -293,22 +286,6 @@ function PickSubjectCode(xhttp){
 				columnNames,
 				CreateSubjectID
 			);
-			//<<<<<<<<<<<<<<Creating Schedule
-			// var content = {};
-			// content['SubjectDay'] = day;
-			// content['SubjectTime'] = time;
-			// content['SubjectCode'] = this.childNodes[0].innerHTML;
-			// content['SectionNum'] = txt_SectionNum.value;
- 		// 	CreateWithPreset(
-			// 	"subject", 
-			// 	content,
-			// 	1, 
-			// 	SchedCreated
-			// );
-			//>>>>>>>>>>>>>>>>>
-
-			// CreateWithPreset(
-			// );
 		});
 		tbody_tr[i].addEventListener("mouseover", function(){
 			this.style.backgroundColor = "maroon";

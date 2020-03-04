@@ -138,6 +138,30 @@
                 <a href="requests_subjectcode.php" class="dropdown-item">Requests</a>
               </div>
             </li>
+            <li class="nav-item dropdown">
+              <a id="section" class="nav-link dropdown-toggle" href="#" 
+              id="sectionDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-chalkboard-teacher mr-2"></i>
+                Sections
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="subjectDropdown">
+                <a href="masterlist_section.php" class="dropdown-item">List of Sections</a>
+                <a href="requests_section.php" class="dropdown-item">Requests</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a id="schedule" class="nav-link dropdown-toggle" href="#" 
+                id="schedulesDropdown" role="button" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-clock mr-2"></i>
+                Schedules
+              </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="schedulesDropdown">
+                <a href="#" class="dropdown-item">Sections</a>
+                <a href="#" class="dropdown-item">Teachers</a>
+              </div>
+            </li>
             <!-- <li class="nav-item">
                 <a id="room" class="nav-link" href="RoomCreation.php">
                     <i class="fas fa-chalkboard mr-2"></i>

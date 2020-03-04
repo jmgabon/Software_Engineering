@@ -33,6 +33,38 @@ if(strpos($table, "SectionCreation") !== false){
 	// echo($subtable);
 	// $content = " WHERE ";
 }
+else if(strpos($table, "ScheduleCreation") !== false){
+	if($subtable == "Section"){
+		// $table = str_replace("ScheduleCreation", "sectioncreation", $table);
+		$table = "masterlist_section"; //PRINCIPAL
+	}
+	// (strpos($table, "SectionCreation") !== false)
+	else if(strpos($subtable, "SubjectCode") !== false){
+		if(strpos($subtable, "7") !== false){
+			$grade = 7;
+		}
+		elseif(strpos($subtable, "8") !== false){
+			$grade = 8;
+		}
+		elseif(strpos($subtable, "9") !== false){
+			$grade = 9;
+		}
+		elseif(strpos($subtable, "10") !== false){
+			$grade = 10;
+		}
+		else{
+
+		}
+		$table = "main_subjectcode"; //PRINCIPAL
+		$content = " WHERE GradeLevel=" .$grade;
+	}	
+	elseif($subtable == "Teacher"){
+		$table = "masterlist_teacher";
+	}
+	else{
+		
+	}
+}
 else{
 	// $content = " WHERE CreatedBy='" . $_SESSION['TeacherNum'] . "' AND ";
 	$content = " WHERE CreatedBy='" . $_SESSION['TeacherNum'] . "'";

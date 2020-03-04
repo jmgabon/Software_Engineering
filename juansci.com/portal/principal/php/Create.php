@@ -39,6 +39,10 @@ if($table == "requests_subjectcode"){
 	$main_table = "main_subjectcode";
 	$temp_table = "temp_subjectcodecreation";
 }
+if($table == "requests_section"){
+	$main_table = "main_section";
+	$temp_table = "temp_sectioncreation";
+}
 if($remarks == ""){
 	$remarks = NULL;
 }
@@ -69,7 +73,7 @@ try{
 		$row = $stmt->fetchAll();
 		for ($i=0; $i < count($row); $i++) { 
 		# code...
-			if(!($row[$i][0] == "DateCreated" || $row[$i][0] == "TeacherNum")){
+			if(!($row[$i][0] == "DateCreated" || $row[$i][0] == "TeacherNum" || $row[$i][0] == "SectionNum")){
 				$columns .= $row[$i][0] . ",";
 			}
 		}

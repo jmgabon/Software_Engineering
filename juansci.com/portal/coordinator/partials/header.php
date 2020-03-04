@@ -131,6 +131,12 @@
                 Sections
               </a>
             </li>
+            <li class="nav-item">
+              <a id="schedule" class="nav-link" href="ScheduleCreation.php">
+                <i class="fas fa-clock mr-2"></i>
+                Schedules
+              </a>
+            </li>
             <!-- <li class="nav-item">
               <a id="employee" class="nav-link dropdown-toggle" href="#" 
                 id="employeesDropdown" role="button" data-toggle="dropdown" 
