@@ -79,8 +79,8 @@ const objMAPEH = [
 
 if (accessRole === 'teacher') {
     modal_button.addEventListener('click', function() {
-        let theadID = 'LRNNum@LastName@Extension@FirstName@MiddleName';
-        let theadHTML = 'LRN@Last Name@Extension@First Name@Middle Name';
+        let theadID = 'LRNNum@LastName@ExtendedName@FirstName@MiddleName';
+        let theadHTML = 'LRN@Last Name@ExtendedName@First Name@Middle Name';
         CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
 
         let cat = document.querySelector('#modal-body select');
@@ -97,10 +97,10 @@ if (accessRole === 'teacher') {
         let Search = function() {
             let query = '';
 
-            query += 'SELECT student.LRNNum, LastName, Extension, FirstName, MiddleName, Age, Gender ';
-            query += 'FROM student ';
-            query += 'LEFT JOIN student_section ON student.LRNNum = student_section.LRNNum ';
-            query += 'WHERE student_section.SectionNum IN (' + sectionNum + ')';
+            query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ';
+            query += 'FROM main_student ';
+            query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
+            query += 'WHERE main_student_section.SectionNum IN (' + sectionNum + ')';
 
             if (searchStudent.value !== '') {
                 let queryAnd;
@@ -268,11 +268,11 @@ let createTBodySubj = function(subj) {
 let setSubjectListDB = function(grLvl) {
     let query = '';
 
-    query += 'SELECT subjectcode.SubjectCode, subjectcode.SubjectDescription ';
-    query += 'FROM subjectcode ';
-    query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
-    query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
-    query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+    query += 'SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ';
+    query += 'FROM main_subjectcode ';
+    query += 'LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ';
+    query += 'WHERE main_subjectcode.GradeLevel IN (' + grLvl + ') ';
+    query += 'AND main_subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
     query += 'ORDER BY grade_sortable.OrderNumber ASC ';
 
     SimplifiedQuery('SELECT', query, '', getSubjectListDB);
@@ -296,8 +296,8 @@ let getSubjectListDB = function(xhttp) {
 let setStudentInfo = function() {
     let query = '';
 
-    query += 'SELECT LastName, Extension, FirstName, MiddleName, Age, Gender, GradeLevel ';
-    query += 'FROM student ';
+    query += 'SELECT LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender, GradeLevel ';
+    query += 'FROM main_student ';
     query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
 
     SimplifiedQuery('SELECT', query, '', getStudentInfo);
@@ -308,7 +308,7 @@ let getStudentInfo = function(xhttp) {
     console.log(jsonStudentInfo)
 
     try {
-        let extName = jsonStudentInfo[0]['Extension'];
+        let extName = jsonStudentInfo[0]['ExtendedName'];
         let midName = jsonStudentInfo[0]['MiddleName'];
 
         if (midName === null) {
@@ -328,7 +328,7 @@ let getStudentInfo = function(xhttp) {
         txt_StudentName.textContent += midName;
         studentName = txt_StudentName.textContent;
 
-        studentAge = jsonStudentInfo[0]['Age'];
+        studentAge = jsonStudentInfo[0]['Birthday'];
         studentSex = jsonStudentInfo[0]['Gender'];
 
         gradeLevel = jsonStudentInfo[0]['GradeLevel'];
@@ -349,7 +349,7 @@ let setIfSectionAssigned = function() {
     let query = '';
 
     query += 'SELECT SectionNum ';
-    query += 'FROM student_section ';
+    query += 'FROM main_student_section ';
     query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
     query += 'AND GradeLevel IN ("' + gradeLevel + '") ';
 
@@ -382,23 +382,23 @@ function setSectionInfo() {
     let query = '';
 
     if (accessRole === 'teacher') {
-        query += 'SELECT section.SectionNum, section.SectionName, section.GradeLevel, ';
-        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
-        query += 'FROM section ';
-        query += 'LEFT JOIN employee ON section.EmployeeNum = employee.EmployeeNum ';
-        query += 'WHERE section.EmployeeNum IN (' + employeeNum + ') ';
+        query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
+        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
+        query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+        query += 'FROM main_section ';
+        query += 'LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ';
+        query += 'WHERE main_section.Adviser IN (' + employeeNum + ') ';
     } else if (accessRole === 'student') {
-        query += 'SELECT section.SectionNum, section.SectionName, section.GradeLevel, ';
-        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(Extension is NULL, "", CONCAT(" ", Extension)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
-        query += 'FROM section ';
-        query += 'LEFT JOIN student_section ';
-        query += 'ON section.SectionNum = student_section.SectionNum ';
-        query += 'JOIN employee ';
-        query += 'ON section.EmployeeNum = employee.EmployeeNum ';
-        query += 'WHERE student_section.LRNNum IN (' + LRNNum + ') ';
-        query += 'ORDER BY student_section.DateCreated DESC ';
+        query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
+        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
+        query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+        query += 'FROM main_section ';
+        query += 'LEFT JOIN main_student_section ';
+        query += 'ON main_section.SectionNum = main_student_section.SectionNum ';
+        query += 'JOIN main_teacher ';
+        query += 'ON main_section.Adviser = main_teacher.TeacherNum ';
+        query += 'WHERE main_student_section.LRNNum IN (' + LRNNum + ') ';
+        query += 'ORDER BY main_student_section.DateCreated DESC ';
         query += 'LIMIT 1 ';
     }
 
@@ -455,7 +455,10 @@ function setGradeSubjDB() {
     query += 'WHERE LRNNum IN (' + LRNNum + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
     if (accessRole === 'student') {
+        query += 'AND Status = "ENCODED" ';
+    } else if (accessRole === 'teacher') {
         query += 'AND Status = "APPROVED" ';
+        query += 'OR Status = "ENCODED" ';
     }
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
@@ -493,10 +496,10 @@ function getGradeSubjDB(xhttp) {
 function getAveMAPEH() {
     for (let i = 0; i < trTableGrade.length; i++) {
 
-        if (trTableGrade[i].textContent === 'MAPEH 7' ||
-            trTableGrade[i].textContent === 'MAPEH 8' ||
-            trTableGrade[i].textContent === 'MAPEH 9' ||
-            trTableGrade[i].textContent === 'MAPEH 10') {
+        if (trTableGrade[i].textContent.includes('MAPEH 7') ||
+            trTableGrade[i].textContent.includes('MAPEH 8') ||
+            trTableGrade[i].textContent.includes('MAPEH 9') ||
+            trTableGrade[i].textContent.includes('MAPEH 10')) {
             for (let j = 1; j <= 4; j++) {
                 let aveMAPEH = 0;
                 let isMAPEHGradeCompleted = true;
@@ -707,8 +710,10 @@ let init = (function() {
             let query = '';
 
             query += 'UPDATE grade_subject ';
-            query += 'SET Status = "APPROVED" ';
+            query += 'SET Status = "ENCODED" ';
             query += 'WHERE LRNNum = "' + LRNNum + '" ';
+            query += 'AND GradeLevel = "' + gradeLevel + '" ';
+            query += 'AND Quarter = "' + quarterSelected + '" ';
 
             console.log(query);
 

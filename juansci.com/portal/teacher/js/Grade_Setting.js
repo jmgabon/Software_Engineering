@@ -159,7 +159,12 @@ const wrapperGradeEnabler = (function() {
     let setDOMString = {
         selectQuarter: '#selectQuarter',
         btnSaveQuarter: '#btnSaveQuarter',
+        txt_CaseApproved: '#txt_CaseApproved',
+        txt_CaseTotal: '#txt_CaseTotal',
     }
+    let jsonQuarter
+    let totalApproved;
+    let overall;
 
 
     let setQuarter = function() {
@@ -175,7 +180,7 @@ const wrapperGradeEnabler = (function() {
 
     let getQuarter = function(xhttp) {
         try {
-            let jsonQuarter = JSON.parse(xhttp.responseText);
+            jsonQuarter = JSON.parse(xhttp.responseText);
 
             document.querySelector(setDOMString.selectQuarter).value = jsonQuarter[0]['SettingValue'];
 
@@ -187,6 +192,67 @@ const wrapperGradeEnabler = (function() {
     }
 
 
+    let getGradeCaseValues = function(xhttp) {
+        try {
+            let jsonCaseVal = JSON.parse(xhttp.responseText);
+            console.log(jsonCaseVal);
+
+            totalApproved = document.querySelector(setDOMString.txt_CaseApproved).textContent = jsonCaseVal[0]['TotalApproved'];
+            overall = document.querySelector(setDOMString.txt_CaseTotal).textContent = jsonCaseVal[0]['Overall'];
+
+        } catch (err) {
+            alert('CANNOT FIND');
+            console.log(xhttp.responseText);
+            console.log(err);
+        }
+    }
+
+
+    let changeGradeCaseValue = function(q) {
+        let query = '';
+
+        if (q == 0) {
+            if (totalApproved == overall) {
+                query += 'UPDATE grade_case ';
+                query += 'SET CaseValue = 0 ';
+
+                SimplifiedQuery('UPDATE', query, '', () => null);
+                alert('Enabled Quarter is set to ' + q);
+                return true;
+            } else {
+                alert('Some teachers are not yet finished grading.');
+                return false;
+            }
+        } else {
+            if (jsonQuarter[0][0] == 0) {
+                query += 'UPDATE grade_case ';
+                query += 'SET CaseValue = 1 ';
+
+                SimplifiedQuery('UPDATE', query, '', () => null);
+                alert('Enabled Quarter is set to ' + q);
+                return true;
+            } else {
+                alert('Error input.');
+                return false;
+            }
+        }
+
+        // query += 'UPDATE grade_case JOIN ';
+        // query += '((SELECT COUNT(*) ';
+        // query += '     AS TotalApproved ';
+        // query += '     FROM grade_case ';
+        // query += '     WHERE CaseValue ';
+        // query += '     IN (6)) AS SUB, ';
+        // query += '     ';
+        // query += '(SELECT COUNT(*) ';
+        // query += '     AS Overall ';
+        // query += '     FROM grade_case) ';
+        // query += '    AS SUB2) ';
+        // query += 'SET CaseValue = 0 ';
+        // query += 'WHERE SUB.TotalApproved = SUB2.Overall ';
+    }
+
+
     return {
         getDOMString: function() {
             return setDOMString;
@@ -194,19 +260,32 @@ const wrapperGradeEnabler = (function() {
 
 
         saveQuarter: function(q) {
-            let query = '';
+            if (changeGradeCaseValue(q)) {
+                let query = '';
 
-            query += 'UPDATE setting ';
-            query += 'SET SettingValue ="' + q + '" ';
-            query += 'WHERE SettingName = "quarter_enabled" ';
+                query += 'UPDATE setting ';
+                query += 'SET SettingValue ="' + q + '" ';
+                query += 'WHERE SettingName = "quarter_enabled" ';
 
-            SimplifiedQuery('UPDATE', query, '', () => null);
+                SimplifiedQuery('UPDATE', query, '', () => null);
+            }
         },
 
 
         selectQuarter: function() {
             setQuarter();
         },
+
+
+        setGradeCaseValues: function() {
+            let query = '';
+
+            query += 'SELECT * FROM ';
+            query += '(SELECT COUNT(*) AS TotalApproved FROM grade_case WHERE `CaseValue` IN (6)) AS SUB, ';
+            query += '(SELECT COUNT(*) AS Overall FROM grade_case) AS SUB2 ';
+
+            SimplifiedQuery('SELECT', query, '', getGradeCaseValues);
+        }
     }
 })();
 
@@ -234,8 +313,12 @@ const wrapperGradeSettingMain = (function(wrapGrSort, wrapGrEn) {
         let selectedQuarter = document.querySelector(DOMGrEn.selectQuarter).value;
 
         wrapGrEn.saveQuarter(selectedQuarter);
-        alert('Enabled Quarter is set to ' + selectedQuarter);
     };
+
+
+    let setGradeCaseValues = function() {
+        wrapGrEn.setGradeCaseValues();
+    }
 
 
     return {
@@ -244,6 +327,7 @@ const wrapperGradeSettingMain = (function(wrapGrSort, wrapGrEn) {
             setupEventListeners();
             selectGradeLevel();
             selectQuarter();
+            setGradeCaseValues();
         },
     };
 })(wrapperGradeSorter, wrapperGradeEnabler);
