@@ -61,6 +61,10 @@ else if(strpos($table, "ScheduleCreation") !== false){
 	elseif($subtable == "Teacher"){
 		$table = "masterlist_teacher";
 	}
+	elseif($subtable == "Request"){
+		$table = "requests_schedule";
+		$content = " WHERE CreatedBy='" . $_SESSION['TeacherNum'] . "'";
+	}
 	else{
 		
 	}

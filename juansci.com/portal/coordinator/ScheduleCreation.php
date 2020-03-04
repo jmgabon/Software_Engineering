@@ -18,6 +18,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="float-right">
 		<input type="text" id="txt_SectionNum" style="display: none;"/>
 			<label for="">Section Name: <input class="ml-2 sec-name" type="text" id="txt_SectionName" required/></label>
@@ -134,6 +135,7 @@
 	<!-- <button>SUBMIT</button> -->
 	<button class="rounded-pill">RESET</button>
 	<button class="rounded-pill">SUBMIT</button>
+	<button class="rounded-pill" style="width: 20% !important">SHOW REQUESTS</button>
 	<!-- <button class="rounded-pill">RESET</button> -->
 
 	<script type="text/javascript">
@@ -162,11 +164,16 @@
 	let units;
 	// let tbody_tr;
 function Get1stRowCell(i, j){
+
+
 	parentCol = j;
 	parentRow = i;
 	time = table.rows[i].cells[0].innerHTML;
 	day = table.rows[0].cells[j].innerHTML;
 
+	if(content.length == 0){
+
+	}
 	// console.log(time);
 	// console.log(day);
 	if(table.rows[i].cells[j].innerHTML == ""){
@@ -186,44 +193,46 @@ function Get1stRowCell(i, j){
 			Search(window.location.href + "#SubjectCode"+txt_GradeLevel.innerHTML, searchBox_value, PickSubjectCode);
 		});
 	}
+	else{
+		// console.log(content.indexOf(table.rows[i].cells[j]));
+		// let sub_content = time
+		// table.rows[i].cells[j].innerHTML = "";
+		// content.splice(index, 1);
+		// sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
+		// 		sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
+		// 		sub_content["Teacher"] = teacher;
+		for(let k = 0; k < content.length; k++){
+			if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
+				if(content[k]["Time"] == time && content[k]["Day"] == day){
+					content.splice(k, 1);
+					break;
+				}
+			}
+		}
+		// content.splice(1, 1);
+		table.rows[i].cells[j].innerHTML = "";
+		// console.log(content);
+	}
 }
-
-// function PickSubjectCode(xhttp){
-// 	CreateTBody(xhttp, PickSubjectCode);
-// 	let tbody_tr = document.querySelectorAll("#SubjectCodeTable tbody tr");
-// 	for(let i = 0; i < tbody_tr.length; i++){
-// 		tbody_tr[i].addEventListener("click", function(){
-// 			closeModal(modal_body);
-// 			let subjectcode = this.childNodes[0].innerHTML;
-// 			let units = this.childNodes[3].innerHTML;
-// 			// console.log(content[0]["SubjectCode"]);
-// 			let count = 0;
-// 			for(let i = 0; i < content.length; i++){
-// 				if(content[i]["SubjectCode"] == subjectcode){
-// 					count++;
-// 				}
-// 			}
-
-// 			if(count < units){
-// 				table.rows[parentRow].cells[parentCol].innerHTML = subjectcode;
-// 				let sub_content = {};
-// 				sub_content["SubjectCode"] = subjectcode;
-// 				sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
-// 				sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
-
-// 				content.push(sub_content);
-// 				console.log("Time:" + table.rows[parentRow].cells[0].innerHTML);
-// 				console.log("Day:" + table.rows[0].cells[parentCol].innerHTML);
-// 			}
-// 			else{
-// 				alert(subjectcode +" is only " + units + " times a week");
-// 			}
-// 		});
-// 	}
-// }
-
 var subj_tr_container = [];
 var tr_display;
+
+btn[1].addEventListener("click", function(){ //RESET BUTTON
+	RemoveTD_InnerHTML();
+	content = [];
+});
+
+btn[2].addEventListener("click", function(){
+	// console.log(content);
+	if(content.length > 0){
+		content = JSON.stringify(content);
+		data = "content=" + content;
+		data += "&section=" + txt_SectionNum.value;
+		data += "&userID=" + userID;
+		// Create("", content, messageAlert);	
+		AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
+	}
+});
 
 function PickSubjectCode(xhttp){
 	CreateTBody(xhttp, PickSubjectCode);
@@ -259,8 +268,6 @@ function PickSubjectCode(xhttp){
 			searchTeacher.addEventListener('change', function(){
 				let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchTeacher.value;
 				Search(window.location.href + "#Teacher", searchBox_value, PickTeacher);
-
-
 			});
 		});
 	}
@@ -303,7 +310,7 @@ function PickTeacher(xhttp){
 				subj_tr_pair["SubjectCode"] = subjectcode;
 				subj_tr_pair["Row"] = i;
 				subj_tr_container.push(subj_tr_pair);
-				console.log(subj_tr_container);
+				// console.log(subj_tr_container);
 				table.rows[parentRow].cells[parentCol].innerHTML = subjectcode;
 				let sub_content = {};
 				sub_content["SubjectCode"] = subjectcode;
@@ -339,7 +346,7 @@ btn[0].addEventListener("click", function(){
 	searchSection = document.getElementById("SearchSection");
 	SearchSectionModal = function(){
 		let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSection.value;
-		console.log(searchBox_value);
+		// console.log(searchBox_value);
 		Search(window.location.href + "#Section", searchBox_value, PickSection);
 	}
 	SearchSectionModal();
@@ -347,13 +354,9 @@ btn[0].addEventListener("click", function(){
 });
 
 function PickSection(xhttp){
-	for(let i = 1; i < tr.length+1; i++){
-		for(let j = 1; j < tr[0].childElementCount; j++){
-			table.rows[i].cells[j].addEventListener("click", Get1stRowCell.bind(null, i, j));
-		}
-	}
+	content = [];
 	CreateTBody(xhttp, PickSection);
-	console.log(modal_body);
+	// console.log(modal_body);
 	var tbody_tr = document.querySelectorAll("#SearchSectionTable tbody tr");
 	for(var i = 0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("click", function(){
@@ -364,51 +367,109 @@ function PickSection(xhttp){
 			txt_SectionName.value = this.childNodes[1].innerHTML;
 			txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
 			txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
+
+			// RetrieveSectionSchedule();
+			AddListenersTD();
 		});
 	}
 }
 
-btn[1].addEventListener("click", function(){ //RESET BUTTON
-	// if(txt_SectionNum.value != ''){
-	// 	var query;
-	// 	Search = function(){
-	// 		RetrieveSectionSchedule();
-	// 	}
-	// 	query = "SubjectID LIKE '" + txt_SectionNum.value + "-%'";
-	// 	// console.log(query);
-	// 	DeleteRecord("sched", query, DeleteSubjID);
-	// 	function DeleteSubjID(xhttp){
-	// 		DeleteRecord("subject", query, null);
-	// 	}
-	// }
-	// else{
-	// 	alert("Select section first");
-	// 	openSectionModal.style.backgroundColor = "pink";
-	// }	
+btn[3].addEventListener("click", function(){
+	theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
+	theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
+	CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
+	// CreateInput("SearchSubjectCode", "search", modal_body);
+	let hiddenCol = "none"
+	modal_cat = document.querySelector("#modal-body select");
+	CreateTable("RequestTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
+
+	let searchRequest = document.getElementById("Request");
+	openModal("Requests", "Request");
+
+	Search(window.location.href+"#Request", "", PickRequest);
+	// url = "php/ScheduleRequest.php";
+	// AJAX(data, true, "post", url, true, PickRequest);
+	searchRequest.addEventListener('change', function(){
+		let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchRequest.value;
+		Search(window.location.href + "#Request", searchBox_value, PickRequest);
+		// AJAX(data, true, "post", url, true, PickRequest);
+	});
+});
+
+function PickRequest(xhttp){
+	CreateTBody(xhttp, PickRequest);
+	var tbody_tr = document.querySelectorAll("#RequestTable tbody tr");
+	for(var i = 0; i < tbody_tr.length; i++){
+		tbody_tr[i].addEventListener("click", function(){
+			document.querySelector("#Request").value = "";
+			// console.log(this);
+			closeModal(modal_body);
+			// txt_SectionNum.value = this.childNodes[0].innerHTML;
+			// txt_SectionName.value = this.childNodes[1].innerHTML;
+			// txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
+			// txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
+
+			// RetrieveSectionSchedule();
+			data = "cnum="
+			data += this.childNodes[0].innerHTML;
+			// RemoveListenersTD();
+			AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
+			// Create("php/ScheduleRequest.php", content, Retrieve);
+		});
+	}
+}
+
+function Retrieve(xhttp){
+	content = [];
+	let json = JSON.parse(xhttp.responseText);
+	txt_Adviser.innerHTML = json[0][3];
+	txt_GradeLevel.innerHTML = json[0][2];
+	txt_SectionName.value = json[0][1];
+	txt_SectionNum.value = json[0][0];
+
+	RemoveTD_InnerHTML();
+	try{
+		for(var i = 0; i < json.length; i++){
+			// console.log(table.rows[GetParentRow(json[i][1])]);
+			// console.log(json[i]);
+			table.rows[GetParentRow(json[i][6])].cells[GetParentCol(json[i][5])].innerHTML = json[i][4];
+			let sub_content = {};
+			sub_content["SubjectCode"] = json[i][4];
+			sub_content["Day"] = json[i][5];
+			sub_content["Time"] = json[i][6];
+			sub_content["Teacher"] = json[i][7];
+			content.push(sub_content);
+		}
+		// json[3] => SubjectCode
+		// json[1] => Time //parentRow
+		// json[2] => Day //parentCol
+		
+	}
+	catch(err){
+		console.log(err);
+	}
+}
+
+function AddListenersTD(){
 	for(let i = 1; i < tr.length+1; i++){
 		for(let j = 1; j < tr[0].childElementCount; j++){
-			// table.rows[i].cells[j].addEventListener("click", Get1stRowCell.bind(null, i, j));
-			table.rows[i].cells[j].innerHTML = "";
+			table.rows[i].cells[j].addEventListener("click", Get1stRowCell.bind(null, i, j));
 		}
 	}
-	content = [];
-});
+}
 
-btn[2].addEventListener("click", function(){
-	// console.log(content);
-	content = JSON.stringify(content);
-	data = "content=" + content;
-	data += "&section=" + txt_SectionNum.value;
-	data += "&userID=" + userID;
-	// Create("", content, messageAlert);	
-	AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
-});
-
-function messageAlert(xhttp){
-
-	// console.log(xhttp.responseText);
-	// console.log(JSON.parse(xhttp.responseText));
-	// location.reload(true);
+function RemoveTD_InnerHTML(){
+	for(let j = 1; j < tr.length+1; j++){
+		for(let k = 1; k < tr[0].childElementCount; k++){
+			table.rows[j].cells[k].innerHTML = "";
+			// table.rows[j].cells[k].removeEventListener("click", Get1stRowCell.bind(null, j, k));
+			// console.log("GAGO");
+		}
+	}
+	// console.log("GAGO");
+	// btn[0].disabled = "disabled";
+	// btn[1].disabled = "disabled";
+	// btn[2].disabled = "disabled";
 }
 </script>
 
