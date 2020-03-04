@@ -151,7 +151,7 @@
                 <a href="requests_section.php" class="dropdown-item">Requests</a>
               </div>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a id="schedule" class="nav-link dropdown-toggle" href="#" 
                 id="schedulesDropdown" role="button" data-toggle="dropdown" 
                 aria-haspopup="true" aria-expanded="false">
@@ -162,6 +162,12 @@
                 <a href="masterlist_schedule.php" class="dropdown-item">Masterlist</a>
                 <a href="requests_schedule.php" class="dropdown-item">Requests</a>
               </div>
+            </li> -->
+            <li class="nav-item">
+              <a id="schedule" class="nav-link" href="schedule.php">
+                <i class="fas fa-clock mr-2"></i>
+                Schedules
+              </a>
             </li>
             <!-- <li class="nav-item">
                 <a id="room" class="nav-link" href="RoomCreation.php">
