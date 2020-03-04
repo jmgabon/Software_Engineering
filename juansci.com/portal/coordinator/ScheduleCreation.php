@@ -401,11 +401,12 @@ btn[2].addEventListener("click", function(){
 	data += "&section=" + txt_SectionNum.value;
 	data += "&userID=" + userID;
 	// Create("", content, messageAlert);	
-	AJAX(data, true, "post", "php/Schedule.php", true, messageAlert);
+	AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
 });
 
 function messageAlert(xhttp){
-	console.log(xhttp.responseText);
+
+	// console.log(xhttp.responseText);
 	// console.log(JSON.parse(xhttp.responseText));
 	// location.reload(true);
 }

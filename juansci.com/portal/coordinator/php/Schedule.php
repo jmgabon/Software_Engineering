@@ -61,13 +61,14 @@ try{
 		$stmt->bindValue(2, $subjectID);
 		
 		$stmt->bindValue(3, $SubjectDay[$i]);
-		$stmt->bindValue(4, $SubjecTime[$i]);
+		$stmt->bindValue(4, $SubjectTime[$i]);
 		$stmt->bindValue(5, $userID);
 		$stmt->bindValue(6, "INSERT");
 		$stmt->bindValue(7, "PENDING");
 		$stmt->execute();
 	}
 	//>>>>>>>>>>>>>>>>>>>
+	echo "Successful";
 }
 catch(Exception $e){
 	echo $e;

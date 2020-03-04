@@ -159,8 +159,8 @@
                 Schedules
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="schedulesDropdown">
-                <a href="#" class="dropdown-item">Sections</a>
-                <a href="#" class="dropdown-item">Teachers</a>
+                <a href="masterlist_schedule.php" class="dropdown-item">Masterlist</a>
+                <a href="requests_schedule.php" class="dropdown-item">Requests</a>
               </div>
             </li>
             <!-- <li class="nav-item">

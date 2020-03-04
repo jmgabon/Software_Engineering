@@ -29,6 +29,7 @@ $table = str_replace("masterlist_student", "main_student", $table);
 // $table = str_replace("masterlist_section", "main_section", $table);
 $table = str_replace("masterlist_room", "main_room", $table);
 $table = str_replace("masterlist_subjectcode", "main_subjectcode", $table);
+$table = str_replace("requests_schedule", "summary_schedulerequests", $table);
 // $table = str_replace("stureg", "studentregistration", $table);
 // $summary_table = strtolower(str_replace(".php", "", $table));
 $table = strtolower(str_replace(".php", "", $table));
