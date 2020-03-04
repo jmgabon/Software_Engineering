@@ -1,24 +1,24 @@
-<?php
-include 'partials/header.php';
-?>
+<?php include 'partials/header.php'; ?>
 <script type="text/javascript">
-    $('#lead').text('Requests');
+    $('#lead').text('Section Scheduling');
     $('#schedule').addClass('active');
 </script>
-<div class="content-main mt-4">
-<div id="div_schedule">
+   
+    <div class="content-main mt-5">
     <div id="modal">
         <div id="modal-content">
             <span id="close" onclick="closeModal(document.getElementById('modal-body'));">&times;</span>
-            <div id="modal-header" >
+            <div id="modal-header">
                 <h2 id="modal-title"></h2>
             </div>
             <div id= "modal-body">
             </div>
+            
             <div id="modal-footer"> 
             </div>
         </div>
     </div>
+
     <div class="float-right">
         <input type="text" id="txt_SectionNum" style="display: none;"/>
             <label for="">Section Name: <input class="ml-2 sec-name" type="text" id="txt_SectionName" required/></label>
@@ -132,164 +132,345 @@ include 'partials/header.php';
             
         </tbody>
     </table>
-    <button class="rounded-pill">GO BACK</button>   
-    <button class="rounded-pill">REJECT</button>
-    <button class="rounded-pill">APPROVE</button>
-</div>
     <!-- <button>SUBMIT</button> -->
-    <div id="div_base">
-    <div class="col-xl-12">
-    <p class="h5 pb-2">
-        <label class="float-right" for="Results">
-            <select id="Category" class="mt-1 form-control rounded-0 bg-light">
-                <option value="ControlNum" selected = "selected">Request Number</option>
-                <option value="SectionNum">Section Number</option>
-                <option value="SectionName">Section Name</option>
-                
-                <option value="GradeLevel">Grade Level</option>
-                <option value="SchoolYear">School Year</option>
-            
-            
-                <option value="DateCreated">Date</option>
-                <option value="CreatedBy">Teacher ID</option>
-                <option value="RequestedBy">Name</option>
-                <option value="Action_" style="display: none;">Action</option>
-                <option value="Status_">Status</option>
-            </select>   
-            <input placeholder="Search" type="search" class="mt-1 form-control rounded-0 bg-light" id="Results">
-        </label>
-    </p>
-    <table id="ResultsTable">
-        <thead class="dark">
-            <tr>
-            <!-- <td>Section Number</td> -->
-            <td id="ControlNum">Request Number</td>
-            <td id="SectionNum">Section Number</td>
-            <td id="SectionName">Section Name</td>
-            
-            <td id="GradeLevel">Grade Level</td>
-            <td id="SchoolYear">School Year</td>
-            
-            <td id="CreatedBy">ID</td>
-            <td id="RequestedBy">Created By</td>
-            <td id="DateCreated">Date</td>
-            <td id="Action_" style="display: none;">Action</td>
-            <td id="Status_">Status</td>
-            <td style="width: 2% !important;"></td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    </div>
-</div>
-</div>
-<?php
-include 'partials/footer.php';
-?>
+    <button class="rounded-pill">RESET</button>
+    <button class="rounded-pill">SUBMIT</button>
+    <button class="rounded-pill" style="width: 20% !important">SHOW REQUESTS</button>
+    <!-- <button class="rounded-pill">RESET</button> -->
+
+    <script type="text/javascript">
+        // var user = "php echo($_SESSION['access']);?>";
+        // console.log(user);
+    </script>
+
+    <!-- <script type="text/javascript" src="../js/Scheduling.js"></script> -->
+
+<?php include 'partials/footer.php'; ?>
 <script type="text/javascript">
-    Search(window.location.href, "", "", tableUI);
-    let results_input = document.querySelector("#Results");
-    let category = document.querySelector("#Category");
-    let base = document.querySelector("#div_base");
-    let schedule = document.querySelector("#div_schedule");
-    let base_button = document.querySelectorAll("#div_base button");
-    let schedule_button = document.querySelectorAll("#div_schedule button");
+    // parent_id = "Subject";
+    let tr = document.querySelectorAll("tbody tr");
+    let table = document.querySelector("table");
+    let modal_body = document.getElementById("modal-body");
+    let btn = document.querySelectorAll("button");
+    let modal_cat;
+    let parentCol;
+    let parentRow;
+    let txt_SectionNum = document.getElementById("txt_SectionNum")
+    let txt_SectionName = document.getElementById("txt_SectionName")
+    let txt_GradeLevel = document.getElementById("txt_GradeLevel")
+    let txt_Adviser = document.getElementById("txt_Adviser")
+    let content = [];
+    let subjectcode;
+    let units;
+    // let tbody_tr;
+function Get1stRowCell(i, j){
 
-    console.log("BASE BUTTONS:"+base_button);
-    console.log("SCHEDULE BUTTONS:"+schedule_button);
-    schedule.style.display = "none";
 
-    schedule_button[1].addEventListener("click", function(){//GO BACK BUTTOn
-        base.style.display = "";
-        schedule.style.display = "none";
-    });
+    parentCol = j;
+    parentRow = i;
+    time = table.rows[i].cells[0].innerHTML;
+    day = table.rows[0].cells[j].innerHTML;
 
+    if(content.length == 0){
 
-    results_input.addEventListener("change", function(){
-        let content = category.options[category.selectedIndex].value + "=" + results_input.value;
-        Search(window.location.href, content, "", tableUI);
-    });
-
-    function tableUI(xhttp){
-        CreateTBody(xhttp, null, ApprovalButton);
-        let tr = document.querySelectorAll("#ResultsTable tbody tr");
-        // Hover(tr);
     }
-    function ApprovalButton(td, i){
-        console.log(td.innerHTML);
+    // console.log(time);
+    // console.log(day);
+    if(table.rows[i].cells[j].innerHTML == ""){
+        theadID = "SubjectCode@SubjectDescription@GradeLevel@Frequency";
+        theadHTML = "Subject Code@Description@Grade Level@Units";
+        CreateSearchBox(theadID, theadHTML, '@', 'SubjectCode', 'search', modal_body);
+        // CreateInput("SearchSubjectCode", "search", modal_body);
+        modal_cat = document.querySelector("#modal-body select");
+        CreateTable("SubjectCodeTable", theadID, theadHTML, "@", modal_body, 0, null);
 
-        let btn1, btn2, btn0, class_btn1, class_btn2, class_btn0;
-        // console.log(td);
-        btn0 = document.createElement('button');
-        btn1 = document.createElement('button');
-        btn2 = document.createElement('button');
-        // btn_Block.innerHTML = "Block";
-        // btn_Privilege.innerHTML = "Set as Coordinator";
-        btn0.innerHTML = "Show"
-        btn1.innerHTML = "Approve";
-        btn2.innerHTML = "Reject";
+        searchSubjectCode = document.getElementById("SubjectCode");
+        openModal("Subject Code", "SubjectCode");
 
-        // btn1.style.width = "100% !important";
-        // btn2.style.width = "100% !important";
-        if(results[i]["Status_"] == "PENDING"){
-            td.appendChild(btn0);
-            td.appendChild(btn1);
-            td.appendChild(btn2);
-
+        Search(window.location.href+"#SubjectCode"+txt_GradeLevel.innerHTML, "", PickSubjectCode);
+        searchSubjectCode.addEventListener('change', function(){
+            let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSubjectCode.value;
+            Search(window.location.href + "#SubjectCode"+txt_GradeLevel.innerHTML, searchBox_value, PickSubjectCode);
+        });
+    }
+    else{
+        // console.log(content.indexOf(table.rows[i].cells[j]));
+        // let sub_content = time
+        // table.rows[i].cells[j].innerHTML = "";
+        // content.splice(index, 1);
+        // sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
+        //      sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
+        //      sub_content["Teacher"] = teacher;
+        for(let k = 0; k < content.length; k++){
+            if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
+                if(content[k]["Time"] == time && content[k]["Day"] == day){
+                    content.splice(k, 1);
+                    break;
+                }
+            }
         }
-        // // td.appendChild(btn_Delete);
-        class_btn0 = document.createAttribute("class");
-        class_btn1 = document.createAttribute("class");
-        class_btn2 = document.createAttribute("class");
-        class_btn1.value = "btn_Table";
-        class_btn2.value = "btn_Table";
-        class_btn0.value = "btn_Table";
-        // btn0.setAttibuteNode(class_btn0);
-        // btn1.setAttibuteNode(class_btn1);
-        // btn2.setAttributeNode(class_btn2); 
-
-        btn0.addEventListener("click", ShowMore.bind(null, i));
-        btn1.addEventListener("click", Approval.bind(null, i, "APPROVED"));
-        btn2.addEventListener("click", Approval.bind(null, i, "REJECTED"));
+        // content.splice(1, 1);
+        table.rows[i].cells[j].innerHTML = "";
+        // console.log(content);
     }
+}
+var subj_tr_container = [];
+var tr_display;
 
-    function ShowMore(i){
-        schedule.style.display = '';
-        base.style.display = "none";
-        // console.log(button);
+btn[1].addEventListener("click", function(){ //RESET BUTTON
+    RemoveTD_InnerHTML();
+    content = [];
+});
+
+btn[2].addEventListener("click", function(){
+    // console.log(content);
+    if(content.length > 0){
+        content = JSON.stringify(content);
+        data = "content=" + content;
+        data += "&section=" + txt_SectionNum.value;
+        data += "&userID=" + userID;
+        // Create("", content, messageAlert);   
+        AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
     }
+});
 
-    function Approval(i, decision){
-        data = "";
-        remarks = "";
-        data += "url=" + window.location.href;
-        data += "&value=" + results[i]["ControlNum"];
-        data += "&decision=" + decision;
-        if(decision == "REJECTED"){
+function PickSubjectCode(xhttp){
+    CreateTBody(xhttp, PickSubjectCode);
+    var tbody_tr = document.querySelectorAll("#SubjectCodeTable tbody tr");
+    for(let i = 0; i < tbody_tr.length; i++){
+        tbody_tr[i].addEventListener("click", function(){
+            subjectcode = this.childNodes[0].innerHTML;
+            units = this.childNodes[3].innerHTML;
+            // alert("GAGO");
+            // let count = 0;
+            // for(let i = 0; i < content.length; i++){
+            //  if(content[i]["SubjectCode"] == subjectcode){
+            //      count++;
+            //  }
+            // }
+            // subj_tr_container[];
             
-        }
-        data += "&remarks=" + remarks;
-        if(results[i]["Action_"] == "UPDATE"){
-            // console.log(data);
-            AJAX(data, true, "post", "php/Update.php", true, messageAlert);
-        }
-        else if(results[i]["Action_"] == "INSERT"){
-            AJAX(data, true, "post", "php/Create.php", true, messageAlert);
-        }
 
+
+            // console.log(subj_tr_container.length);
+            closeModal(modal_body);
+            theadID = "TeacherNum@LastName@ExtendedName@FirstName@MiddleName@Shift@Major";
+            theadHTML = "Teacher ID@Last Name@Extended Name@First Name@Middle Name@Shift@Major";
+            CreateSearchBox(theadID, theadHTML, '@', 'Teacher', 'search', modal_body);
+            // CreateInput("SearchSubjectCode", "search", modal_body);
+            modal_cat = document.querySelector("#modal-body select");
+            CreateTable("TeacherTable", theadID, theadHTML, "@", modal_body, 0, null);
+
+            searchTeacher = document.getElementById("Teacher");
+            openModal("Teachers", "Teacher");
+
+            Search(window.location.href+"#Teacher", "", PickTeacher);
+            searchTeacher.addEventListener('change', function(){
+                let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchTeacher.value;
+                Search(window.location.href + "#Teacher", searchBox_value, PickTeacher);
+            });
+        });
     }
+}
+// console.log(tr_display);
+function PickTeacher(xhttp){
+    CreateTBody(xhttp, PickTeacher);
+    var tbody_tr = document.querySelectorAll("#TeacherTable tbody tr");
+    // console.log(tr_display);
+    // alert(tr_display);
+    for(let i = 0; i < tbody_tr.length; i++){
 
-    function messageAlert(xhttp){
-        // console.log(xhttp.responseText);
-        let message = xhttp.responseText;
-
-        if(message.indexOf("Request No.") !== -1){
-            alert(message);
-            location.reload(true);
+        for(let j = 0; j < subj_tr_container.length; j++){
+            if(subj_tr_container[j]["SubjectCode"] == subjectcode) {
+                if(subj_tr_container[j]["Row"] == i){
+                    tbody_tr[i].style.display = ""
+                }
+                else{
+                    tbody_tr[i].style.display = "none"; 
+                }
+            }
         }
-        else{
-            alert(message);
-        }   
+        // if(tr_display == i){
+        //  alert(i);
+        // }
+        tbody_tr[i].addEventListener("click", function(){
+            let teacher = this.childNodes[0].innerHTML;
+            // subjectcode = this.childNodes[0].innerHTML;
+            // units = this.childNodes[3].innerHTML;
+            // console.log(content[0]["SubjectCode"]);
+            let count = 0;
+            for(let j = 0; j < content.length; j++){
+                if(content[j]["SubjectCode"] == subjectcode){
+                    count++;
+                }
+            }
+            // console.log(tr_display);
+            if(count < units){
+                let subj_tr_pair = {};
+                subj_tr_pair["SubjectCode"] = subjectcode;
+                subj_tr_pair["Row"] = i;
+                subj_tr_container.push(subj_tr_pair);
+                // console.log(subj_tr_container);
+                table.rows[parentRow].cells[parentCol].innerHTML = subjectcode;
+                let sub_content = {};
+                sub_content["SubjectCode"] = subjectcode;
+                sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
+                sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
+                sub_content["Teacher"] = teacher;
+                content.push(sub_content);
+                // console.log("Time:" + table.rows[parentRow].cells[0].innerHTML);
+                // console.log("Day:" + table.rows[0].cells[parentCol].innerHTML);
+            }
+            else{
+                alert(subjectcode +" is only " + units + " times a week");
+            }
+            closeModal(modal_body);
+        });
     }
+}
+
+
+btn[0].addEventListener("click", function(){
+    this.style.backgroundColor = "";
+    theadID = "SectionNum@SectionName@RoomNum@GradeLevel@SchoolYear@Adviser@AdviserName";
+    theadHTML = "Section Number@Section Name@Room Number@Grade Level@School Year@Adviser@Adviser Name";
+    // CreateInput("SearchSection", "search", modal_body);
+    CreateSearchBox(theadID, theadHTML, '@', 'SearchSection', 'search', modal_body);
+    // theadID = "SectionNum@" + theadID;
+    // theadHTML = "Section Number@" + theadHTML;
+    modal_cat = document.querySelector("#modal-body select");
+    // document.querySelector("#SearchSection").className = "modal-search";
+    CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, null);
+    document.querySelector("thead").className = "dark";
+    openModal("Section", "SearchSection");
+    searchSection = document.getElementById("SearchSection");
+    SearchSectionModal = function(){
+        let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSection.value;
+        // console.log(searchBox_value);
+        Search(window.location.href + "#Section", searchBox_value, PickSection);
+    }
+    SearchSectionModal();
+    searchSection.addEventListener("change", SearchSectionModal);
+});
+
+function PickSection(xhttp){
+    content = [];
+    CreateTBody(xhttp, PickSection);
+    // console.log(modal_body);
+    var tbody_tr = document.querySelectorAll("#SearchSectionTable tbody tr");
+    for(var i = 0; i < tbody_tr.length; i++){
+        tbody_tr[i].addEventListener("click", function(){
+            document.querySelector("#SearchSection").value = "";
+            // console.log(this);
+            closeModal(modal_body);
+            txt_SectionNum.value = this.childNodes[0].innerHTML;
+            txt_SectionName.value = this.childNodes[1].innerHTML;
+            txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
+            txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
+
+            // RetrieveSectionSchedule();
+            AddListenersTD();
+        });
+    }
+}
+
+btn[3].addEventListener("click", function(){
+    theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
+    theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
+    CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
+    // CreateInput("SearchSubjectCode", "search", modal_body);
+    let hiddenCol = "none"
+    modal_cat = document.querySelector("#modal-body select");
+    CreateTable("RequestTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
+
+    let searchRequest = document.getElementById("Request");
+    openModal("Requests", "Request");
+
+    Search(window.location.href+"#Request", "", PickRequest);
+    // url = "php/ScheduleRequest.php";
+    // AJAX(data, true, "post", url, true, PickRequest);
+    searchRequest.addEventListener('change', function(){
+        let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchRequest.value;
+        Search(window.location.href + "#Request", searchBox_value, PickRequest);
+        // AJAX(data, true, "post", url, true, PickRequest);
+    });
+});
+
+function PickRequest(xhttp){
+    CreateTBody(xhttp, PickRequest);
+    var tbody_tr = document.querySelectorAll("#RequestTable tbody tr");
+    for(var i = 0; i < tbody_tr.length; i++){
+        tbody_tr[i].addEventListener("click", function(){
+            document.querySelector("#Request").value = "";
+            // console.log(this);
+            closeModal(modal_body);
+            // txt_SectionNum.value = this.childNodes[0].innerHTML;
+            // txt_SectionName.value = this.childNodes[1].innerHTML;
+            // txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
+            // txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
+
+            // RetrieveSectionSchedule();
+            data = "cnum="
+            data += this.childNodes[0].innerHTML;
+            // RemoveListenersTD();
+            AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
+            // Create("php/ScheduleRequest.php", content, Retrieve);
+        });
+    }
+}
+
+function Retrieve(xhttp){
+    content = [];
+    let json = JSON.parse(xhttp.responseText);
+    txt_Adviser.innerHTML = json[0][3];
+    txt_GradeLevel.innerHTML = json[0][2];
+    txt_SectionName.value = json[0][1];
+    txt_SectionNum.value = json[0][0];
+
+    RemoveTD_InnerHTML();
+    try{
+        for(var i = 0; i < json.length; i++){
+            // console.log(table.rows[GetParentRow(json[i][1])]);
+            // console.log(json[i]);
+            table.rows[GetParentRow(json[i][6])].cells[GetParentCol(json[i][5])].innerHTML = json[i][4];
+            let sub_content = {};
+            sub_content["SubjectCode"] = json[i][4];
+            sub_content["Day"] = json[i][5];
+            sub_content["Time"] = json[i][6];
+            sub_content["Teacher"] = json[i][7];
+            content.push(sub_content);
+        }
+        // json[3] => SubjectCode
+        // json[1] => Time //parentRow
+        // json[2] => Day //parentCol
+        
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
+function AddListenersTD(){
+    for(let i = 1; i < tr.length+1; i++){
+        for(let j = 1; j < tr[0].childElementCount; j++){
+            table.rows[i].cells[j].addEventListener("click", Get1stRowCell.bind(null, i, j));
+        }
+    }
+}
+
+function RemoveTD_InnerHTML(){
+    for(let j = 1; j < tr.length+1; j++){
+        for(let k = 1; k < tr[0].childElementCount; k++){
+            table.rows[j].cells[k].innerHTML = "";
+            // table.rows[j].cells[k].removeEventListener("click", Get1stRowCell.bind(null, j, k));
+            // console.log("GAGO");
+        }
+    }
+    // console.log("GAGO");
+    // btn[0].disabled = "disabled";
+    // btn[1].disabled = "disabled";
+    // btn[2].disabled = "disabled";
+}
 </script>
+
+

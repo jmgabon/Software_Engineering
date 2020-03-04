@@ -4,8 +4,8 @@
 // $username = 'juanscic_rtucpe';
 // $password = 'Ju@nsci2020';
 $dsn = 'mysql:dbname=MIS;host=localhost;port=3306';//
-$username = 'tgold';
-$password = 'payaman';
+$username = 'root';
+$password = '';
 try { //UNBUFFERED
     $db = new PDO($dsn, $username, $password);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // also allows an extra parameter of configuration

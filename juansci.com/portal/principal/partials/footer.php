@@ -1,6 +1,6 @@
         <!-- <script type="text/javascript" src="../js/pagination.js"></script> -->
         <script type="text/javascript">
-            
+            var parent_id = "Results";
         </script>
         <script type="text/javascript" src="../../js/ajax.js"></script>
         <script type="text/javascript" src="js/MIS.js"></script>
