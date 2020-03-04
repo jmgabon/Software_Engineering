@@ -37,6 +37,8 @@ let parent_id;
 let trTableGrade;
 let arrSubjCode = [];
 
+let quarterSelected;
+
 
 const btn_encode = document.querySelector('#btn_encode');
 
@@ -159,6 +161,9 @@ function PickStudent(xhttp) {
 
             studentAge = this.childNodes[4].textContent;
             studentSex = this.childNodes[5].textContent;
+
+            btn_encode.disabled = true;
+
 
             setGradeSubjDB();
             setGradeValDB();
@@ -548,6 +553,33 @@ function calculateFinalWithRemark() {
     }
 }
 
+setQuarterDB();
+
+function setQuarterDB() {
+    let query = '';
+
+    query += 'SELECT SettingValue ';
+    query += 'FROM setting ';
+    query += 'WHERE SettingName = "quarter_enabled" ';
+
+    SimplifiedQuery('SELECT', query, '', getQuarter);
+};
+
+
+function getQuarter(xhttp) {
+    try {
+        let jsonQuarter = JSON.parse(xhttp.responseText);
+        quarterSelected = jsonQuarter[0]['SettingValue'];
+        console.log(quarterSelected)
+
+    } catch (err) {
+        alert('CANNOT FIND');
+        console.log(xhttp.responseText);
+        console.log(err);
+    }
+}
+
+
 function calculateAverage() {
     let GWA = '';
     let remarksGWA;
@@ -578,13 +610,18 @@ function calculateAverage() {
             colAverage /= ((trTableGrade.length - 1) - lenChild);
             colAverage = colAverage.toFixed(0);
             trTableGrade[trTableGrade.length - 1].cells[i].textContent = colAverage;
+
+            if (quarterSelected == i) {
+                if (colAverage != '') {
+                    btn_encode.disabled = false;
+                }
+            }
         }
     }
 
 
     GWA = Number(trTableGrade[trTableGrade.length - 1].cells[5].textContent);
 
-    btn_encode.disabled = true;
     if (GWA == '') {
         remarksGWA = '';
     } else if (GWA >= 75) {
@@ -596,7 +633,7 @@ function calculateAverage() {
             remarksGWA = 'RETAINED';
         }
 
-        btn_encode.disabled = false;
+
     } else {
         remarksGWA = 'RETAINED';
     }
