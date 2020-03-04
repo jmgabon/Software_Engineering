@@ -165,57 +165,57 @@
     let subjectcode;
     let units;
     // let tbody_tr;
-function Get1stRowCell(i, j){
+// function Get1stRowCell(i, j){
 
 
-    parentCol = j;
-    parentRow = i;
-    time = table.rows[i].cells[0].innerHTML;
-    day = table.rows[0].cells[j].innerHTML;
+//     parentCol = j;
+//     parentRow = i;
+//     time = table.rows[i].cells[0].innerHTML;
+//     day = table.rows[0].cells[j].innerHTML;
 
-    if(content.length == 0){
+//     if(content.length == 0){
+        
+//     }
+//     // console.log(time);
+//     // console.log(day);
+//     if(table.rows[i].cells[j].innerHTML == ""){
+//         theadID = "SubjectCode@SubjectDescription@GradeLevel@Frequency";
+//         theadHTML = "Subject Code@Description@Grade Level@Units";
+//         CreateSearchBox(theadID, theadHTML, '@', 'SubjectCode', 'search', modal_body);
+//         // CreateInput("SearchSubjectCode", "search", modal_body);
+//         modal_cat = document.querySelector("#modal-body select");
+//         CreateTable("SubjectCodeTable", theadID, theadHTML, "@", modal_body, 0, null);
 
-    }
-    // console.log(time);
-    // console.log(day);
-    if(table.rows[i].cells[j].innerHTML == ""){
-        theadID = "SubjectCode@SubjectDescription@GradeLevel@Frequency";
-        theadHTML = "Subject Code@Description@Grade Level@Units";
-        CreateSearchBox(theadID, theadHTML, '@', 'SubjectCode', 'search', modal_body);
-        // CreateInput("SearchSubjectCode", "search", modal_body);
-        modal_cat = document.querySelector("#modal-body select");
-        CreateTable("SubjectCodeTable", theadID, theadHTML, "@", modal_body, 0, null);
+//         searchSubjectCode = document.getElementById("SubjectCode");
+//         openModal("Subject Code", "SubjectCode");
 
-        searchSubjectCode = document.getElementById("SubjectCode");
-        openModal("Subject Code", "SubjectCode");
-
-        Search(window.location.href+"#SubjectCode"+txt_GradeLevel.innerHTML, "", PickSubjectCode);
-        searchSubjectCode.addEventListener('change', function(){
-            let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSubjectCode.value;
-            Search(window.location.href + "#SubjectCode"+txt_GradeLevel.innerHTML, searchBox_value, PickSubjectCode);
-        });
-    }
-    else{
-        // console.log(content.indexOf(table.rows[i].cells[j]));
-        // let sub_content = time
-        // table.rows[i].cells[j].innerHTML = "";
-        // content.splice(index, 1);
-        // sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
-        //      sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
-        //      sub_content["Teacher"] = teacher;
-        for(let k = 0; k < content.length; k++){
-            if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
-                if(content[k]["Time"] == time && content[k]["Day"] == day){
-                    content.splice(k, 1);
-                    break;
-                }
-            }
-        }
-        // content.splice(1, 1);
-        table.rows[i].cells[j].innerHTML = "";
-        // console.log(content);
-    }
-}
+//         Search(window.location.href+"#SubjectCode"+txt_GradeLevel.innerHTML, "", PickSubjectCode);
+//         searchSubjectCode.addEventListener('change', function(){
+//             let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSubjectCode.value;
+//             Search(window.location.href + "#SubjectCode"+txt_GradeLevel.innerHTML, searchBox_value, PickSubjectCode);
+//         });
+//     }
+//     else{
+//         // console.log(content.indexOf(table.rows[i].cells[j]));
+//         // let sub_content = time
+//         // table.rows[i].cells[j].innerHTML = "";
+//         // content.splice(index, 1);
+//         // sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
+//         //      sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
+//         //      sub_content["Teacher"] = teacher;
+//         for(let k = 0; k < content.length; k++){
+//             if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
+//                 if(content[k]["Time"] == time && content[k]["Day"] == day){
+//                     content.splice(k, 1);
+//                     break;
+//                 }
+//             }
+//         }
+//         // content.splice(1, 1);
+//         table.rows[i].cells[j].innerHTML = "";
+//         // console.log(content);
+//     }
+// }
 var subj_tr_container = [];
 var tr_display;
 
