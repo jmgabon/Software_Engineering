@@ -18,67 +18,24 @@ $numberOfRooms = 0;
 // echo $numberOfStudents;
 ?>
 <script type="text/javascript">
-    $('#lead').text('Dashboard');
+    $('#lead').text('JuanSci Portal');
     $('#dashboard').addClass('active');
+    $('#navbarNav').removeClass('d-md-block');
 </script>      
 
-      <div class="content mt-4">
-        <div class="row ml-4">
-          <div class="col row col-12 col-md-8">
-            <div class="card shadow border-0 students">
-              <h1 class="count-text"><?php echo $numberOfStudents;?></h1>
-              <p class="ml-4 lead pl-2">students</p>
-            </div>
-            <div class="card shadow border-0 teachers">
-              <h1 class="count-text">0</h1>
-              <p class="ml-4 lead pl-2">teachers</p>
-            </div>
-            <div class="row card shadow border-0 classes">
-              <div class="col-5 pl-0">
-                <h1 class="count-text">0</h1>
-                <p class="ml-4 lead pl-2">classes</p>
-              </div>
-              <div class="col-7 mt-4 d-inline-block text-center">
-                <div class="d-inline-block mr-3 mb-2">
-                  <h1 class="count-text-classes">0</h1>
-                  grade 7
-                </div>
-                <div class="d-inline-block">
-                  <h1 class="count-text-classes">0</h1>
-                  grade 8
-                </div>
-                <div class="d-inline-block mr-3">
-                  <h1 class="count-text-classes">0</h1>
-                  grade 9
-                </div>
-                <div class="d-inline-block">
-                  <h1 class="count-text-classes">0</h1>
-                  grade 10
-                </div>
-              </div>
-              
-            </div>
-            <div class="card shadow border-0 rooms">
-              <div class="row mt-4 text-center">
-                <div class="col-4 mt-3 ml-5">
-                  <h1 class="count-text m-0">0</h1>
-                  <p class="text-rooms">available</p>
-                </div>
-                <div class="col-4 mt-3">
-                  <h1 class="count-text m-0">0</h1>
-                  <p class="text-rooms ">occupied</p>
-                </div>
-              </div>
-              
-              <p class="ml-4 lead pl-2">rooms</p>
-            </div>
-          </div>
-          <div class="col col-4">
-            
-          </div>
+      <div class="content">
+        <div class="mt-5 ml-5 d-none d-md-block">
+          <p class='text-lg'>
+            <span class="text-md pb-0">WELCOME TO</span>
+            <span class="head-text text-maroon"><em>JUAN</span><span class="head-text text-secondary">SCI</em>
+            <span class="h1 mt-0"> PORTAL      
+          </p>
+          <h1 class="">Sir Jay Macasieb, DEM</h1>
+          <a id="SidebarToggler" class="btn btn-danger btn-lg text-light mt-3 send-to-front"><i class="fa fa-caret-left mr-2"></i>Get Started</a>
         </div>
-
       </div>
+      <div class="bg-red w-100">
+        </div>
       
 <?php include 'partials/footer.php'; ?>
 

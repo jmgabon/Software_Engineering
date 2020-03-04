@@ -1,4 +1,4 @@
-        input[type="text"], input[type = 'email'], select, input[type="date"]{
+        input[type="text"], input[type = 'email'], input[type="date"]{
             height: 25px;
             width: 200px;
             float: right;
@@ -30,13 +30,13 @@
             font-size: 14px;
         }
         
-        input[type="search"] {
+        /* input[type="search"] {
             height: 25px !important;
             width: 180px;
             box-sizing: border-box;
             border: 1px solid #b5b5b5;
             font-size: 14px !important;
-        }
+        } */
         
         .modal-search {
             float: left;

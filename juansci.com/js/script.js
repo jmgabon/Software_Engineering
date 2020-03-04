@@ -22,10 +22,35 @@ $("#slide").on("click", function () {
 		hidden=false;
 	}
 });
+var hiddens = true;
+$("#SidebarToggler").on("click", function () {
+	if(!hiddens){
+        $(function () {
+            $("#navbarNav").animate({
+                width: '0'
+             }, { duration: 300, queue: false });
+            $("#navbarNav").hide({
+                queue: false });
+            
+        });
+	   hiddens=true;
+	}
+	else{
+        $(function () {
+            $("#navbarNav").show({
+                queue: false });
+            $("#navbarNav").animate({
+               width: '230px'
+            }, { duration: 300, queue: false });
+        });
+		hiddens=false;
+	}
+});
 
 $('#profileDropdown').on('click', function(){
     $('#divDropdown').toggleClass('d-block');
 })
+
 $(window).click(function() {
     $('#divDropdown').removeClass('d-block');
     });

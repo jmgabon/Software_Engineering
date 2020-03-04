@@ -36,20 +36,22 @@
 	</div>
     <!-- <button class="rounded-pill create-button" id="ShowRequests" style="width: 20% !important;">Show Requests</button> -->
     <div class="col col-xl-12" style="margin-top: 10% !important;">
-        <p class="h4 pb-2">List of Requests
-        <label class="float-right" for="Results">
+        <div class="form-inline mb-3">
+            <h4 class="mb-2">Lists of Requests</h4>
+            <label class="ml-auto" for="Results">
             <!-- <input placeholder="Search for subject codes.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchSubjectCode" style="width: 200px !important;"> -->
-        <select class="mt-1 form-control rounded-0 bg-light" id="Category">
-            <option value="ControlNum" selected="selected">Request Number</option>
-            <option value="SubjectCode">Subject Code</option>
-            <option value="SubjectDescription">Description</option>
-            <option value="Frequency">Number of Days</option>
-            <option value="GradeLevel">Grade Level</option>
-            <option value="Action_">Action</option>
-            <option value="Status_">Status</option>
-        </select>
-        <input type="search" name="" class="mt-1 form-control rounded-0 bg-light" id="Results">
-        </label></p>
+                <select class="form-control mt-5 form-control-sm rounded-0 bg-dark text-light" id="Category">
+                    <option value="ControlNum" selected="selected">Request Number</option>
+                    <option value="SubjectCode">Subject Code</option>
+                    <option value="SubjectDescription">Description</option>
+                    <option value="Frequency">Number of Days</option>
+                    <option value="GradeLevel">Grade Level</option>
+                    <option value="Action_">Action</option>
+                    <option value="Status_">Status</option>
+                </select>
+                <input type="search" name="" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
+            </label>
+        </div>
         <table id="ResultsTable">
             <thead class="dark">
                 <tr>

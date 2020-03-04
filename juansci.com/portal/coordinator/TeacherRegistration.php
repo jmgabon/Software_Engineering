@@ -2,7 +2,7 @@
 include 'partials/header.php';
 ?>
 <script type="text/javascript">
-    $('#lead').text('Registration');
+    $('#lead').text('Teacher Registration');
     $('#teacher').addClass('active');
 </script>
 <style type="text/css">
