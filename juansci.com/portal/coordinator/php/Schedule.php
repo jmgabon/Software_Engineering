@@ -38,7 +38,7 @@ try{
 	//<<<<<<<<<<CREATE UNIQUE Subject ID
 	// echo(array_keys($unique_SubjectCode));
 	for($i = 0; $i < count($uniqueIndex); $i++){
-		$subjectID = $sectionNum . "-".$SubjectCode[$uniqueIndex[$i]];
+		$subjectID = $SubjectCode[$i] . "-" .$sectionNum ."-". $userID;
 		$subjectID = preg_replace('/\s+/', '', $subjectID);
 		$preparedStatement = "INSERT INTO temp_subject(SubjectID, TeacherNum, SectionNum, SubjectCode, CreatedBy, Action_,Status_) VALUES (?,?,?,?,?,?,?)";
 		$stmt = $db->prepare($preparedStatement);
@@ -52,19 +52,19 @@ try{
 		$stmt->execute();
 	}
 
-	$preparedStatement = "INSERT INTO temp_sched(SchedID, SubjectID, SubjectDay, SubjectTime, CreatedBy, Action_, Status_) VALUES(?,?,?,?,?,?,?);";
+	$preparedStatement = "INSERT INTO temp_sched(SubjectID, SubjectDay, SubjectTime, CreatedBy, Action_, Status_) VALUES(?,?,?,?,?,?);";
 	for($i = 0; $i < count($SubjectCode); $i++){
-		$subjectID = $sectionNum . "-".$SubjectCode[$i];
+		$subjectID = $SubjectCode[$i] . "-" .$sectionNum ."-". $userID;
 		$subjectID = preg_replace('/\s+/', '', $subjectID);
 		$stmt = $db->prepare($preparedStatement);
-		$stmt->bindValue(1, $subjectID.$i); //ID
-		$stmt->bindValue(2, $subjectID);
+		// $stmt->bindValue(1, $subjectID."-".$i); //ID
+		$stmt->bindValue(1, $subjectID);
 		
-		$stmt->bindValue(3, $SubjectDay[$i]);
-		$stmt->bindValue(4, $SubjectTime[$i]);
-		$stmt->bindValue(5, $userID);
-		$stmt->bindValue(6, "INSERT");
-		$stmt->bindValue(7, "PENDING");
+		$stmt->bindValue(2, $SubjectDay[$i]);
+		$stmt->bindValue(3, $SubjectTime[$i]);
+		$stmt->bindValue(4, $userID);
+		$stmt->bindValue(5, "INSERT");
+		$stmt->bindValue(6, "PENDING");
 		$stmt->execute();
 	}
 	//>>>>>>>>>>>>>>>>>>>

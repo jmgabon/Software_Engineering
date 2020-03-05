@@ -4,7 +4,7 @@ session_start();
 $cnum = $_POST['cnum'];
 // $_SESSION['TeacherNum']
 try{
-	$preparedStatement = "SELECT ControlNum, SectionName, GradeLevel, Adviser, SubjectCode, SubjectDay, SubjectTime, CreatedBy, Creator FROM summary_schedule WHERE CreatedBy='" . $_SESSION['TeacherNum']."' AND ControlNum ='". $cnum ."'";
+	$preparedStatement = "SELECT SectionNum, SectionName, GradeLevel, Adviser, SubjectCode, SubjectDay, SubjectTime, CreatedBy, Creator FROM summary_schedule WHERE CreatedBy='" . $_SESSION['TeacherNum']."' AND ControlNum ='". $cnum ."'";
 	$stmt = $db->prepare($preparedStatement);
 
 	$stmt->execute();

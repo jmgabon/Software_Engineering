@@ -146,6 +146,11 @@
     <!-- <script type="text/javascript" src="../js/Scheduling.js"></script> -->
 
 <?php include 'partials/footer.php'; ?>
+<?php
+	// require "../../php/ConnectToDB.php";
+	// $preparedStatement = "SELECT SectionNum FROM summary_schedule WHERE CreatedBy='" . $_SESSION['TeacherNum']."' AND '". $cnum ."'";
+	// $stmt = $db->prepare($preparedStatement);
+?>
 <script type="text/javascript">
 	// parent_id = "Subject";
 	let tr = document.querySelectorAll("tbody tr");

@@ -174,7 +174,7 @@
 //     day = table.rows[0].cells[j].innerHTML;
 
 //     if(content.length == 0){
-        
+
 //     }
 //     // console.log(time);
 //     // console.log(day);
@@ -219,162 +219,22 @@
 var subj_tr_container = [];
 var tr_display;
 
-btn[1].addEventListener("click", function(){ //RESET BUTTON
+btn[0].addEventListener("click", function(){ //REJECT BUTTON
     RemoveTD_InnerHTML();
     content = [];
 });
 
-btn[2].addEventListener("click", function(){
+btn[1].addEventListener("click", function(){ //APPROVE BUTTON
     // console.log(content);
-    if(content.length > 0){
-        content = JSON.stringify(content);
-        data = "content=" + content;
-        data += "&section=" + txt_SectionNum.value;
-        data += "&userID=" + userID;
-        // Create("", content, messageAlert);   
-        AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
-    }
+    // if(content.length > 0){
+    //     content = JSON.stringify(content);
+    //     data = "content=" + content;
+    //     data += "&section=" + txt_SectionNum.value;
+    //     data += "&userID=" + userID;
+    //     // Create("", content, messageAlert);   
+    //     AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
+    // }
 });
-
-function PickSubjectCode(xhttp){
-    CreateTBody(xhttp, PickSubjectCode);
-    var tbody_tr = document.querySelectorAll("#SubjectCodeTable tbody tr");
-    for(let i = 0; i < tbody_tr.length; i++){
-        tbody_tr[i].addEventListener("click", function(){
-            subjectcode = this.childNodes[0].innerHTML;
-            units = this.childNodes[3].innerHTML;
-            // alert("GAGO");
-            // let count = 0;
-            // for(let i = 0; i < content.length; i++){
-            //  if(content[i]["SubjectCode"] == subjectcode){
-            //      count++;
-            //  }
-            // }
-            // subj_tr_container[];
-            
-
-
-            // console.log(subj_tr_container.length);
-            closeModal(modal_body);
-            theadID = "TeacherNum@LastName@ExtendedName@FirstName@MiddleName@Shift@Major";
-            theadHTML = "Teacher ID@Last Name@Extended Name@First Name@Middle Name@Shift@Major";
-            CreateSearchBox(theadID, theadHTML, '@', 'Teacher', 'search', modal_body);
-            // CreateInput("SearchSubjectCode", "search", modal_body);
-            modal_cat = document.querySelector("#modal-body select");
-            CreateTable("TeacherTable", theadID, theadHTML, "@", modal_body, 0, null);
-
-            searchTeacher = document.getElementById("Teacher");
-            openModal("Teachers", "Teacher");
-
-            Search(window.location.href+"#Teacher", "", PickTeacher);
-            searchTeacher.addEventListener('change', function(){
-                let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchTeacher.value;
-                Search(window.location.href + "#Teacher", searchBox_value, PickTeacher);
-            });
-        });
-    }
-}
-// console.log(tr_display);
-function PickTeacher(xhttp){
-    CreateTBody(xhttp, PickTeacher);
-    var tbody_tr = document.querySelectorAll("#TeacherTable tbody tr");
-    // console.log(tr_display);
-    // alert(tr_display);
-    for(let i = 0; i < tbody_tr.length; i++){
-
-        for(let j = 0; j < subj_tr_container.length; j++){
-            if(subj_tr_container[j]["SubjectCode"] == subjectcode) {
-                if(subj_tr_container[j]["Row"] == i){
-                    tbody_tr[i].style.display = ""
-                }
-                else{
-                    tbody_tr[i].style.display = "none"; 
-                }
-            }
-        }
-        // if(tr_display == i){
-        //  alert(i);
-        // }
-        tbody_tr[i].addEventListener("click", function(){
-            let teacher = this.childNodes[0].innerHTML;
-            // subjectcode = this.childNodes[0].innerHTML;
-            // units = this.childNodes[3].innerHTML;
-            // console.log(content[0]["SubjectCode"]);
-            let count = 0;
-            for(let j = 0; j < content.length; j++){
-                if(content[j]["SubjectCode"] == subjectcode){
-                    count++;
-                }
-            }
-            // console.log(tr_display);
-            if(count < units){
-                let subj_tr_pair = {};
-                subj_tr_pair["SubjectCode"] = subjectcode;
-                subj_tr_pair["Row"] = i;
-                subj_tr_container.push(subj_tr_pair);
-                // console.log(subj_tr_container);
-                table.rows[parentRow].cells[parentCol].innerHTML = subjectcode;
-                let sub_content = {};
-                sub_content["SubjectCode"] = subjectcode;
-                sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
-                sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
-                sub_content["Teacher"] = teacher;
-                content.push(sub_content);
-                // console.log("Time:" + table.rows[parentRow].cells[0].innerHTML);
-                // console.log("Day:" + table.rows[0].cells[parentCol].innerHTML);
-            }
-            else{
-                alert(subjectcode +" is only " + units + " times a week");
-            }
-            closeModal(modal_body);
-        });
-    }
-}
-
-
-btn[0].addEventListener("click", function(){
-    this.style.backgroundColor = "";
-    theadID = "SectionNum@SectionName@RoomNum@GradeLevel@SchoolYear@Adviser@AdviserName";
-    theadHTML = "Section Number@Section Name@Room Number@Grade Level@School Year@Adviser@Adviser Name";
-    // CreateInput("SearchSection", "search", modal_body);
-    CreateSearchBox(theadID, theadHTML, '@', 'SearchSection', 'search', modal_body);
-    // theadID = "SectionNum@" + theadID;
-    // theadHTML = "Section Number@" + theadHTML;
-    modal_cat = document.querySelector("#modal-body select");
-    // document.querySelector("#SearchSection").className = "modal-search";
-    CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, null);
-    document.querySelector("thead").className = "dark";
-    openModal("Section", "SearchSection");
-    searchSection = document.getElementById("SearchSection");
-    SearchSectionModal = function(){
-        let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSection.value;
-        // console.log(searchBox_value);
-        Search(window.location.href + "#Section", searchBox_value, PickSection);
-    }
-    SearchSectionModal();
-    searchSection.addEventListener("change", SearchSectionModal);
-});
-
-function PickSection(xhttp){
-    content = [];
-    CreateTBody(xhttp, PickSection);
-    // console.log(modal_body);
-    var tbody_tr = document.querySelectorAll("#SearchSectionTable tbody tr");
-    for(var i = 0; i < tbody_tr.length; i++){
-        tbody_tr[i].addEventListener("click", function(){
-            document.querySelector("#SearchSection").value = "";
-            // console.log(this);
-            closeModal(modal_body);
-            txt_SectionNum.value = this.childNodes[0].innerHTML;
-            txt_SectionName.value = this.childNodes[1].innerHTML;
-            txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
-            txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
-
-            // RetrieveSectionSchedule();
-            AddListenersTD();
-        });
-    }
-}
 
 btn[3].addEventListener("click", function(){
     theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";

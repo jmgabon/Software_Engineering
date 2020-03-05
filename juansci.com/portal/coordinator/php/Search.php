@@ -25,7 +25,7 @@ if(strpos($table, "SectionCreation") !== false){
 		$table = str_replace("SectionCreation", "availableclassroom", $table);
 	}
 	else if($subtable == "Teacher"){
-		$table = str_replace("SectionCreation", "availableteacher", $table);	
+		$table = str_replace("SectionCreation", "availableadviser", $table);	
 	}
 	else{
 		
@@ -36,7 +36,9 @@ if(strpos($table, "SectionCreation") !== false){
 else if(strpos($table, "ScheduleCreation") !== false){
 	if($subtable == "Section"){
 		// $table = str_replace("ScheduleCreation", "sectioncreation", $table);
-		$table = "masterlist_section"; //PRINCIPAL
+		$table = "masterlist_section_request"; //PRINCIPAL
+		// $content = " WHERE (Status_ != 'PENDING' AND CreatedBy != ".$_SESSION['TeacherNum'].")";
+		$content = " WHERE (Status_ IS NULL OR Status_ = 'REJECTED') AND (CreatedBy IS NULL OR CreatedBy != ".$_SESSION['TeacherNum'].")" ;
 	}
 	// (strpos($table, "SectionCreation") !== false)
 	else if(strpos($subtable, "SubjectCode") !== false){
