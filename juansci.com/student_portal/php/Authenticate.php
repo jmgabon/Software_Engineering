@@ -15,11 +15,12 @@
 		$stmt->closeCursor();	
 
 		if($row != null){
-			if($row[2] == 1){
+			if($row[3] == 1){
 				// if($row[2] == 'student'){
 				$_SESSION['LRNNum'] = $row[0];
+				$_SESSION['AccessType'] = $row[2];
 				// }
-				// echo $row[2];
+				echo $row[2];
 			}
 			else{
 				echo "BLOCKED";

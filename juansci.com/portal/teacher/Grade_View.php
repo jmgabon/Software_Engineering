@@ -8,8 +8,10 @@
     session_start();
     // $_SESSION['TeacherNum'] = 1;
     // $_SESSION['AccessType'] = "principal";
-    if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
-      header('Location: ../');
+    if ($_SESSION['AccessType'] != "student") {
+        if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
+            header('Location: ../');
+          }
     }
 ?>
 
@@ -69,7 +71,12 @@
           <nav class="d-none d-md-block row navbar pt-0 w-75">
           <a class="lead p-0" id="lead"></a>
           <div class="float-right mt-2" id="back-to-menu">
-            <a href="../teacher/dashboard.php" class="text-danger h6 mr-5">
+
+            <?php if ($_SESSION['AccessType'] == "student") { ?>
+              <a href="../../student_portal/student/dashboard.php" class="text-danger h6 mr-5">
+            <?php } else if ($_SESSION['AccessType'] == "") { ?>
+              <a href="dashboard.php" class="text-danger h6 mr-5">
+            <?php } ?>
             <i class="fa fa-caret-left"></i> Back to Menu</a>
           </div>
           </nav>
@@ -308,7 +315,7 @@
         <?php if($_SESSION['AccessType'] === '') { ?>
             employeeNum = <?php echo $_SESSION['TeacherNum']?>;
         <?php } else if($_SESSION['AccessType'] === 'student') { ?>
-            LRNNum = <?php echo $_SESSION['TeacherNum'];
+            LRNNum = <?php echo $_SESSION['LRNNum'];
         } ?>;
     </script>
     <script src="js/ajax.js" type="text/javascript"></script>

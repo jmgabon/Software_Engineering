@@ -2,9 +2,9 @@
   session_start();
   // $_SESSION['TeacherNum'] = 1;
   // $_SESSION['AccessType'] = "principal";
-    if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
-      header('Location: ../');
-    }
+  if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
+    header('Location: ../');
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,8 +65,6 @@
               <a href="../principal/dashboard.php" class="text-danger h6 mr-5">
             <?php } else if ($_SESSION['AccessType'] == "coordinator") { ?>
               <a href="../coordinator/dashboard.php" class="text-danger h6 mr-5">
-            <?php } else if ($_SESSION['AccessType'] == "student") { ?>
-              <a href="../../student_portal/student/dashboard.php" class="text-danger h6 mr-5">
             <?php } else if ($_SESSION['AccessType'] == "") { ?>
               <a href="dashboard.php" class="text-danger h6 mr-5">
             <?php } ?>
