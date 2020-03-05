@@ -74,7 +74,7 @@ function ResetInput(initialValue, parent_id){//whatToReset - resets the button
 function CreateTBody(xhttp, cfunction, cfunction2){ //Create Table Body (Imitates result of sql)
 	try{
 	// var json;
-	parent_id = "Results";
+	// parent_id = "Results";
 	var td;
 	var tr;
 	var btn_Edit;

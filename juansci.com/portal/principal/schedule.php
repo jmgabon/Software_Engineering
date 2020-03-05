@@ -236,7 +236,7 @@ btn[1].addEventListener("click", function(){ //APPROVE BUTTON
     // }
 });
 
-btn[3].addEventListener("click", function(){
+btn[2].addEventListener("click", function(){
     theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
     theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
     CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
@@ -247,19 +247,21 @@ btn[3].addEventListener("click", function(){
 
     let searchRequest = document.getElementById("Request");
     openModal("Requests", "Request");
-
-    Search(window.location.href+"#Request", "", PickRequest);
+    console.log()
+    Search(window.location.href+"#Request", "", "", PickRequest);
     // url = "php/ScheduleRequest.php";
     // AJAX(data, true, "post", url, true, PickRequest);
     searchRequest.addEventListener('change', function(){
         let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchRequest.value;
-        Search(window.location.href + "#Request", searchBox_value, PickRequest);
+        Search(window.location.href + "#Request", searchBox_value, "", PickRequest);
         // AJAX(data, true, "post", url, true, PickRequest);
     });
 });
 
 function PickRequest(xhttp){
-    CreateTBody(xhttp, PickRequest);
+    // alert("GAGO");
+    CreateTBody(xhttp, PickRequest, "");
+
     var tbody_tr = document.querySelectorAll("#RequestTable tbody tr");
     for(var i = 0; i < tbody_tr.length; i++){
         tbody_tr[i].addEventListener("click", function(){
@@ -274,7 +276,7 @@ function PickRequest(xhttp){
             // RetrieveSectionSchedule();
             data = "cnum="
             data += this.childNodes[0].innerHTML;
-            // RemoveListenersTD();
+            
             AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
             // Create("php/ScheduleRequest.php", content, Retrieve);
         });
