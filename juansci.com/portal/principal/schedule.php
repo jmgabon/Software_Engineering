@@ -26,8 +26,8 @@
         
     </div>
     <br/> -->
-    <p><b>Section Number: </b><span id="txt_GradeLevel"></span></p>
-    <p><b>Section Name: </b><span id="txt_Adviser"></span></p>
+    <p><b>Section Number: </b><span id="txt_SectionNum"></span></p>
+    <p><b>Section Name: </b><span id="txt_SectionName"></span></p>
     <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
     <p><b>Adviser: </b><span id="txt_Adviser"></span></p>
     <table class="mt-3 s-table">
@@ -135,8 +135,8 @@
         </tbody>
     </table>
     <!-- <button>SUBMIT</button> -->
-    <button class="rounded-pill">RESET</button>
-    <button class="rounded-pill">SUBMIT</button>
+    <button class="rounded-pill">REJECT</button>
+    <button class="rounded-pill">APPROVE</button>
     <button class="rounded-pill" style="width: 20% !important">SHOW REQUESTS</button>
     <!-- <button class="rounded-pill">RESET</button> -->
 
@@ -164,64 +164,18 @@
     let content = [];
     let subjectcode;
     let units;
-    // let tbody_tr;
-// function Get1stRowCell(i, j){
 
-
-//     parentCol = j;
-//     parentRow = i;
-//     time = table.rows[i].cells[0].innerHTML;
-//     day = table.rows[0].cells[j].innerHTML;
-
-//     if(content.length == 0){
-
-//     }
-//     // console.log(time);
-//     // console.log(day);
-//     if(table.rows[i].cells[j].innerHTML == ""){
-//         theadID = "SubjectCode@SubjectDescription@GradeLevel@Frequency";
-//         theadHTML = "Subject Code@Description@Grade Level@Units";
-//         CreateSearchBox(theadID, theadHTML, '@', 'SubjectCode', 'search', modal_body);
-//         // CreateInput("SearchSubjectCode", "search", modal_body);
-//         modal_cat = document.querySelector("#modal-body select");
-//         CreateTable("SubjectCodeTable", theadID, theadHTML, "@", modal_body, 0, null);
-
-//         searchSubjectCode = document.getElementById("SubjectCode");
-//         openModal("Subject Code", "SubjectCode");
-
-//         Search(window.location.href+"#SubjectCode"+txt_GradeLevel.innerHTML, "", PickSubjectCode);
-//         searchSubjectCode.addEventListener('change', function(){
-//             let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchSubjectCode.value;
-//             Search(window.location.href + "#SubjectCode"+txt_GradeLevel.innerHTML, searchBox_value, PickSubjectCode);
-//         });
-//     }
-//     else{
-//         // console.log(content.indexOf(table.rows[i].cells[j]));
-//         // let sub_content = time
-//         // table.rows[i].cells[j].innerHTML = "";
-//         // content.splice(index, 1);
-//         // sub_content["Day"] = table.rows[0].cells[parentCol].innerHTML;
-//         //      sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
-//         //      sub_content["Teacher"] = teacher;
-//         for(let k = 0; k < content.length; k++){
-//             if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
-//                 if(content[k]["Time"] == time && content[k]["Day"] == day){
-//                     content.splice(k, 1);
-//                     break;
-//                 }
-//             }
-//         }
-//         // content.splice(1, 1);
-//         table.rows[i].cells[j].innerHTML = "";
-//         // console.log(content);
-//     }
-// }
 var subj_tr_container = [];
 var tr_display;
 
+var controlNum;
+
 btn[0].addEventListener("click", function(){ //REJECT BUTTON
-    RemoveTD_InnerHTML();
-    content = [];
+    
+    // AJAX(data, true, "post", "php/Create.php", true, callback);
+    data = "";
+    data += "cnum=" + controlNum;
+    AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
 });
 
 btn[1].addEventListener("click", function(){ //APPROVE BUTTON
@@ -275,6 +229,7 @@ function PickRequest(xhttp){
 
             // RetrieveSectionSchedule();
             data = "cnum="
+            controlNum = this.childNodes[0].innerHTML; 
             data += this.childNodes[0].innerHTML;
             
             AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
@@ -284,12 +239,12 @@ function PickRequest(xhttp){
 }
 
 function Retrieve(xhttp){
-    content = [];
+    // content = [];
     let json = JSON.parse(xhttp.responseText);
     txt_Adviser.innerHTML = json[0][3];
     txt_GradeLevel.innerHTML = json[0][2];
-    txt_SectionName.value = json[0][1];
-    txt_SectionNum.value = json[0][0];
+    txt_SectionName.innerHTML = json[0][1];
+    txt_SectionNum.innerHTML = json[0][0];
 
     RemoveTD_InnerHTML();
     try{

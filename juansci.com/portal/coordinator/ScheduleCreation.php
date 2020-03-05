@@ -133,8 +133,8 @@
 		</tbody>
 	</table>
 	<!-- <button>SUBMIT</button> -->
-	<button class="rounded-pill">RESET</button>
-	<button class="rounded-pill">SUBMIT</button>
+	<button class="rounded-pill" style="display: none;">RESET</button>
+	<button class="rounded-pill" style="display: none;">SUBMIT</button>
 	<button class="rounded-pill" style="width: 20% !important">SHOW REQUESTS</button>
 	<!-- <button class="rounded-pill">RESET</button> -->
 
@@ -375,6 +375,7 @@ function PickSection(xhttp){
 
 			// RetrieveSectionSchedule();
 			AddListenersTD();
+			RemoveTD_InnerHTML();
 		});
 	}
 }
@@ -425,6 +426,8 @@ function PickRequest(xhttp){
 }
 
 function Retrieve(xhttp){
+	btn[1].style.display = "none";
+	btn[2].style.display = "none";
 	content = [];
 	let json = JSON.parse(xhttp.responseText);
 	txt_Adviser.innerHTML = json[0][3];
@@ -456,6 +459,8 @@ function Retrieve(xhttp){
 }
 
 function AddListenersTD(){
+	btn[1].style.display ="";
+	btn[2].style.display ="";
 	for(let i = 1; i < tr.length+1; i++){
 		for(let j = 1; j < tr[0].childElementCount; j++){
 			table.rows[i].cells[j].addEventListener("click", Get1stRowCell.bind(null, i, j));
