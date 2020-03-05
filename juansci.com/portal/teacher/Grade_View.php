@@ -140,7 +140,7 @@
                         Outstanding                 90-100      Passed
                         Very Satisfactory           85-89       Passed
                         Satisfactory                80-84       Passed
-                        Fairly Satisfactory          75-79       Passed
+                        Fairly Satisfactory         75-79       Passed
                         Did Not Meet Expectations   Below-75    Failed
                     </pre>
                 </div>
@@ -248,7 +248,7 @@
                 <input type="hidden" name="adviserName" value="">
        
 
-        <?php if($_SESSION['AccessType'] === 'teacher') { ?>
+        <?php if($_SESSION['AccessType'] === '') { ?>
         <div class="hide-on-print float-right d-inline-block mb-5">
             <select id="print-select" class="form-control-sm">
             <option>Outer Page</option>
@@ -316,6 +316,8 @@
     <script src="js/cms.js" type="text/javascript"></script>
     <script src="js/modal.js" type="text/javascript"></script>
     <script src="js/Grade_View.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/script.js" ></script>
+    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

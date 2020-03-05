@@ -179,3 +179,8 @@ body {
 .send-to-front{
   z-index: 9999;
 }
+select{
+  height: 25px;
+  width: 200px;
+  float: right;
+}

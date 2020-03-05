@@ -66,7 +66,7 @@
         </a>
         <!-- <p style="text-align: left;">* - REQUIRED</p> -->
           <div class="ml-auto d-none d-md-block">
-            <a href="" class="btn btn-danger text-light" style="">Manage Home</a>
+            
             <a href="" class="btn btn-danger text-light" style="display: none;"></a>
             <a href="" class="btn btn-danger text-light" style="display: none;"></a>
             <!-- <a href="../" class="btn btn-danger text-light">Manage Home</a> -->
@@ -76,15 +76,8 @@
 
       <nav class="d-md-block bg-white sidebar shadow collapse navbar-collapse" id="navbarNav">
         <div class="sidebar-sticky">
-        <img src="../../pictures/logo2.png" width="200px" class="ml-2 mt-2 mb-4">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a id="dashboard" class="nav-link" href="dashboard.php">
-                <span data-feather="home"></span>
-                <i class="fas fa-tachometer-alt mr-2"></i>
-                Dashboard <span class="sr-only">(current)</span>
-              </a>
-            </li>
+        <img src="../../pictures/logo2.png" width="200px" class="ml-2 mt-3 mb-5">
+          <ul class="nav flex-column mt-2">
             <li class="nav-item dropdown">
               <a id="student" class="nav-link dropdown-toggle" href="#" 
               id="studentsDropdown" role="button" data-toggle="dropdown" 
@@ -132,7 +125,7 @@
                 Sections
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-5">
               <a id="schedule" class="nav-link" href="ScheduleCreation.php">
                 <i class="fas fa-clock mr-2"></i>
                 Schedules
