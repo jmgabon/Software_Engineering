@@ -217,7 +217,7 @@
               <a id="setting" class="nav-link dropdown-toggle" href="#" 
                 id="settingsDropdown" role="button" data-toggle="dropdown" 
                 aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-clock mr-2"></i>
+                <i class="fas fa-cog mr-2"></i>
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">

@@ -234,6 +234,8 @@
     <script src="../js/cms.js" type="text/javascript"></script>
     <script src="../js/modal.js" type="text/javascript"></script>
     <script src="../js/Student_Record.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/script.js" ></script>
+    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

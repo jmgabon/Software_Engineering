@@ -1,49 +1,49 @@
-"SubjectCode","SubjectDescription","GradeLevel","Frequency","DateCreated","User"
-"AP 10","Araling Panlipunan (AP) 10","10","3","2020-01-31 14:26:00","admin"
-"AP 7","Araling Panlipunan (AP) 7","7","3","2020-01-30 10:05:42","admin"
-"AP 8","Araling Panlipunan (AP) 8","8","3","2020-01-31 14:26:08","admin"
-"AP 9","Araling Panlipunan (AP) 9","9","3","2020-01-31 14:26:14","admin"
-"ENG 10","English 10","10","4","2020-01-31 14:26:20","admin"
-"ENG 7 ","English 7","7","4","2020-01-30 10:11:46","admin"
-"ENG 8","English 8","8","4","2020-01-31 14:26:28","admin"
-"ENG 9","English 9","9","4","2020-01-31 14:26:34","admin"
-"ESP 10","	Edukasyon sa Pagpapakatao (EsP) 10","10","3","2020-01-31 14:26:43","admin"
-"ESP 7","Edukasyon sa Pagpapakatao (EsP) 7","7","2","2020-01-30 10:06:14","admin"
-"ESP 8","	Edukasyon sa Pagpapakatao (EsP) 8","8","3","2020-01-31 14:26:49","admin"
-"ESP 9","	Edukasyon sa Pagpapakatao (EsP) 9","9","3","2020-01-31 14:26:53","admin"
-"FIL 10","Filipino 10","10","4","2020-01-31 14:27:01","admin"
-"FIL 7","Filipino 7","7","4","2020-01-30 10:06:29","admin"
-"FIL 8","Filipino 8","8","4","2020-01-31 14:27:06","admin"
-"FIL 9","Filipino 9","9","4","2020-01-31 14:27:16","admin"
-"FOLA 10","Foreign Language II 10","10","4","2020-01-31 14:27:44","admin"
-"FOLA 9","Foreign Language I 9","9","4","2020-01-31 14:30:26","admin"
-"HOMEROOM 10","Homeroom 10","10","1","2020-01-31 14:27:58","admin"
-"HOMEROOM 7","Homeroom 7","7","1","2020-02-24 22:40:30","admin"
-"HOMEROOM 8","Homeroom 8","8","1","2020-02-24 22:40:15","admin"
-"HOMEROOM 9","Homeroom 9","9","1","2020-02-24 22:40:00","admin"
-"MAPEH 10","MAPEH 10","10","3","2020-01-31 14:28:06","admin"
-"MAPEH 7","MAPEH 7","7","4","2020-01-31 08:50:01","admin"
-"MAPEH 8","MAPEH 8","8","4","2020-01-31 14:28:12","admin"
-"MAPEH 9","MAPEH 9","9","4","2020-01-31 14:28:16","admin"
-"MATH 10A","Mathematics 10","10","4","2020-01-31 14:28:32","admin"
-"MATH 10B","____ (Math B) 10","10","4","2020-01-31 14:29:56","admin"
-"MATH 7A","Mathematics 7","7","4","2020-01-30 10:07:07","admin"
-"MATH 7B","Geometry (Math B) 7","7","4","2020-01-30 10:08:12","admin"
-"MATH 8A","Mathematics 8","8","4","2020-01-31 14:29:06","admin"
-"MATH 8B","____ (Math B) 8","8","4","2020-01-31 14:30:01","admin"
-"MATH 9A","Mathematics 9","9","4","2020-01-31 14:29:15","admin"
-"MATH 9B","____ (Math B) 9","9","4","2020-01-31 14:30:07","admin"
-"RESEARCH 7","Research I 7","7","4","2020-01-30 10:11:36","admin"
-"RESEARCH 8","Research II 8","8","4","2020-01-31 14:30:17","admin"
-"SCI 10A","Science 10","10","4","2020-01-31 14:31:19","admin"
-"SCI 10B","____ (Science B) 10","10","4","2020-01-31 14:30:51","admin"
-"SCI 7A","Science 7","7","4","2020-01-30 10:07:43","admin"
-"SCI 7B","BioTech (Science B) 7","7","4","2020-01-30 10:08:18","admin"
-"SCI 8A","Science 8","8","4","2020-01-31 14:31:25","admin"
-"SCI 8B","____ (Science B) 8","8","4","2020-01-31 14:30:59","admin"
-"SCI 9A","Science 9","9","4","2020-01-31 14:31:30","admin"
-"SCI 9B","____ (Science B) 9","9","4","2020-01-31 14:31:05","admin"
-"TLE 10","Technology and Livelihood Education (TLE) 10","10","4","2020-01-31 14:31:39","admin"
-"TLE 7","Technology and Livelihood Education (TLE) 7","7","4","2020-01-30 10:08:31","admin"
-"TLE 8","Technology and Livelihood Education (TLE) 8","8","4","2020-01-31 14:31:43","admin"
-"TLE 9","Technology and Livelihood Education (TLE) 9","9","4","2020-01-31 14:31:47","admin"
+SubjectCode,SubjectDescription,GradeLevel,Frequency,DateCreated
+AP 10,Araling Panlipunan (AP) 10,10,3,31/01/2020 14:26
+AP 7,Araling Panlipunan (AP) 7,7,3,30/01/2020 10:05
+AP 8,Araling Panlipunan (AP) 8,8,3,31/01/2020 14:26
+AP 9,Araling Panlipunan (AP) 9,9,3,31/01/2020 14:26
+ENG 10,English 10,10,4,31/01/2020 14:26
+ENG 7 ,English 7,7,4,30/01/2020 10:11
+ENG 8,English 8,8,4,31/01/2020 14:26
+ENG 9,English 9,9,4,31/01/2020 14:26
+ESP 10,"	Edukasyon sa Pagpapakatao (EsP) 10",10,3,31/01/2020 14:26
+ESP 7,Edukasyon sa Pagpapakatao (EsP) 7,7,2,30/01/2020 10:06
+ESP 8,"	Edukasyon sa Pagpapakatao (EsP) 8",8,3,31/01/2020 14:26
+ESP 9,"	Edukasyon sa Pagpapakatao (EsP) 9",9,3,31/01/2020 14:26
+FIL 10,Filipino 10,10,4,31/01/2020 14:27
+FIL 7,Filipino 7,7,4,30/01/2020 10:06
+FIL 8,Filipino 8,8,4,31/01/2020 14:27
+FIL 9,Filipino 9,9,4,31/01/2020 14:27
+FOLA 10,Foreign Language II 10,10,4,31/01/2020 14:27
+FOLA 9,Foreign Language I 9,9,4,31/01/2020 14:30
+HOMEROOM 10,Homeroom 10,10,1,31/01/2020 14:27
+HOMEROOM 7,Homeroom 7,7,1,24/02/2020 22:40
+HOMEROOM 8,Homeroom 8,8,1,24/02/2020 22:40
+HOMEROOM 9,Homeroom 9,9,1,24/02/2020 22:40
+MAPEH 10,MAPEH 10,10,3,31/01/2020 14:28
+MAPEH 7,MAPEH 7,7,4,31/01/2020 8:50
+MAPEH 8,MAPEH 8,8,4,31/01/2020 14:28
+MAPEH 9,MAPEH 9,9,4,31/01/2020 14:28
+MATH 10A,Mathematics 10,10,4,31/01/2020 14:28
+MATH 10B,____ (Math B) 10,10,4,31/01/2020 14:29
+MATH 7A,Mathematics 7,7,4,30/01/2020 10:07
+MATH 7B,Geometry (Math B) 7,7,4,30/01/2020 10:08
+MATH 8A,Mathematics 8,8,4,31/01/2020 14:29
+MATH 8B,____ (Math B) 8,8,4,31/01/2020 14:30
+MATH 9A,Mathematics 9,9,4,31/01/2020 14:29
+MATH 9B,____ (Math B) 9,9,4,31/01/2020 14:30
+RESEARCH 7,Research I 7,7,4,30/01/2020 10:11
+RESEARCH 8,Research II 8,8,4,31/01/2020 14:30
+SCI 10A,Science 10,10,4,31/01/2020 14:31
+SCI 10B,____ (Science B) 10,10,4,31/01/2020 14:30
+SCI 7A,Science 7,7,4,30/01/2020 10:07
+SCI 7B,BioTech (Science B) 7,7,4,30/01/2020 10:08
+SCI 8A,Science 8,8,4,31/01/2020 14:31
+SCI 8B,____ (Science B) 8,8,4,31/01/2020 14:30
+SCI 9A,Science 9,9,4,31/01/2020 14:31
+SCI 9B,____ (Science B) 9,9,4,31/01/2020 14:31
+TLE 10,Technology and Livelihood Education (TLE) 10,10,4,31/01/2020 14:31
+TLE 7,Technology and Livelihood Education (TLE) 7,7,4,30/01/2020 10:08
+TLE 8,Technology and Livelihood Education (TLE) 8,8,4,31/01/2020 14:31
+TLE 9,Technology and Livelihood Education (TLE) 9,9,4,31/01/2020 14:31

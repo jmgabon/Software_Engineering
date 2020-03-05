@@ -3,7 +3,7 @@
     $('#lead').text('Report Card Settings');
     $('#setting').addClass('active');
 </script>
-<div class="content-main mt-5">
+<div class="newcontainer mt-5">
     <style>
         .ul {
             margin: 0;
@@ -43,7 +43,7 @@
                 <ul class="ul mt-4" id="uListSubject"></ul>
             </div>
 
-            <div class = "col mt-4">
+            <div class = "col mt-4 mb-4">
                 <button id="btnSaveSubj">SAVE Subject Arrangement</button>
             </div>
         </div>
