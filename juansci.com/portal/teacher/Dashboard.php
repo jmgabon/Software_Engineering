@@ -29,7 +29,6 @@
     $('#lead').text('Main Menu');
     $('#back-to-menu').addClass('d-none');
 </script>
-<script>console.log('aww')</script>     
 <script>console.log('teachernum: ' + '<?php echo $col[0] ?>')</script>     
     <div class="newcontainer">
         <div class="row mt-5">

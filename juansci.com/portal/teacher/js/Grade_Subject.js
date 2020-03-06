@@ -15,38 +15,178 @@ const wrapperGradeViewMain = (function(wrapSubj) {
 //
 
 
-let quarterSelected;
-let teacherEmployeeNum;
-let jsonQuarter;
-let gradeCaseValue;
-
-let newGradeCaseValue;
-
-let SectionNum;
-let Quarter;
-let jsonStudent;
-let jsonGrade;
-let SubjectCode;
 let parent_id;
-let selectMAPEH = document.querySelector('#selectMAPEH');
-let colNum = document.querySelector('table thead tr').childElementCount + 3;
+let jsonStudent;
+let jsonQuarter;
+let jsonGrade;
+let quarterSelected;
 
-const tbody = document.querySelector('table tbody');
+let Quarter;
+let SectionNum;
+let SubjectCode;
+
+let newCase;
+let currCase;
+
+
+const txt_Adviser = document.querySelector('#txt_Adviser');
 const txt_Section = document.querySelector('#txt_Section');
-const input_SubjectCode = document.querySelector('#input_SubjectCode');
 const txt_GradeLevel = document.querySelector('#txt_GradeLevel');
 const txt_SubjectCode = document.querySelector('#txt_SubjectCode');
-const txt_Adviser = document.querySelector('#txt_Adviser');
+const input_SubjectCode = document.querySelector('#input_SubjectCode');
+
+const modal_button = document.querySelector('.modal-button');
 const modal_body = document.querySelector('#modal-body');
-const button = document.querySelectorAll('button');
+
 const labelMAPEH = document.querySelector('#labelMAPEH');
+const selectMAPEH = document.querySelector('#selectMAPEH');
 
 const btn_approve = document.querySelector('#btn_approve');
 const btn_disapprove = document.querySelector('#btn_disapprove');
 
-console.log('accessRole: ' + accessRole);
+const tbody = document.querySelector('table tbody');
+const colNum = (document.querySelector('table thead tr').childElementCount + 3);
 
-function setAdviserNameDB() {
+
+
+let modalSubject = function() {
+    modal_button.addEventListener('click', function() {
+        let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser';
+        let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser';
+        CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
+
+        let cat = document.querySelector('#modal-body select');
+        let hiddenCol = 'SectionNum@TeacherNum';
+        const searchSubject = document.querySelector('#SearchSubject');
+        theadID += '@' + hiddenCol;
+        theadHTML += '@' + hiddenCol;
+        CreateTable('SearchSubjectTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
+
+        document.querySelector('thead').className = 'dark';
+        openModal('Select Subject', 'Subject');
+
+        let Search = function() {
+            let query = '';
+
+            query += 'SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ';
+            query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
+            query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
+            query += 'main_section.SectionNum, main_subject.TeacherNum ';
+            query += 'FROM main_subject ';
+            query += 'INNER JOIN main_section ';
+            query += 'ON main_subject.SectionNum = main_section.SectionNum ';
+            query += 'JOIN main_teacher ';
+            query += 'ON main_subject.TeacherNum = main_teacher.TeacherNum ';
+
+            if (accessType === 'teacher') {
+                query += 'WHERE main_subject.TeacherNum = ' + teacherNum + ' ';
+            } else {
+                query += 'ORDER BY Adviser ASC';
+            }
+
+            if (searchSubject.value !== '') {
+                let queryHaving;
+
+                if (cat.options[cat.selectedIndex].value === 'Adviser') {
+                    queryHaving = 'HAVING ';
+                } else {
+                    queryHaving = 'AND ';
+                }
+
+                query += queryHaving + cat.options[cat.selectedIndex].value + ' LIKE "' + searchSubject.value + '%"';
+            }
+
+            SimplifiedQuery('SELECT', query, searchSubject, getSubject);
+        }
+        Search();
+
+        searchSubject.addEventListener('change', Search);
+        cat.addEventListener('change', () => {
+            searchSubject.value = '';
+            Search();
+        });
+    });
+}
+
+
+let getSubject = function(xhttp) {
+    console.log(JSON.parse(xhttp.responseText));
+    CreateTBody(xhttp, getSubject);
+    const tbody_tr = document.querySelectorAll('#SearchSubjectTable tbody tr');
+
+    for (let i = 0; i < tbody_tr.length; i++) {
+        tbody_tr[i].addEventListener('click', function() {
+            document.querySelector('#SearchSubject').value = '';
+            closeModal(modal_body);
+
+            SectionNum = this.childNodes[4].innerHTML;
+            teacherNum = this.childNodes[5].innerHTML;
+            SubjectCode = this.childNodes[0].innerHTML;
+            txt_Section.innerHTML = this.childNodes[1].innerHTML;
+            txt_GradeLevel.innerHTML = this.childNodes[2].innerHTML;
+
+            input_SubjectCode.value = SubjectCode;
+            txt_SubjectCode.innerHTML = SubjectCode;
+
+            displayAfterModal();
+
+            console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+        });
+
+        tbody_tr[i].addEventListener('mouseover', function() {
+            this.style.backgroundColor = 'maroon';
+            this.style.color = 'white';
+        });
+
+        tbody_tr[i].addEventListener('mouseout', function() {
+            this.style.backgroundColor = '';
+            this.style.color = '';
+        });
+    }
+}
+
+
+let displayAfterModal = function() {
+    btn_approve.style.display = 'none';
+    btn_disapprove.style.display = 'none';
+
+    if (input_SubjectCode.value === 'MAPEH 7' ||
+        input_SubjectCode.value === 'MAPEH 8' ||
+        input_SubjectCode.value === 'MAPEH 9' ||
+        input_SubjectCode.value === 'MAPEH 10') {
+        labelMAPEH.style.display = 'block';
+        selectMAPEH.value = selectMAPEH.options[0].value;
+
+        RemoveChildNodes(tbody);
+        textCaseStatus('cls');
+        setAdviserName();
+        setQuarterDB();
+
+    } else {
+        labelMAPEH.style.display = 'none';
+
+        RemoveChildNodes(tbody);
+        setCaseStatus();
+        setAdviserName();
+        setQuarterDB();
+        setStudentListDB();
+    }
+}
+
+
+let setSubMAPEH = function() {
+    SubjectCode = selectMAPEH.value + ' ' + txt_GradeLevel.innerHTML;
+    txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
+
+    RemoveChildNodes(tbody);
+    setCaseStatus();
+    setStudentListDB();
+
+    console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+}
+
+
+let setAdviserName = function() {
     let query = '';
     txt_Adviser.innerHTML = '';
 
@@ -69,139 +209,7 @@ function setAdviserNameDB() {
 }
 
 
-openSubjectModal = button[0];
-openSubjectModal.addEventListener('click', function() {
-    let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser';
-    let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser';
-    CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
-
-    let cat = document.querySelector('#modal-body select');
-    let hiddenCol = 'SectionNum@TeacherNum';
-    const searchSubject = document.querySelector('#SearchSubject');
-    theadID += '@' + hiddenCol;
-    theadHTML += '@' + hiddenCol;
-    CreateTable('SearchSubjectTable', theadID, theadHTML, '@', modal_body, 0, hiddenCol);
-
-    document.querySelector('thead').className = 'dark';
-    openModal('Select Subject', 'Subject');
-
-    let Search = function() {
-        let query = '';
-
-        query += 'SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ';
-        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
-        query += 'main_section.SectionNum, main_subject.TeacherNum ';
-        query += 'FROM main_subject ';
-        query += 'INNER JOIN main_section ';
-        query += 'ON main_subject.SectionNum = main_section.SectionNum ';
-        query += 'JOIN main_teacher ';
-        query += 'ON main_subject.TeacherNum = main_teacher.TeacherNum ';
-
-        if (accessRole === 'teacher') {
-            query += 'WHERE main_subject.TeacherNum = ' + EmployeeNum + ' ';
-        } else {
-            query += 'ORDER BY Adviser ASC';
-        }
-
-        if (searchSubject.value !== '') {
-            let queryHaving;
-
-            if (cat.options[cat.selectedIndex].value === 'Adviser') {
-                queryHaving = 'HAVING ';
-            } else {
-                queryHaving = 'AND ';
-            }
-
-            query += queryHaving + cat.options[cat.selectedIndex].value + ' LIKE "' + searchSubject.value + '%"';
-        }
-
-        SimplifiedQuery('SELECT', query, searchSubject, getSubject);
-    }
-    Search();
-
-    searchSubject.addEventListener('change', Search);
-    cat.addEventListener('change', () => {
-        searchSubject.value = '';
-        Search();
-    });
-});
-
-
-let displayAfterClickModal = function() {
-    setGradeCase();
-
-    if (input_SubjectCode.value === 'MAPEH 7' ||
-        input_SubjectCode.value === 'MAPEH 8' ||
-        input_SubjectCode.value === 'MAPEH 9' ||
-        input_SubjectCode.value === 'MAPEH 10') {
-        labelMAPEH.style.display = 'block';
-        selectMAPEH.value = selectMAPEH.options[0].value;
-        RemoveChildNodes(tbody);
-        setQuarterDB();
-        setAdviserNameDB();
-
-    } else {
-        labelMAPEH.style.display = 'none';
-        RemoveChildNodes(tbody);
-        setQuarterDB();
-        setAdviserNameDB();
-        setStudentListDB();
-    }
-}
-
-
-function getSubject(xhttp) {
-    console.log(JSON.parse(xhttp.responseText));
-    CreateTBody(xhttp, getSubject);
-    const tbody_tr = document.querySelectorAll('#SearchSubjectTable tbody tr');
-
-    for (let i = 0; i < tbody_tr.length; i++) {
-        tbody_tr[i].addEventListener('click', function() {
-            document.querySelector('#SearchSubject').value = '';
-            closeModal(modal_body);
-
-            SectionNum = this.childNodes[4].innerHTML;
-            teacherEmployeeNum = this.childNodes[5].innerHTML;
-            console.log('teacherEmployeeNum: ' + teacherEmployeeNum)
-            SubjectCode = this.childNodes[0].innerHTML;
-            txt_Section.innerHTML = this.childNodes[1].innerHTML;
-            txt_GradeLevel.innerHTML = this.childNodes[2].innerHTML;
-
-            input_SubjectCode.value = SubjectCode;
-            txt_SubjectCode.innerHTML = SubjectCode;
-
-            displayAfterClickModal();
-
-            console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
-        });
-
-        tbody_tr[i].addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'maroon';
-            this.style.color = 'white';
-        });
-
-        tbody_tr[i].addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
-            this.style.color = '';
-        });
-    }
-}
-
-
-function setStudentListDB() {
-    let query = '';
-
-    query += 'SELECT main_student.LRNNum, main_student.LastName, main_student.ExtendedName, main_student.FirstName, main_student.MiddleName ';
-    query += 'FROM main_student ';
-    query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-    query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ') ';
-
-    SimplifiedQuery('SELECT', query, '', tBodyGrade);
-}
-
-
-function setQuarterDB() {
+let setQuarterDB = function() {
     let query = '';
 
     query += 'SELECT SettingValue ';
@@ -212,7 +220,7 @@ function setQuarterDB() {
 };
 
 
-function getQuarter(xhttp) {
+let getQuarter = function(xhttp) {
     try {
         jsonQuarter = JSON.parse(xhttp.responseText);
         quarterSelected = jsonQuarter[0]['SettingValue'];
@@ -225,32 +233,29 @@ function getQuarter(xhttp) {
 }
 
 
-function setSubMAPEH() {
-    SubjectCode = selectMAPEH.value + ' ' + txt_GradeLevel.innerHTML;
-    txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
-
-    RemoveChildNodes(tbody);
-    setStudentListDB();
-
-    console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
-}
-
-
-function enablerQuarter(q) {
-    if (accessRole === 'principal' || accessRole === 'coordinator') {
-        return true
-    }
-
+let enablerQuarter = function(q, currCase) {
     if (q == quarterSelected &&
-        (gradeCaseValue == 1 || gradeCaseValue == 2 || gradeCaseValue == 3)) {
+        (currCase == 1 || currCase == 2 || currCase == 3)) {
         return false
     }
+
     return true
 }
 
 
-function tBodyGrade(xhttp) {
+let setStudentListDB = function() {
+    let query = '';
 
+    query += 'SELECT main_student.LRNNum, main_student.LastName, main_student.ExtendedName, main_student.FirstName, main_student.MiddleName ';
+    query += 'FROM main_student ';
+    query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
+    query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ') ';
+
+    SimplifiedQuery('SELECT', query, '', tBodyGrade);
+}
+
+
+let tBodyGrade = function(xhttp) {
     try {
         let tr, td, input_quarter, button_save;
 
@@ -265,12 +270,12 @@ function tBodyGrade(xhttp) {
                     td = document.createElement('td');
 
 
-                    function setInputGrade(i) {
+                    let setInputGrade = function(i) {
                         input_quarter = document.createElement('input');
                         input_quarter.setAttribute('type', 'input');
                         input_quarter.setAttribute('style', 'width:3em');
                         input_quarter.setAttribute('maxlength', '3');
-                        input_quarter.disabled = enablerQuarter(i);
+                        input_quarter.disabled = enablerQuarter(i, currCase);
 
                         switch (i) {
                             case 1:
@@ -289,10 +294,10 @@ function tBodyGrade(xhttp) {
                         td.appendChild(input_quarter);
                     }
 
-                    function setSaveButton(i) {
-                        if (accessRole === 'teacher') {
+                    let setSaveButton = function(i) {
+                        if (accessType === 'teacher') {
                             button_save = document.createElement('button');
-                            button_save.disabled = enablerQuarter(i);
+                            button_save.disabled = enablerQuarter(i, currCase);
 
                             switch (i) {
                                 case 1:
@@ -366,7 +371,7 @@ function tBodyGrade(xhttp) {
 
             setGradeDB();
 
-            if (accessRole === 'teacher') {
+            if (accessType === 'teacher') {
                 const save1 = document.querySelector('#save1');
                 const save2 = document.querySelector('#save2');
                 const save3 = document.querySelector('#save3');
@@ -406,7 +411,7 @@ function tBodyGrade(xhttp) {
 }
 
 
-function setGradeDB() {
+let setGradeDB = function() {
     let query = '';
 
     query += 'SELECT main_student.LRNNum, grade_subject.GradeLevel, grade_subject.SubjectCode, ';
@@ -429,7 +434,7 @@ function setGradeDB() {
 }
 
 
-function getGradeDB(xhttp) {
+let getGradeDB = function(xhttp) {
     try {
         jsonGrade = JSON.parse(xhttp.responseText);
         console.log('Student(s) with Grade: ' + jsonGrade.length);
@@ -444,7 +449,7 @@ function getGradeDB(xhttp) {
 }
 
 
-function insertGrade() {
+let insertGrade = function() {
     const q1 = document.querySelectorAll('#q1');
     const q2 = document.querySelectorAll('#q2');
     const q3 = document.querySelectorAll('#q3');
@@ -468,11 +473,11 @@ function insertGrade() {
         }
     }
 
-    getFinalAndRemark();
+    computeFinalAndRemark();
 }
 
 
-function checkValidInput() {
+let checkValidInput = function() {
     for (let i = 0; i < jsonStudent.length; i++) {
         let GradeRating = document.querySelectorAll('#q' + Quarter)[i].value;
 
@@ -493,7 +498,7 @@ function checkValidInput() {
 }
 
 
-function saveGrade() {
+let saveGrade = function() {
     if (checkValidInput()) {
         let GradeID;
         let found;
@@ -546,67 +551,33 @@ function saveGrade() {
 
         alert('QUARTER ' + Quarter + ' GRADES SAVED');
         console.log('QUARTER ' + Quarter + ' GRADES SAVED');
-        setGradeDB();
 
-        //
-        changeGradeCase();
-        textCaseStatus(newGradeCaseValue);
-
-        save1.disabled = true;
-        save2.disabled = true;
-        save3.disabled = true;
-        save4.disabled = true;
-        //
+        // setGradeDB();
+        updateCaseStatus(4);
+        RemoveChildNodes(tbody);
+        setStudentListDB();
     } else {
         alert('Invalid input! Check all grades.');
     }
 }
 
 
-let changeGradeCase = function() {
-    switch (gradeCaseValue) {
-        case 0:
-            break;
-        case 1:
-            newGradeCaseValue = 4;
-            break;
-        case 2:
-            newGradeCaseValue = 4;
-            break;
-        case 3:
-            newGradeCaseValue = 5;
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-    }
-
-    let query = '';
-
-    query += 'UPDATE grade_case ';
-    query += 'SET CaseValue = ' + newGradeCaseValue + ' ';
-    if (accessRole === 'teacher') {
-        query += 'WHERE TeacherNum = ' + EmployeeNum + ' ';
-        query += 'AND SubjectCode = "' + SubjectCode + '" ';
-    } else if (accessRole === 'principal' || accessRole === 'coordinator') {
-        query += 'WHERE TeacherNum = ' + teacherEmployeeNum + ' ';
-        query += 'AND SubjectCode = "' + SubjectCode + '" ';
-    }
-
-    console.log(query);
-
-    SimplifiedQuery('UPDATE', query, '', () => null);
-}
-
-
-function getFinalAndRemark() {
+let computeFinalAndRemark = function() {
     let finalRating;
     const CreateGradeTable = document.querySelector('#CreateGradeTable');
 
     for (let i = 0; i < jsonStudent.length; i++) {
         CreateGradeTable.rows[i + 2].cells[6].innerHTML = '';
         CreateGradeTable.rows[i + 2].cells[7].innerHTML = '';
+
+        let completeGrade = function() {
+            CreateGradeTable.rows[i + 2].cells[6].innerHTML = finalRating.toFixed(0);
+
+            if (finalRating >= 75)
+                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'PASSED';
+            else
+                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'FAILED';
+        }
 
         if (jsonStudent.length > 1) {
             if (q1[i].value != '' && q2[i].value != '' && q3[i].value != '' && q4[i].value != '') {
@@ -623,15 +594,35 @@ function getFinalAndRemark() {
                 completeGrade();
             }
         }
+    }
+}
 
-        function completeGrade() {
-            CreateGradeTable.rows[i + 2].cells[6].innerHTML = finalRating.toFixed(0);
 
-            if (finalRating >= 75)
-                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'PASSED';
-            else
-                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'FAILED';
+let setCaseStatus = function() {
+    let query = '';
+
+    query += 'SELECT CaseValue ';
+    query += 'FROM grade_case ';
+    query += 'WHERE TeacherNum = ' + teacherNum + ' ';
+    query += 'AND SubjectCode = "' + SubjectCode + '" ';
+
+    SimplifiedQuery('SELECT', query, '', getCaseStatus);
+};
+
+
+let getCaseStatus = function(xhttp) {
+    try {
+        jsonGradeCase = JSON.parse(xhttp.responseText);
+        currCase = jsonGradeCase[0]['CaseValue'];
+
+        textCaseStatus(currCase);
+        if (accessType === 'principal' || accessType === 'coordinator') {
+            approvalChange();
         }
+    } catch (err) {
+        alert('CANNOT FIND');
+        console.log(xhttp.responseText);
+        console.log(err);
     }
 }
 
@@ -640,6 +631,9 @@ let textCaseStatus = function(val) {
     let txt_gradeCaseStatus = document.querySelector('#txt_gradeCaseStatus');
 
     switch (val) {
+        case 'cls':
+            txt_gradeCaseStatus.textContent = '';
+            break;
         case 0:
             txt_gradeCaseStatus.textContent = 'CODE0: ENCODING OF GRADES NOT STARTED YET.';
             break;
@@ -665,119 +659,135 @@ let textCaseStatus = function(val) {
 }
 
 
-let setGradeCase = function() {
+let updateCaseStatus = function(newCase) {
+    // switch (curr) {
+    //     case 1:
+    //         newCase = 4;
+    //         break;
+    //     case 2:
+    //         newCase = 4;
+    //         break;
+    //     case 3:
+    //         newCase = 5;
+    //         break;
+    // }
+
     let query = '';
 
-    query += 'SELECT CaseValue ';
-    query += 'FROM grade_case ';
-    if (accessRole === 'teacher') {
-        query += 'WHERE TeacherNum = ' + EmployeeNum + ' ';
-        query += 'AND SubjectCode = "' + SubjectCode + '" ';
-    } else if (accessRole === 'principal' || accessRole === 'coordinator') {
-        query += 'WHERE TeacherNum = ' + teacherEmployeeNum + ' ';
-        query += 'AND SubjectCode = "' + SubjectCode + '" ';
-    }
+    query += 'UPDATE grade_case ';
+    query += 'SET CaseValue = ' + newCase + ' ';
+    query += 'WHERE TeacherNum = ' + teacherNum + ' ';
+    query += 'AND SubjectCode = "' + SubjectCode + '" ';
 
-    SimplifiedQuery('SELECT', query, '', getGradeCase);
-};
+    SimplifiedQuery('UPDATE', query, '', () => null);
+
+    console.log(query);
+    currCase = newCase;
+    textCaseStatus(newCase);
+}
 
 
-let getGradeCase = function(xhttp) {
-    try {
-        jsonGradeCase = JSON.parse(xhttp.responseText);
-        gradeCaseValue = jsonGradeCase[0]['CaseValue'];
+let approvalListeners = function() {
+    btn_approve.addEventListener('click', () => {
+        let principalApproved = function() {
+            for (let i = 0; i < jsonStudent.length; i++) {
+                let query = '';
 
-        if (accessRole === 'coordinator') {
-            if (gradeCaseValue === 4) {
-                btn_approve.disabled = false;
-                btn_disapprove.disabled = false;
-            } else {
-                btn_approve.disabled = true;
-                btn_disapprove.disabled = true;
-            }
-        } else if (accessRole === 'principal') {
-            if (gradeCaseValue === 5) {
-                btn_approve.disabled = false;
-                btn_disapprove.disabled = false;
-            } else {
-                btn_approve.disabled = true;
-                btn_disapprove.disabled = true;
+                query += 'UPDATE grade_subject ';
+                query += 'SET Status = "APPROVED" ';
+                query += 'WHERE LRNNum = "' + jsonStudent[i][0] + '" ';
+                query += 'AND GradeLevel = "' + txt_GradeLevel.innerHTML + '" ';
+                query += 'AND SubjectCode = "' + SubjectCode + '" ';
+                query += 'AND Quarter = "' + quarterSelected + '" ';
+
+                SimplifiedQuery('UPDATE', query, '', () => null);
             }
         }
 
-        textCaseStatus(gradeCaseValue);
-    } catch (err) {
-        alert('CANNOT FIND');
-        console.log(xhttp.responseText);
-        console.log(err);
+        let isConfirmed = function(newCase) {
+            updateCaseStatus(newCase);
+
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+        }
+
+
+        if (accessType === 'coordinator') {
+            if (confirm("Do you want to approve?")) {
+                isConfirmed(5);
+                alert('Grades can now be evaluated by the principal!');
+            } else {
+                alert('Cancelled.');
+            }
+        } else if (accessType === 'principal') {
+            if (confirm("Do you want to approve?")) {
+                principalApproved();
+                isConfirmed(6);
+                alert('Grades can now be viewed by the adviser!');
+            } else {
+                alert('Cancelled.');
+            }
+        }
+    });
+
+    btn_disapprove.addEventListener('click', () => {
+        let isConfirmed = function(newCase) {
+            updateCaseStatus(newCase);
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+            alert('Subject teachers can now be allowed to fix grades.');
+        }
+
+        if (confirm("Do you want to disapprove?")) {
+            if (accessType === 'coordinator') {
+                isConfirmed(2);
+            } else if (accessType === 'principal') {
+                isConfirmed(3);
+            }
+        } else {
+            alert('Cancelled.');
+        }
+    });
+}
+
+
+let approvalChange = function() {
+    // 0	DISABLED T. ENCODING OF GRADES NOT STARTED YET.
+    // 1	ENABLED T. SUBJECT TEACHERS GRADING FOR THE FIRST TIME. IF SAVED, DISABLE. GOTO 4.
+    // 2	ENABLED T. ALREADY VIEWED BY C, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 4.
+    // 3	ENABLED T. ALREADY VIEWED BY P, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 5.
+    // 4	DISABLED C. C IS EVALUATING. IF NEEDS CORRECTION, GOTO 2. ELSE, GOTO 5.
+    // 5	DISABLED P. P IS EVALUATING. IF NEEDS CORRECTION, GOTO 3. ELSE, GOTO 6.
+    // 6	DISABLED T. GRADES ARE NOW ACCESSIBLE. PENDING -> APPROVED (`grade_subject`/`Status`).
+
+    btn_approve.style.display = 'block';
+    btn_disapprove.style.display = 'block';
+
+
+    if (accessType === 'coordinator') {
+        if (currCase === 4) {
+            btn_approve.disabled = false;
+            btn_disapprove.disabled = false;
+        } else {
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+        }
+    } else if (accessType === 'principal') {
+        if (currCase === 5) {
+            btn_approve.disabled = false;
+            btn_disapprove.disabled = false;
+        } else {
+            btn_approve.disabled = true;
+            btn_disapprove.disabled = true;
+        }
     }
 }
 
 
 
 let init = (function() {
-    // 0	DISABLED T. ENCODING OF GRADES NOT STARTED YET.
-    // 1	ENABLED T. SUBJECT TEACHERS GRADING FOR THE FIRST TIME. IF SAVED, DISABLE. GOTO 4.
-    // 2	ENABLED T. ALREADY VIEWED BY AC, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 4.
-    // 3	ENABLED T. ALREADY VIEWED BY P, BUT NEEDS CORRECTION. IF SAVED, DISABLE. GOTO 5.
-    // 4	DISABLED AC. AC IS EVALUATING. IF NEEDS CORRECTION, GOTO 2. ELSE, GOTO 5.
-    // 5	DISABLED P. P IS EVALUATING. IF NEEDS CORRECTION, GOTO 3. ELSE, GOTO 6.
-    // 6	DISABLED T. GRADES ARE NOW ACCESSIBLE. PENDING -> APPROVED (`grade_subject`/`Status`).
-
-    if (accessRole === 'principal' || accessRole === 'coordinator') {
-        btn_approve.style.display = 'block';
-        btn_disapprove.style.display = 'block';
-
-
-        btn_approve.addEventListener('click', () => {
-            if (accessRole === 'principal') {
-                newGradeCaseValue = 6;
-
-                if (confirm("Do you want to store grades to the database?")) {
-                    for (let i = 0; i < jsonStudent.length; i++) {
-                        let query = '';
-
-                        query += 'UPDATE grade_subject ';
-                        query += 'SET Status = "APPROVED" ';
-                        query += 'WHERE LRNNum = "' + jsonStudent[i][0] + '" ';
-                        query += 'AND GradeLevel = "' + txt_GradeLevel.innerHTML + '" ';
-                        query += 'AND SubjectCode = "' + SubjectCode + '" ';
-                        query += 'AND Quarter = "' + quarterSelected + '" ';
-
-                        console.log(query);
-
-                        SimplifiedQuery('UPDATE', query, '', () => null);
-                    }
-
-                    alert('Approved. Grades are stored to the database!');
-                } else {
-                    alert('Cancelled.');
-                }
-            } else if (accessRole === 'coordinator') {
-                newGradeCaseValue = 5;
-            }
-
-            changeGradeCase();
-
-            textCaseStatus(newGradeCaseValue);
-            btn_approve.disabled = true;
-            btn_disapprove.disabled = true;
-        });
-
-        btn_disapprove.addEventListener('click', () => {
-            if (accessRole === 'principal') {
-                newGradeCaseValue = 3;
-            } else if (accessRole === 'coordinator') {
-                newGradeCaseValue = 2;
-            }
-
-            changeGradeCase();
-            alert('Needs Correction!');
-
-            textCaseStatus(newGradeCaseValue);
-            btn_approve.disabled = true;
-            btn_disapprove.disabled = true;
-        });
-
-    }
+    console.log('accessType: ' + accessType);
+    console.log('teacherNum: ' + teacherNum);
+    modalSubject();
+    approvalListeners();
 })();
