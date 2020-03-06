@@ -14,8 +14,11 @@ if(strpos($url[count($url)-1], "#") !== false){
 	$table = explode("#", $table)[0];
 }
 $temp_table = strtolower("temp_".str_replace(".php", "", $table));
+
 $main_table = str_replace("creation", "", $temp_table);
 $main_table = str_replace("registration", "", $main_table);
+$main_table = str_replace("temp", "main", $main_table);
+// $main_table = "main_"
 // $request_table = strtolower("request_".str_replace(".php", "", $table));
 // $table = strtolower("main_".str_replace(".php", "", $table));
 
@@ -52,10 +55,12 @@ foreach($content as $key => $value){  //Loops for every key-value of $content
 	// }
 }
 try{
-	// echo $temp_table;
-	$preparedStatement = "SELECT " . $primary_key . " FROM " . $temp_table . " WHERE ";
-	$preparedStatement .= $primary_key . " = '" . $primary_key_value . "' AND Action_ = '";
-	$preparedStatement .= $Action_Val . "'"; 
+	// echo $main_table;
+	// $preparedStatement = "SELECT " . $primary_key . " FROM " . $temp_table . " WHERE ";
+	// $preparedStatement .= $primary_key . " = '" . $primary_key_value . "' AND Action_ = '";
+	// $preparedStatement .= $Action_Val . "'"; 
+	$preparedStatement = "SELECT " . $primary_key . " FROM " . $main_table . " WHERE ";
+	$preparedStatement .= $primary_key . " = '" . $primary_key_value . "'"; 
 	$stmt = $db->prepare($preparedStatement);
 	$stmt->execute();
 	$row = $stmt->fetchAll();

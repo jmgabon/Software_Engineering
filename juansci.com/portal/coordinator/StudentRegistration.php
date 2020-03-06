@@ -569,14 +569,27 @@ include 'partials/header.php';
     </div>
     <!--  -->
     <p class="h5 pt-3 pb-2">Contact Details</p>
-    <p><label for="LandlineNum">Landline No.: </label><input type="text" id = "LandlineNum" name = "LandlineNum"></p>
-	<p><label for="CellphoneNum">Cellphone No.: </label><input type="text" id = "CellphoneNum" name = "CellphoneNum"></p>
+    <p>
+      <label for="LandlineNum">Landline No.: </label>
+      <!-- <input type="tel" id = "LandlineNum" name = "LandlineNum" pattern="0{1}[2-9]{1}[0-9]{8}" placeholder="02-XXXX-XXXX for Metro Manila"> -->
+      <input type="tel" id = "LandlineNum" name = "LandlineNum" minlength=6 maxlength=9 pattern="([0-9]{1,4}-[0-9]{4}|[0-3]{6})" onkeyup="if(!this.checkValidity()){
+            this.reportValidity();
+         }" placeholder="XXXX-XXXX">
+   </p>
+	<p>
+      <label for="CellphoneNum">Cellphone No.: </label>
+      <input type="tel" id = "CellphoneNum" name = "CellphoneNum" minlength=11 maxlength=13 pattern="([0]{1}[9]{1}[0-9]{9}|[+]{1}[6]{1}[3]{1}[9]{1}[0-9]{9})" onkeyup="if(!this.checkValidity()){
+            this.reportValidity();
+         }">
+   </p>
 	<p><label for="Email">Email Address: </label><input type="email" id = "Email" name = "Email"></p>
 	<!--  -->
 	<div style="margin-top: 1rem;">
 	<p>
 		<label for="Birthday">*Birthday</label>
-		<input type="date" id = "Birthday" name = "Birthday" required/>
+		<input type="date" id = "Birthday" name = "Birthday" required onblur="if(!this.checkValidity()){
+            this.reportValidity();
+         }" />
 	</p>
 	<p>
 		<label for="BirthPlace">*Place of Birth</label>
@@ -614,7 +627,9 @@ include 'partials/header.php';
 			</p>	
 			<p>
 				<label for="MotherContact">Contact No.:</label>
-				<input type="text" id = "MotherContact" name = "MotherContact"/>
+				<input type="tel" id = "MotherContact" name = "MotherContact" minlength="6" maxlength="13" pattern="([0]{1}[9]{1}[0-9]{9}|[+]{1}[0-9]{1}[0-9]{1}[9]{1}[0-9]{9}|[0-9]{1,4}-[0-9]{4}|[0-3]{6})" onkeyup="if(!this.checkValidity()){
+            this.reportValidity();
+         }"/>
 			</p>
 			<p>
 				<label for="MotherEducation">Educational Attainment:</label>
@@ -631,7 +646,9 @@ include 'partials/header.php';
 			</p>
 			<p>
 				<label for="FatherContact">Contact No.:</label>
-				<input type="text" id = "FatherContact" name = "FatherContact"/>
+				<input type="tel" id = "FatherContact" name = "FatherContact" minlength="6" maxlength="13" pattern="([0]{1}[9]{1}[0-9]{9}|[+]{1}[0-9]{1}[0-9]{1}[9]{1}[0-9]{9}|[0-9]{1,4}-[0-9]{4}|[0-3]{6})" onkeyup="if(!this.checkValidity()){
+            this.reportValidity();
+         }"/>
 			</p>	
 			<p>
 				<label for="FatherEducation">Educational Attainment:</label>
@@ -648,7 +665,9 @@ include 'partials/header.php';
 			</p>	
 			<p>
 				<label for="GuardianContact">Contact No.:</label>
-				<input type="text" id = "GuardianContact" name = "GuardianContact"/>
+				<input type="tel" id = "GuardianContact" name = "GuardianContact" minlength="6" maxlength="13" pattern="([0]{1}[9]{1}[0-9]{9}|[+]{1}[0-9]{1}[0-9]{1}[9]{1}[0-9]{9}|[0-9]{1,4}-[0-9]{4}|[0-3]{6})" onkeyup="if(!this.checkValidity()){
+            this.reportValidity();
+         }"/>
 			</p>
 			<p>
 				<label for="GuardianRelationship">Relation to the Applicant:</label>
@@ -689,6 +708,30 @@ include 'partials/footer.php';
 ?>
 
 <script type="text/javascript">
+   let Birthday = document.querySelector("#Birthday");
+   // console.log(new Date());
+   let dateToday = new Date();
+   var dd = dateToday.getDate();
+   var mm = dateToday.getMonth();
+   if(mm/10 < 1){
+      mm = '0'+mm;
+   }
+   if(dd/10 < 1){
+      dd = '0'+dd;
+   }
+   // console.log(mm);
+   var y = dateToday.getFullYear();
+
+   var maxDate = (y-10) + '-'+ mm + '-' + dd;
+   var minDate = (y-80) + '-'+ mm + '-' + dd;
+
+   Birthday.value = maxDate;
+   // Birthday.setAttributeNode("");
+   Birthday.min = minDate;
+   Birthday.max = maxDate;
+
+   // Birthday.style.display = "none";
+
 	let Permanent_Address = document.querySelector("#Permanent_Address");
 	let input_permanent_address = document.querySelectorAll("#Permanent_Address input");
 	let input_current_address = document.querySelectorAll("#Present_Address input");

@@ -1,4 +1,4 @@
-        input[type="text"], input[type = 'email'], input[type="date"]{
+        input[type="text"], input[type = 'email'], input[type="date"], input[type = 'tel']{
             height: 25px;
             width: 200px;
             float: right;

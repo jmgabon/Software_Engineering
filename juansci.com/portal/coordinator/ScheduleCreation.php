@@ -167,14 +167,16 @@
 	let content = [];
 	let subjectcode;
 	let units;
+	var subjTime;
+	var subjDay;
 	// let tbody_tr;
 function Get1stRowCell(i, j){
 
 
 	parentCol = j;
 	parentRow = i;
-	time = table.rows[i].cells[0].innerHTML;
-	day = table.rows[0].cells[j].innerHTML;
+	subjTime = table.rows[i].cells[0].innerHTML;
+	subjDay = table.rows[0].cells[j].innerHTML;
 
 	if(content.length == 0){
 
@@ -208,7 +210,7 @@ function Get1stRowCell(i, j){
 		// 		sub_content["Teacher"] = teacher;
 		for(let k = 0; k < content.length; k++){
 			if(content[k]["SubjectCode"] == table.rows[i].cells[j].innerHTML){
-				if(content[k]["Time"] == time && content[k]["Day"] == day){
+				if(content[k]["Time"] == subjTime && content[k]["Day"] == subjDay){
 					content.splice(k, 1);
 					break;
 				}
@@ -216,7 +218,7 @@ function Get1stRowCell(i, j){
 		}
 		// content.splice(1, 1);
 		table.rows[i].cells[j].innerHTML = "";
-		// console.log(content);
+		console.log(content);
 	}
 }
 var subj_tr_container = [];
@@ -238,6 +240,10 @@ btn[2].addEventListener("click", function(){
 		AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
 	}
 });
+
+function printA(xhttp){
+	console.log(xhttp.responseText);
+}
 
 function PickSubjectCode(xhttp){
 	CreateTBody(xhttp, PickSubjectCode);
@@ -267,12 +273,24 @@ function PickSubjectCode(xhttp){
 			CreateTable("TeacherTable", theadID, theadHTML, "@", modal_body, 0, null);
 
 			searchTeacher = document.getElementById("Teacher");
-			openModal("Teachers", "Teacher");
+			openModal("Available Teachers", "Teacher");
 
-			Search(window.location.href+"#Teacher", "", PickTeacher);
+			// Search(window.location.href+"#Teacher", "", PickTeacher);//
+			searchAvailableTeachers("");
+
+			function searchAvailableTeachers(content){
+				data = "";
+				data += "subjDay=" + subjDay;
+				data += "&subjTime=" + subjTime;
+				data += "&content=" + content;
+				AJAX(data, true, "post", "php/TeacherAvailability.php", true, PickTeacher);
+				// AJAX()
+			}
+
 			searchTeacher.addEventListener('change', function(){
 				let searchBox_value = modal_cat.options[modal_cat.selectedIndex].value + "=" + searchTeacher.value;
-				Search(window.location.href + "#Teacher", searchBox_value, PickTeacher);
+				// Search(window.location.href + "#Teacher", searchBox_value, PickTeacher);//
+				searchAvailableTeachers(searchBox_value);
 			});
 		});
 	}
@@ -323,6 +341,8 @@ function PickTeacher(xhttp){
 				sub_content["Time"] = table.rows[parentRow].cells[0].innerHTML;
 				sub_content["Teacher"] = teacher;
 				content.push(sub_content);
+
+				console.log(content);
 				// console.log("Time:" + table.rows[parentRow].cells[0].innerHTML);
 				// console.log("Day:" + table.rows[0].cells[parentCol].innerHTML);
 			}

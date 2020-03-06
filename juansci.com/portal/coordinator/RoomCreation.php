@@ -21,7 +21,7 @@
         <p class="p-0 mt-4"><label for="RoomNum">Room Number: </label><input class="" type="text" name="RoomNum" id="RoomNum" required/></p>
         <p><label for="RoomName">Room Name: </label><input class="" type="text" name="RoomName" id="RoomName" required/></p>
         <p><label for="Building">Building: </label><input class="" type="text" name="Building" id="Building"/></p>
-        <p><label for="Floor">Floor: </label><input class="" type="number" name="Floor" id="Floor" min = "1"/></p>
+        <p><label for="Floor">Floor: </label><input class="" type="number" name="Floor" id="Floor" min = "1" max="20"/></p>
         <!-- <label class="pl-3" for="txt_Capacity">Capacity: <input class="ml-2 mb-2" type="number" name="txt_Capacity" id="txt_Capacity" min="5" max="50" required/></label></p> -->
         <p>
             <label for="Type">Room Type: </label>

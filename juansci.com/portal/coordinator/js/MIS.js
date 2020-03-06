@@ -2,20 +2,33 @@
 
 function Create(url, content, callback){
 	let data = "";
+	let ifblank  = "";
+
+	let input = document.querySelectorAll("form input");
+	let form = document.querySelector("form");
 	// if(user != null){
 	// 	content["User"] = user;
 	// }
-	content = JSON.stringify(content);
-	data += "&url=" + url;
-	data += "&content=" + content;
-	if(callback === null){
-		AJAX(data, false, "post", "php/Create.php", true, callback);
+	for(var i = 0; i < input.length; i++){
+		if(!input[i].checkValidity()){
+			ifblank++;
+			form.reportValidity();
+		}
 	}
-	else if(typeof callback == "function"){
-		AJAX(data, true, "post", "php/Create.php", true, callback);
-	}
-	else{
-		
+
+	if(ifblank == 0){
+		content = JSON.stringify(content);
+		data += "&url=" + url;
+		data += "&content=" + content;
+		if(callback === null){
+			AJAX(data, false, "post", "php/Create.php", true, callback);
+		}
+		else if(typeof callback == "function"){
+			AJAX(data, true, "post", "php/Create.php", true, callback);
+		}
+		else{
+			
+		}
 	}
 }
 function Search(url, content, callback){
@@ -43,9 +56,9 @@ function requestStatus(xhttp){
     else if (message == "Duplicate Request") {
         alert(message);
     }
-    else if (message.indexOf("null")){
-    	alert("Please fill up missing fields");
-    }
+    // else if (message.indexOf("null")){
+    // 	alert("Please fill up missing fields");
+    // }
     else{
         console.log(message);
     }

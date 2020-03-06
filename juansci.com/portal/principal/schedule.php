@@ -138,6 +138,7 @@
     <button class="rounded-pill">REJECT</button>
     <button class="rounded-pill">APPROVE</button>
     <button class="rounded-pill" style="width: 20% !important">SHOW REQUESTS</button>
+    <button class="rounded-pill" style="width: 20% !important">LIST OF SCHEDULES</button>
     <!-- <button class="rounded-pill">RESET</button> -->
 
     <script type="text/javascript">
@@ -175,20 +176,22 @@ btn[0].addEventListener("click", function(){ //REJECT BUTTON
     // AJAX(data, true, "post", "php/Create.php", true, callback);
     data = "";
     data += "cnum=" + controlNum;
-    AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
+    data += "&approval=" + 0; 
+    AJAX(data, true, "post", "php/ScheduleApproval.php", true, Decided);
 });
 
 btn[1].addEventListener("click", function(){ //APPROVE BUTTON
-    // console.log(content);
-    // if(content.length > 0){
-    //     content = JSON.stringify(content);
-    //     data = "content=" + content;
-    //     data += "&section=" + txt_SectionNum.value;
-    //     data += "&userID=" + userID;
-    //     // Create("", content, messageAlert);   
-    //     AJAX(data, true, "post", "php/Schedule.php", true, requestStatus);
-    // }
+
+    data = "";
+    data += "cnum=" + controlNum;
+    data += "&approval=" + 1; 
+    AJAX(data, true, "post", "php/ScheduleApproval.php", true, Decided);
 });
+
+function Decided(xhttp){
+    alert("GAGI");
+    console.log(xhttp.responseText);
+}
 
 btn[2].addEventListener("click", function(){
     theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";

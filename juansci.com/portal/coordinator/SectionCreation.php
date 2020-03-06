@@ -80,7 +80,7 @@
             let yearToday = new Date().getFullYear()
             for(let i = 0; i <= yearToday - yearFounded; i++){
                 let option = document.createElement("option");
-                option.value = yearFounded++;
+                option.value = (yearFounded + i) + "-" + (yearFounded + i + 1);
                 option.innerHTML = (yearFounded + i) + "-" + (yearFounded + i + 1);
                 schoolyear.appendChild(option);
                 

@@ -58,8 +58,8 @@
                 <td scope="col" id="ControlNum">Request Number</td>
                 <td scope="col" id="SubjectCode">Subject Code</td>
                 <td scope="col" id="SubjectDescription">Description</td>
-                <td scope="col" id="Frequency">Units</td>
                 <td scope="col" id="GradeLevel">Grade Level</td>
+                <td scope="col" id="Frequency">Units</td>
                 <td scope="col" id="DateCreated">Date Requested</td>
                 <td scope="col" id="CreatedBy" style="display: none;"></td>
                 <td scope="col" id="RequestedBy" style="display: none;"></td>
