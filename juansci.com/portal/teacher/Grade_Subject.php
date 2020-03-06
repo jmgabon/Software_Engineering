@@ -37,7 +37,7 @@
         <br /><br />
 
         <div class="float-right">
-            <label id="labelMAPEH" for="" style="display: none">Selected MAPEH:
+            <label id="labelMAPEH" for="" style="display: none">Select MAPEH:
                 <select id="selectMAPEH" onchange="setSubMAPEH()">
                     <option disabled selected value> -- Select MAPEH -- </option>
                     <option value="MUSIC">MUSIC</option>
@@ -88,10 +88,10 @@
     </div>
 
     <script>
-        let EmployeeNum = <?php echo $_SESSION['TeacherNum']?>;
-        let accessRole = '<?php echo $_SESSION['AccessType']?>';
-        if (accessRole === '') {
-            accessRole = 'teacher';
+        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        if (accessType === '') {
+            accessType = 'teacher';
         }
     </script>
     <script src="js/ajax.js" type="text/javascript"></script>
