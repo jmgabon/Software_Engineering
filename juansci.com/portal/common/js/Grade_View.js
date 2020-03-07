@@ -77,7 +77,7 @@ const objMAPEH = [
 
 
 
-if (accessRole === 'teacher') {
+if (accessType === 'teacher') {
     modal_button.addEventListener('click', function() {
         let theadID = 'LRNNum@LastName@ExtendedName@FirstName@MiddleName';
         let theadHTML = 'LRN@Last Name@ExtendedName@First Name@Middle Name';
@@ -381,14 +381,14 @@ let getIfSectionAssigned = function(xhttp) {
 function setSectionInfo() {
     let query = '';
 
-    if (accessRole === 'teacher') {
+    if (accessType === 'teacher') {
         query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
         query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
         query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
         query += 'FROM main_section ';
         query += 'LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ';
-        query += 'WHERE main_section.Adviser IN (' + employeeNum + ') ';
-    } else if (accessRole === 'student') {
+        query += 'WHERE main_section.Adviser IN (' + teacherNum + ') ';
+    } else if (accessType === 'student') {
         query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
         query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
         query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
@@ -419,7 +419,7 @@ function getSectionInfo(xhttp) {
         adviserName = jsonSecInfo[0]['Adviser'];
         sectionName = jsonSecInfo[0]['SectionName'];
 
-        if (accessRole === 'teacher') {
+        if (accessType === 'teacher') {
             gradeLevel = jsonSecInfo[0]['GradeLevel'];
             setSubjectListDB(gradeLevel);
         }
@@ -454,9 +454,9 @@ function setGradeSubjDB() {
     query += 'FROM grade_subject ';
     query += 'WHERE LRNNum IN (' + LRNNum + ') ';
     query += 'AND GradeLevel IN (' + gradeLevel + ') ';
-    if (accessRole === 'student') {
+    if (accessType === 'student') {
         query += 'AND Status = "ENCODED" ';
-    } else if (accessRole === 'teacher') {
+    } else if (accessType === 'teacher') {
         query += 'AND Status = "APPROVED" ';
         query += 'OR Status = "ENCODED" ';
     }
@@ -573,7 +573,7 @@ function getQuarter(xhttp) {
     try {
         let jsonQuarter = JSON.parse(xhttp.responseText);
         quarterSelected = jsonQuarter[0]['SettingValue'];
-        console.log(quarterSelected)
+        console.log('Quarter Now: ' + quarterSelected)
 
     } catch (err) {
         alert('CANNOT FIND');
@@ -697,11 +697,11 @@ function printInnerReportCard() {
 
 
 let init = (function() {
-    if (accessRole === 'teacher') {
+    if (accessType === 'teacher') {
         setSectionInfo();
 
         btn_encode.style.display = 'block';
-    } else if (accessRole === 'student') {
+    } else if (accessType === 'student') {
         setStudentInfo();
     }
 

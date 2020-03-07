@@ -553,7 +553,12 @@ let saveGrade = function() {
         console.log('QUARTER ' + Quarter + ' GRADES SAVED');
 
         // setGradeDB();
-        updateCaseStatus(4);
+        if (currCase === 1 || currCase === 2) {
+            updateCaseStatus(4);
+        } else if (currCase === 3) {
+            updateCaseStatus(5);
+        }
+
         RemoveChildNodes(tbody);
         setStudentListDB();
     } else {
@@ -660,7 +665,7 @@ let textCaseStatus = function(val) {
 
 
 let updateCaseStatus = function(newCase) {
-    // switch (curr) {
+    // switch (currCase) {
     //     case 1:
     //         newCase = 4;
     //         break;
@@ -730,6 +735,7 @@ let approvalListeners = function() {
         }
     });
 
+
     btn_disapprove.addEventListener('click', () => {
         let isConfirmed = function(newCase) {
             updateCaseStatus(newCase);
@@ -786,8 +792,6 @@ let approvalChange = function() {
 
 
 let init = (function() {
-    console.log('accessType: ' + accessType);
-    console.log('teacherNum: ' + teacherNum);
     modalSubject();
     approvalListeners();
 })();

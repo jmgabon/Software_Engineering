@@ -1,35 +1,22 @@
-<?php
-    // session_start();
-    // if($_SESSION['TeacherNum'] === null || $_SESSION['access'] != "teacher"){
-    //     header('Location: ../');
-    // }
+    <?php
+        include 'partials/header.php';
+    ?>
 
-    // include '../php/Header_User.php';
+    <script type="text/javascript">
+        $('#lead').text('Main Menu');
+        $('#back-to-menu').addClass('d-none');
+    </script>
+    <script>
+        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        if (accessType === '') {
+            accessType = 'teacher';
+        }
 
-    
-    // check if adviser (if not, hide Print Student Grades)
-    // include 'php/ConnectToDB.php';
-    // $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
-    // $stmt->bindValue(1, $_SESSION['TeacherNum']);
-    // $stmt->execute();
-    // $col = $stmt->fetch();
-    // $stmt->closeCursor();
-?>
+        console.log('accessType: ' + accessType);
+        console.log('teacherNum: ' + teacherNum);
+    </script>
 
-<?php include 'partials/header.php';
-
-    include 'php/ConnectToDB.php';
-    $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
-    $stmt->bindValue(1, $_SESSION['TeacherNum']);
-    $stmt->execute();
-    $col = $stmt->fetch();
-    $stmt->closeCursor();
-?>
-<script type="text/javascript">
-    $('#lead').text('Main Menu');
-    $('#back-to-menu').addClass('d-none');
-</script>
-<script>console.log('teachernum: ' + '<?php echo $col[0] ?>')</script>     
     <div class="newcontainer">
         <div class="row mt-5">
             <div class="col mt-5 text-center">
@@ -39,12 +26,12 @@
                 </a>
             </div>
             <div class="col mt-5 text-center">
-                <a class="text-secondary" href="Grade_Subject.php">
+                <a class="text-secondary" href="../common/Grade_Subject.php">
                     <img src="../../pictures/edit-grade2.png" width="100px">
                     <p class="h6 mt-2">Grade Students on Subjects</p>
                 </a>
             </div>
-            <?php if (!empty($col[0])) { ?>
+            <?php if (!empty($col[0])) { // if Adviser ?>
             <div class="col mt-5 text-center">
                 <a class="text-secondary" href="Grade_Values.php">
                     <img src="../../pictures/edit-grade.png" width="100px">
@@ -52,7 +39,7 @@
                 </a>
             </div>
             <div class="col mt-5 text-center">
-                <a class="text-secondary" href="Grade_View.php">
+                <a class="text-secondary" href="../common/Grade_View.php">
                     <img src="../../pictures/view-grade.png" width="100px">
                     <p class="h6 mt-2">View Student Grades</p>
                 </a>
@@ -90,6 +77,5 @@
         <?php //} ?>
         </div>
     </div> -->
-
 
     <?php include 'partials/footer.php'; ?>

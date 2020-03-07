@@ -1,3 +1,13 @@
+<?php
+    session_start();
+    
+    if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] !== 'principal'){
+        header('Location: ../');
+    }
+
+    // include '../php/Header_User.php';
+?>
+
 <?php include 'partials/header.php'; ?>
 <script type="text/javascript">
     $('#lead').text('Report Card Settings');
@@ -48,9 +58,11 @@
             </div>
         </div>
 
-        <div class="float-right mt-4">
-            <p><b>Approved: </b><span id="txt_CaseApproved"></span></p>
-            <p><b>Total: </b><span id="txt_CaseTotal"></span></p>
+        <div class="float-right">
+            <p><span id="txt_CaseApproved"></span><b> <-- Approved by the Principal</b></p>
+            <p><span id="txt_CaseTotal"></span><b> <--Total Number of Teachers * Subjects</b></p>
+            <p>Note: Wait Subject Teachers to finish their grading.</p>
+            <p><b>Approved</b> must be equal to <b>Total</b> to close the encoding of grades.</p><br />
             <label>Quarter SAVE Button Enabled:
                 <select id="selectQuarter">
                     <option value="0">0</option>
@@ -65,15 +77,17 @@
                 <button id="btnSaveQuarter">SAVE Enabled Quarter</button>
             </div>
         </div>
-
-
-
     </div>
 
-
     <script>
-        let EmployeeNum = <?php echo $_SESSION['TeacherNum']?>;
-        console.log(EmployeeNum);
+        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        if (accessType === '') {
+            accessType = 'teacher';
+        }
+
+        console.log('accessType: ' + accessType);
+        console.log('teacherNum: ' + teacherNum);
     </script>
     <?php include 'partials/footer.php'; ?>
     <script src="js/Grade_Setting.js" type="text/javascript"></script>

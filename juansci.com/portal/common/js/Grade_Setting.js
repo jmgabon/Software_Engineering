@@ -232,7 +232,7 @@ const wrapperGradeEnabler = (function() {
                 alert('Enabled Quarter is set to ' + q);
                 return true;
             } else {
-                alert('Error input.');
+                alert('Error input. Quarter ' + jsonQuarter[0][0] + ' ongoing.');
                 return false;
             }
         }

@@ -92,7 +92,7 @@
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="studentsDropdown">
                 <a href="masterlist_student.php" class="dropdown-item">Masterlist</a>
                 <a href="regrequests_student.php" class="dropdown-item">Requests</a>
-                <a href="../teacher/Grade_Subject.php" class="dropdown-item">Evaluate Grade Subjects</a>
+                <a href="../common/Grade_Subject.php" class="dropdown-item">Evaluate Grade Subjects</a>
                 <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
                 <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
               </div>
@@ -221,7 +221,7 @@
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
-                <a href="../teacher/setting_grade.php" class="dropdown-item">Report Card</a>
+                <a href="../common/setting_grade.php" class="dropdown-item">Report Card</a>
                 <!-- <a href="logs.php" class="dropdown-item">Logs</a> -->
               </div>
             </li> 

@@ -1,18 +1,32 @@
 <?php
-    // session_start();
-    // if($_SESSION['TeacherNum'] === null  || !($_SESSION['AccessType'] === "teacher" xor $_SESSION['AccessType'] === "student")){
-    //     header('Location: ../');
-    // }
+    session_start();
+    
+    if ($_SESSION['AccessType'] === '') {
+        if($_SESSION['TeacherNum'] === null) {
+            header('Location: ../');
+        }
+
+        // checks if Adviser
+        include '../../php/ConnectToDB.php';
+        $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
+        $stmt->bindValue(1, $_SESSION['TeacherNum']);
+        $stmt->execute();
+        $col = $stmt->fetch();
+        $stmt->closeCursor();
+
+        // if not Adviser, logout
+        if (empty($col[0])) {
+            header('Location: ../');
+        }
+    } else if ($_SESSION['AccessType'] === 'student') {
+        if($_SESSION['LRNNum'] === null){
+            header('Location: ../');
+        }
+    } else {
+        header('Location: ../');
+    }
 
     // include '../php/Header_User.php';
-    session_start();
-    // $_SESSION['TeacherNum'] = 1;
-    // $_SESSION['AccessType'] = "principal";
-    if ($_SESSION['AccessType'] != "student") {
-        if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
-            header('Location: ../');
-          }
-    }
 ?>
 
 <!DOCTYPE html>
@@ -71,17 +85,19 @@
           <nav class="d-none d-md-block row navbar pt-0 w-75">
           <a class="lead p-0" id="lead"></a>
           <div class="float-right mt-2" id="back-to-menu">
-
-            <?php if ($_SESSION['AccessType'] == "student") { ?>
-              <a href="../../student_portal/student/dashboard.php" class="text-danger h6 mr-5">
+            <?php if ($_SESSION['AccessType'] == "principal") { ?>
+              <a href="../principal/dashboard.php" class="text-danger h6 mr-5">
+            <?php } else if ($_SESSION['AccessType'] == "coordinator") { ?>
+              <a href="../coordinator/dashboard.php" class="text-danger h6 mr-5">
             <?php } else if ($_SESSION['AccessType'] == "") { ?>
-              <a href="dashboard.php" class="text-danger h6 mr-5">
+              <a href="../teacher/dashboard.php" class="text-danger h6 mr-5">
+            <?php } else if ($_SESSION['AccessType'] == "student") { ?>
+              <a href="../../student_portal/student/dashboard.php" class="text-danger h6 mr-5">
             <?php } ?>
             <i class="fa fa-caret-left"></i> Back to Menu</a>
           </div>
           </nav>
         </div>
-
       </div>
 
     <div class="grade-container mt-5">
@@ -243,7 +259,7 @@
             </div>
         </div>
 
-        <form id="postData" action="../teacher/Grade_oView.php" method="post" target="_blank">
+        <form id="postData" action="Grade_oView.php" method="post" target="_blank">
                 <input type="hidden" name="LRNNum" value="">
                 <input type="hidden" name="schoolYear" value="">
                 <input type="hidden" name="studentName" value="">
@@ -258,8 +274,8 @@
         <?php if($_SESSION['AccessType'] === '') { ?>
         <div class="hide-on-print float-right d-inline-block mb-5">
             <select id="print-select" class="form-control-sm">
-            <option>Outer Page</option>
-            <option>Inner Page</option>
+                <option>Outer Page</option>
+                <option>Inner Page</option>
             </select>
             <button id='print-btn' class="btn btn-sm btn-danger mb-1">Print</button>
         <?php } ?>
@@ -298,33 +314,30 @@
                 <?php //} ?>
             </form> -->
         </div>
-
     </div>
+    <?php include 'partials/footer.php'; ?>
 
 
     <script>
         $('#lead').text("View Student's Grade");
         let LRNNum;
-        let employeeNum;
-        let accessRole = '<?php echo $_SESSION['AccessType']?>';
-        if (accessRole === '') {
-            accessRole = 'teacher';
+        let teacherNum;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+
+        if (accessType === '') {
+            accessType = 'teacher';
         }
-        console.log('accessRole: ' + accessRole)
 
+        console.log('accessType: ' + accessType);
         <?php if($_SESSION['AccessType'] === '') { ?>
-            employeeNum = <?php echo $_SESSION['TeacherNum']?>;
+            teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+            console.log('teacherNum: ' + teacherNum);
         <?php } else if($_SESSION['AccessType'] === 'student') { ?>
-            LRNNum = <?php echo $_SESSION['LRNNum'];
-        } ?>;
+            LRNNum = <?php echo $_SESSION['LRNNum']?>;
+            console.log('LRNNum: ' + LRNNum);
+        <?php } ?>;
     </script>
-    <script src="js/ajax.js" type="text/javascript"></script>
-    <script src="js/utility.js" type="text/javascript"></script>
-    <script src="js/cms.js" type="text/javascript"></script>
-    <script src="js/modal.js" type="text/javascript"></script>
-    <script src="js/Grade_View.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/script.js" ></script>
-    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <script src="js/Grade_View.js" type="text/javascript"></script>
+</body>
 </html>

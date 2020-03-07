@@ -1,8 +1,11 @@
 <?php
-    // session_start();
-    // if($_SESSION['id'] === null || !($_SESSION['access'] === 'principal' xor $_SESSION['access'] === 'coordinator' xor $_SESSION['access'] === 'teacher')){
-    //     header('Location: ../');
-    // }
+    session_start();
+    
+    if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] === ''
+    xor $_SESSION['AccessType'] === 'principal'
+    xor $_SESSION['AccessType'] === 'coordinator')){
+        header('Location: ../');
+    }
 
     // include '../php/Header_User.php';
 ?>
@@ -86,6 +89,7 @@
             </div>
         </div>    
     </div>
+    <?php include 'partials/footer.php'; ?>
 
     <script>
         let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
@@ -93,15 +97,8 @@
         if (accessType === '') {
             accessType = 'teacher';
         }
-    </script>
-    <script src="js/ajax.js" type="text/javascript"></script>
-    <script src="js/utility.js" type="text/javascript"></script>
-    <script src="js/cms.js" type="text/javascript"></script>
-    <script src="js/modal.js" type="text/javascript"></script>
-    <script src="js/Grade_Subject.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/script.js" ></script>
-    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
-    <?php //include 'partials/footer.php'; ?>
-</body>
 
-</html>
+        console.log('accessType: ' + accessType);
+        console.log('teacherNum: ' + teacherNum);
+    </script>
+    <script src="js/Grade_Subject.js" type="text/javascript"></script>

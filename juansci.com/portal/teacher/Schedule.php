@@ -1,12 +1,5 @@
-<?php
-	// session_start();
-    // if($_SESSION['id'] === null || $_SESSION['access'] != "teacher"){
-    //     header('Location: ../');
-	// }
+	<?php include 'partials/header.php'; ?>
 
-    // include '../php/Header_User.php';
-?>
-<?php include 'partials/header.php'; ?>
 	<script type="text/javascript">
 		$('#lead').text('Check Schedule');
 	</script>     
@@ -118,21 +111,36 @@
 	</table>
 	</div>
 	</div>
-	<script type="text/javascript" src="js/ajax.js"></script>
+	<?php include 'partials/footer.php'; ?>
+	
+	<script>
+        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        if (accessType === '') {
+            accessType = 'teacher';
+        }
+
+        console.log('accessType: ' + accessType);
+        console.log('teacherNum: ' + teacherNum);
+    </script>
+
+	<!-- <script type="text/javascript" src="js/ajax.js"></script>
 	<script type="text/javascript" src="js/cms.js"></script>
 	<script type="text/javascript" src="js/utility.js"></script>
-	
-	<!-- <script type="text/javascript" src="../../js/modal.js"></script> -->
-	<!-- <script type="text/javascript" src="../../js/TeacherScheduling.js"></script> -->
+	<script type="text/javascript" src="../../js/modal.js"></script>
+	<script type="text/javascript" src="../../js/TeacherScheduling.js"></script> -->
+
+
+
 	<script type="text/javascript">
 		var table = document.querySelector("table"); //
 		var tr = document.querySelectorAll("tbody tr"); //
 		function RetrieveTeacherSchedule(){
-			query = "SELECT subject.SubjectID, SubjectTime, SubjectDay, section.SectionName, subjectcode.SubjectDescription ";
-			query += "FROM subject LEFT JOIN sched ON subject.SubjectID = sched.SubjectID ";
-			query += "LEFT JOIN section ON subject.SectionNum = section.SectionNum ";
-			query += "LEFT JOIN subjectcode ON subjectcode.SubjectCode = subject.SubjectCode ";
-			query += "WHERE subject.EmployeeNum = '<?php echo($_SESSION['TeacherNum']);?>'";
+			query = "SELECT main_subject.SubjectID, SubjectTime, SubjectDay, main_section.SectionName, main_subjectcode.SubjectDescription ";
+			query += "FROM main_subject LEFT JOIN main_sched ON main_subject.SubjectID = main_sched.SubjectID ";
+			query += "LEFT JOIN main_section ON main_subject.SectionNum = main_section.SectionNum ";
+			query += "LEFT JOIN main_subjectcode ON main_subjectcode.SubjectCode = main_subject.SubjectCode ";
+			query += "WHERE main_subject.TeacherNum = '<?php echo($_SESSION['TeacherNum']);?>'";
 			// function SimplifiedQuery(crud,query,searchbox,callback){
 			SimplifiedQuery(
 				"SELECT",
@@ -166,8 +174,5 @@
 		}
 		RetrieveTeacherSchedule();
 	</script>
-	<script type="text/javascript" src="js/script.js" ></script>
-    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
-	<?php // include 'partials/footer.php'; ?>
 </body>
 </html>
