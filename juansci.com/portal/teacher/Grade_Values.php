@@ -1,24 +1,13 @@
-<?php
-    //  session_start();
-    //  if($_SESSION['TeacherNum'] === null || $_SESSION['access'] != "teacher"){
-    //      header('Location: ../');
-    //  }
+    <?php
+        include 'partials/header.php';
 
-    //  include '../php/Header_User.php';
+        // if not Adviser, logout
+        if (empty($col[0])) {
+            header('Location: ../');
+        }
+    ?>
 
-    // check if adviser (if not, logout)
-    // $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
-    // $stmt->bindValue(1, $_SESSION['TeacherNum']);
-    // $stmt->execute();
-    // $row = $stmt->fetch();
-    // $stmt->closeCursor();
 
-    // if (empty($row[0])) {
-    //     header('Location: ../');
-    // }
-?>
-
-<?php include 'partials/header.php'; ?>
     <script type="text/javascript">
         $('#lead').text('Student Grading on Subjects');
     </script>     
@@ -382,20 +371,18 @@
                     <b> NO</b> -            Not Observed
                 </pre>
             </div>
-
         </div>
-
     </div>
+    <?php include 'partials/footer.php'; ?>
 
-    <script>let EmployeeNum = <?php echo $_SESSION['TeacherNum']?></script>
-    <script src="js/ajax.js" type="text/javascript"></script>
-    <script src="js/utility.js" type="text/javascript"></script>
-    <script src="js/cms.js" type="text/javascript"></script>
-    <script src="js/modal.js" type="text/javascript"></script>
+    <script>
+        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        if (accessType === '') {
+            accessType = 'teacher';
+        }
+
+        console.log('accessType: ' + accessType);
+        console.log('teacherNum: ' + teacherNum);
+    </script>
     <script src="js/Grade_Values.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/script.js" ></script>
-    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
-    <?php //include 'partials/footer.php'; ?>
-</body>
-
-</html>

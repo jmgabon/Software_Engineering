@@ -1,21 +1,34 @@
 <?php
     session_start();
-    if($_SESSION['id'] === null  || !($_SESSION['access'] === "teacher" xor $_SESSION['access'] === "student")){
+    
+    if ($_SESSION['AccessType'] === '') {
+        if($_SESSION['TeacherNum'] === null) {
+            header('Location: ../');
+        }
+
+        // checks if Adviser
+        include '../../php/ConnectToDB.php';
+        $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
+        $stmt->bindValue(1, $_SESSION['TeacherNum']);
+        $stmt->execute();
+        $col = $stmt->fetch();
+        $stmt->closeCursor();
+
+        // if not Adviser, logout
+        if (empty($col[0])) {
+            header('Location: ../');
+        }
+    } else if ($_SESSION['AccessType'] === 'student') {
+        if($_SESSION['LRNNum'] === null){
+            header('Location: ../');
+        }
+    } else {
         header('Location: ../');
     }
 
-    include '../php/Header_User.php';
+    // include '../php/Header_User.php';
 
-    // check if adviser (if not, logout)
-    $stmt = $db->prepare('SELECT EmployeeNum FROM section WHERE EmployeeNum = ?');
-    $stmt->bindValue(1, $_SESSION['id']);
-    $stmt->execute();
-    $row = $stmt->fetch();
-    $stmt->closeCursor();
-
-    if (empty($row[0])) {
-        header('Location: ../');
-    } else if(isset($_POST['LRNNum'])){
+    if(isset($_POST['LRNNum'])){
         $LRNNum = ($_POST['LRNNum'] !== 'undefined') ? $_POST['LRNNum'] : 'N/A';
         $schoolYear = ($_POST['schoolYear'] !== 'undefined') ? $_POST['schoolYear'] : 'N/A';
         $studentName = ($_POST['studentName'] !== 'undefined') ? $_POST['studentName'] : 'N/A';
@@ -37,21 +50,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>View Report Card (Cover Pages)</title>
 
-    <link rel="stylesheet" type="text/css" href="../css/modal.css" />
-    <link rel="stylesheet" type="text/css" href="../css/all.css" />
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../css/merged-styles.css" />
-    <link rel="icon" href="../pictures/logo.png" />
+    <link rel="stylesheet" type="text/css" href="../../css/modal.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/all.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/merged-styles.css" />
+    <link rel="icon" href="../../pictures/logo-new.png" />
 </head>
 
 <body onload="printOuterReportCard()">
-    <img src="../pictures/logodesign.jpg" class="logodesign hide-on-print">
+    <img src="../../pictures/logodesign2.jpg" class="logodesign hide-on-print">
 
     <div class="hide-on-print header mb-3">
         <legend class="h4 pl-0 pt-3 mb-0">ADVISER'S VIEW: STUDENT GRADE</legend>
 
         <div class="menu">
-        <a href="#"><?php echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a>
+        <!-- <a href="#"><?php // echo 'Welcome, ' . $honorific . $fullname?></a>|<a href="Dashboard.php">Menu</a>|<a href="../">Logout</a> -->
         </div>
 
     </div>
@@ -250,6 +263,6 @@
         }
     </script>
 </body>
-    <script type="text/javascript" src="js/script.js" ></script>
-    <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script>
+    <!-- <script type="text/javascript" src="../../js/script.js" ></script> -->
+    <!-- <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script> -->
 </html>

@@ -45,7 +45,7 @@ const wrapperUIValues = (function() {
 
         query += 'SELECT SectionNum, SectionName, GradeLevel ';
         query += 'FROM main_section ';
-        query += 'WHERE Adviser IN (' + EmployeeNum + ') ';
+        query += 'WHERE Adviser IN (' + teacherNum + ') ';
 
         SimplifiedQuery('SELECT', query, '', getSectionInfo);
     };

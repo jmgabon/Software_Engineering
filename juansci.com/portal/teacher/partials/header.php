@@ -1,11 +1,19 @@
 <?php
-  session_start();
-  // $_SESSION['TeacherNum'] = 1;
-  // $_SESSION['AccessType'] = "principal";
-    if($_SESSION['TeacherNum'] === null || !($_SESSION['AccessType'] == "" xor $_SESSION['AccessType'] == "principal" xor $_SESSION['AccessType'] == "coordinator")){
+    session_start();
+    include '../../php/ConnectToDB.php';
+
+    if($_SESSION['TeacherNum'] === null || $_SESSION['AccessType'] !== ''){
       header('Location: ../');
     }
+
+    // checks if Adviser
+    $stmt = $db->prepare('SELECT Adviser FROM main_section WHERE Adviser = ?');
+    $stmt->bindValue(1, $_SESSION['TeacherNum']);
+    $stmt->execute();
+    $col = $stmt->fetch();
+    $stmt->closeCursor();
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -68,7 +76,7 @@
             <?php } else if ($_SESSION['AccessType'] == "student") { ?>
               <a href="../../student_portal/student/dashboard.php" class="text-danger h6 mr-5">
             <?php } else if ($_SESSION['AccessType'] == "") { ?>
-              <a href="dashboard.php" class="text-danger h6 mr-5">
+              <a href="../teacher/dashboard.php" class="text-danger h6 mr-5">
             <?php } ?>
             <i class="fa fa-caret-left"></i> Back to Menu</a>
           </div>

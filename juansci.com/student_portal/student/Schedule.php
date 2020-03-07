@@ -1,9 +1,9 @@
 <?php
 	session_start();
-    if($_SESSION['AccessType'] != "student"){
+
+    if($_SESSION['LRNNum'] === null || $_SESSION['AccessType'] !== 'student'){
         header('Location: ../');
-	}
-	
+    }
     // include '../php/Header_User.php';
 ?>
 <!DOCTYPE html>
@@ -13,7 +13,6 @@
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Subject Grades</title>
 
     <link rel="stylesheet" type="text/css" href="../../css/modal.css" />
     <link rel="stylesheet" type="text/css" href="../../css/all.css" />
@@ -138,11 +137,20 @@
 	</table>
 	</div>
 	</div>
-	<script type="text/javascript" src="js/ajax.js"></script>
+	
+	<script type="text/javascript" src="js/cms.js"></script>
+    <script type="text/javascript" src="../../js/ajax.js"></script>
+    <script type="text/javascript" src="../../js/modal.js"></script>
+    <script type="text/javascript" src="../../js/utility.js"></script>
+	
+	<!-- <script type="text/javascript" src="js/ajax.js"></script>
 	<script type="text/javascript" src="js/cms.js"></script>
 	<script type="text/javascript" src="js/utility.js"></script>
-	<!-- <script type="text/javascript" src="js/modal.js"></script> -->
-	<!-- <script type="text/javascript" src="js/TeacherScheduling.js"></script> -->
+	<script type="text/javascript" src="js/modal.js"></script>
+	<script type="text/javascript" src="js/TeacherScheduling.js"></script> -->
+
+
+
 	<script type="text/javascript">
 		var table = document.querySelector("table"); //
 		var tr = document.querySelectorAll("tbody tr"); //
@@ -165,7 +173,6 @@
 			// 	Retrieved
 			// );
 			// function SimplifiedQuery(crud,query,searchbox,callback){
-			console.log('<?php echo($_SESSION['LRNNum']);?>');
 			var query;
 			query = "SELECT main_subject.SubjectCode, main_sched.SubjectTime, main_sched.SubjectDay, main_subjectcode.SubjectDescription ";
 			query += "FROM main_subject ";
@@ -210,5 +217,13 @@
 		RetrieveSectionSchedule();
 
 	</script>
+
+	<script>
+        let LRNNum = <?php echo $_SESSION['LRNNum']?>;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+
+        console.log('accessType: ' + accessType);
+        console.log('LRNNum: ' + LRNNum);
+    </script>
 </body>
 </html>
