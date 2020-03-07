@@ -78,6 +78,6 @@ try{
 	// echo $preparedStatement;
 }
 catch(Exception $e){
-	echo $preparedStatement;
+	echo $e;
 } 
 ?>

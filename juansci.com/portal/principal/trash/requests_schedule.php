@@ -375,11 +375,11 @@ function PickSection(xhttp){
 }
 
 btn[3].addEventListener("click", function(){
-    theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
-    theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
+    theadID = "ControlNum@SectionNum@GradeLevel@DateCreated@Action_@Status_";
+    theadHTML = "Control No.@Section No.@GradeLevel@DateCreated@Action_@Status_";
     CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
     // CreateInput("SearchSubjectCode", "search", modal_body);
-    let hiddenCol = "none"
+    let hiddenCol = "none";
     modal_cat = document.querySelector("#modal-body select");
     CreateTable("RequestTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
 

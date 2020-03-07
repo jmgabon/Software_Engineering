@@ -15,7 +15,7 @@ include 'partials/header.php';
                 <option value="SectionName">Section Name</option>
                 <option value="RoomNum">Room Number</option>
                 <option value="GradeLevel">Grade Level</option>
-                <option value="SchoolYear">School Year</option>
+                <!-- <option value="SchoolYear">School Year</option> //MARCH 27-->
                 <option value="Adviser">Adviser's Teacher ID</option>
                 <option value="AdviserName">Adviser Name</option>
                 <option value="DateCreated">Date</option>
@@ -36,7 +36,7 @@ include 'partials/header.php';
             <td id="SectionName">Section Name</td>
             <td id="RoomNum">Room Number</td>
             <td id="GradeLevel">Grade Level</td>
-            <td id="SchoolYear">School Year</td>
+            <!-- <td id="SchoolYear">School Year</td> //MARCH 27-->
             <td id="Adviser">ID</td>
             <td id="AdviserName">Adviser</td>
             <td id="DateCreated">Date</td>

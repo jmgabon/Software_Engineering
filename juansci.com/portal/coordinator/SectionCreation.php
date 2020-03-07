@@ -43,7 +43,7 @@
         <p><label for="txt_RoomNum">Room Number: </label>
                 <!-- <button id="btn_RoomNum"onclick="CreateModal('Available Rooms', 'Room')"> -->
             <span class="span-input-btn">
-            <input type="text" name="txt_RoomNum" id="txt_RoomNum" disabled style="width: 75% !important; 
+            <input type="text" name="txt_RoomNum" id="txt_RoomNum" onkeypress="return false;" required style="width: 75% !important; 
                 float: none !important; 
                 margin-right: 0% !important;"/>
             <button class="modal-button" id="btn_RoomNum"><i class="far fa-window-restore"></i></button>
@@ -59,21 +59,20 @@
             <option value="10">10</option>
             </select>
         </p>
-        <p>
+        <!-- <p>//MARCH 7
             <label for="SchoolYear">SchoolYear: </label>
             <select id="SchoolYear" name="SchoolYear"></select>
-        </p>
+        </p> -->
         <p><label for="txt_Adviser">Adviser: </label>
             <span class="span-input-btn">
-            <input type="text" name="txt_Adviser" id="txt_Adviser" required disabled style="width: 75% !important; 
+            <input type="text" name="txt_Adviser" id="txt_Adviser" required onkeypress="return false;" style="width: 75% !important; 
                 float: none !important; 
                 margin-right: 0% !important;"/>
             <button class="modal-button" id="btn_Adviser" onclick=""><i class="far fa-window-restore"></i></button>
             </span>
-            <!-- <input class="" type="text" name="RoomNum" id="RoomNum" required/> -->
         </p>
 
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">//MARCH 7
             let schoolyear = document.querySelector("#SchoolYear");
 
             let yearFounded = 2016;
@@ -85,7 +84,7 @@
                 schoolyear.appendChild(option);
                 
             }
-        </script>
+        </script> -->
 
         <div id="Buttons">
             <button class="rounded-pill create-button" id="CreateSection">Create</button>
@@ -105,12 +104,11 @@
                 <option value="SectionName">SectionName</option>
                 <option value="RoomNum">Room Number</option>
                 <option value="GradeLevel">Grade Level</option>
-                <option value="SchoolYear">School Year</option>
+                <!-- <option value="SchoolYear">School Year</option> //MARCH 7-->
                 <option value="Adviser">Adviser</option>
                 <option value="Status_">Status</option>
             </select>
             <input type="search" name="" class="form-control form-control-sm rounded-0 border-left-0" id="Results">
-        <!-- <input placeholder="Search for rooms.." class="mt-1 form-control rounded-0 bg-light" type="search" id="SearchRoom" style=""> -->
         </label>
     </div>
         <table id="ResultsTable">
@@ -121,7 +119,7 @@
                 <td scope="col" id="SectionName">SectionName</td>
                 <td scope="col" id="RoomNum">Room Number</td>
                 <td scope="col" id="GradeLevel">Grade Level</td>
-                <td scope="col" id="SchoolYear">School Year</td>
+                <!-- <td scope="col" id="SchoolYear">School Year</td> //MARCH 7-->
                 <td style="display: none;"></td>
                 <td scope="col" id="Adviser">Adviser</td>
                 <td scope="col" id="DateCreated">Date Created</td>
@@ -175,7 +173,7 @@
             content["CreatedBy"] = userID; 
         }
         content["Status_"] = "PENDING";
-        content["Action_"] = "INSERT";
+        content["Action_"] = "INSERT";//PLEASE CHANGE TO UPDATE
         Create(window.location.href, content, requestStatus);
     });
 

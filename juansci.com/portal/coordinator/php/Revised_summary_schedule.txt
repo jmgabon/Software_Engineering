@@ -1,0 +1,25 @@
+select 
+requests_schedule.ControlNum,
+requests_schedule.SectionNum,
+main_section.SectionName,
+main_section.GradeLevel
+,if(isnull(advisory.MiddleName),concat(advisory.LastName,if(isnull(advisory.ExtendedName),'',advisory.ExtendedName),', ',advisory.FirstName,'',''),concat(advisory.LastName,' ',if(isnull(advisory.ExtendedName),'',advisory.ExtendedName),', ',advisory.FirstName,' ',left(advisory.MiddleName,1),'.')) AS Adviser,
+temp_subject.SubjectID,
+temp_subject.SubjectCode,
+temp_sched.SchedID,
+temp_sched.SubjectDay AS SubjectDay,
+temp_sched.SubjectTime AS SubjectTime,
+requests_schedule.CreatedBy,
+if(isnull(creation.MiddleName),concat(creation.LastName,if(isnull(creation.ExtendedName),'',creation.ExtendedName),', ',creation.FirstName,'',''),concat(creation.LastName,' ',if(isnull(creation.ExtendedName),'',creation.ExtendedName),', ',creation.FirstName,' ',left(creation.MiddleName,1),'.')) AS Creator,
+temp_subject.TeacherNum AS TeacherNum,if(isnull(teacher.MiddleName),concat(teacher.LastName,if(isnull(teacher.ExtendedName),'',teacher.ExtendedName),', ',teacher.FirstName,'',''),concat(teacher.LastName,' ',if(isnull(teacher.ExtendedName),'',teacher.ExtendedName),', ',teacher.FirstName,' ',left(teacher.MiddleName,1),'.')) AS TeacherName 
+
+
+
+from 
+	temp_sched left join temp_subject on temp_sched.SubjectNum = temp_subject.ControlNum 
+	left join requests_schedule on temp_subject.RequestNum = requests_schedule.ControlNum 
+	left join main_section on main_section.SectionNum = requests_schedule.SectionNum
+	left join main_teacher AS creation on creation.TeacherNum = requests_schedule.CreatedBy 
+	left join main_teacher AS advisory on advisory.TeacherNum = main_section.Adviser
+	left join main_teacher AS teacher on teacher.TeacherNum = temp_subject.TeacherNum 
+	group by temp_sched.SchedID

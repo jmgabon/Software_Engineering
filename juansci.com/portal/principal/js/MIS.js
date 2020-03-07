@@ -42,14 +42,20 @@ function Update(){
 
 function requestStatus(xhttp){
 	let message = xhttp.responseText;
-    if(message == "Successful"){
-        alert("Request Created!");
-        location.reload(true);
+    if(message == "Approved"){
+        alert("Request is approved!");
     }
-    else if (message == "Duplicate Request") {
-        alert(message);
+    // else if (message == "Duplicate Request") {
+    //     alert(message);
+    // }
+    // else{
+    //     console.log(message);
+    // }
+    else if(message == "Rejected"){
+    	alert("Request is rejected!");
     }
     else{
-        console.log(message);
+    	alert(message);
     }
+    location.reload(true);
 }

@@ -357,12 +357,11 @@ function PickTeacher(xhttp){
 
 btn[0].addEventListener("click", function(){
 	this.style.backgroundColor = "";
-	theadID = "SectionNum@SectionName@RoomNum@GradeLevel@SchoolYear@Adviser@AdviserName";
-	theadHTML = "Section Number@Section Name@Room Number@Grade Level@School Year@Adviser@Adviser Name";
-	// CreateInput("SearchSection", "search", modal_body);
+	// theadID = "SectionNum@SectionName@RoomNum@GradeLevel@SchoolYear@Adviser@AdviserName";
+	// theadHTML = "Section Number@Section Name@Room Number@Grade Level@School Year@Adviser@Adviser Name";
+	theadID = "SectionNum@SectionName@RoomNum@GradeLevel@@AdviserName";
+	theadHTML = "Section Number@Section Name@Room Number@Grade Level@@Adviser Name";
 	CreateSearchBox(theadID, theadHTML, '@', 'SearchSection', 'search', modal_body);
-	// theadID = "SectionNum@" + theadID;
-	// theadHTML = "Section Number@" + theadHTML;
 	modal_cat = document.querySelector("#modal-body select");
 	// document.querySelector("#SearchSection").className = "modal-search";
 	CreateTable("SearchSectionTable", theadID, theadHTML, "@", modal_body, 0, null);
@@ -386,12 +385,12 @@ function PickSection(xhttp){
 	for(var i = 0; i < tbody_tr.length; i++){
 		tbody_tr[i].addEventListener("click", function(){
 			document.querySelector("#SearchSection").value = "";
-			// console.log(this);
+			// console.log(this.childNodes[0].innerHTML);
 			closeModal(modal_body);
 			txt_SectionNum.value = this.childNodes[0].innerHTML;
 			txt_SectionName.value = this.childNodes[1].innerHTML;
 			txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
-			txt_Adviser.innerHTML = this.childNodes[6].innerHTML;
+			txt_Adviser.innerHTML = this.childNodes[5].innerHTML;
 
 			// RetrieveSectionSchedule();
 			AddListenersTD();
@@ -402,7 +401,7 @@ function PickSection(xhttp){
 
 btn[3].addEventListener("click", function(){
 	theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
-	theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
+	theadHTML = "Control No.@Section No.@none@DateCreated@Action@Status";
 	CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
 	// CreateInput("SearchSubjectCode", "search", modal_body);
 	let hiddenCol = "none"

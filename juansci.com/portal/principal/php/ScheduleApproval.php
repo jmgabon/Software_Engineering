@@ -1,55 +1,60 @@
 <?php
 require "../../../php/ConnectToDB.php";
+session_start();
 $cnum = $_POST['cnum'];
 $approval = $_POST['approval'];
 
 // echo $cnum. "_" . $approval;
+if($approval == 1){
+	try{
+		$preparedStatement = "SELECT SectionNum, CreatedBy FROM requests_schedule WHERE ControlNum = '".$cnum."'";
+		$stmt = $db->prepare($preparedStatement);
+		$stmt->execute();
+		$row = $stmt->fetch();
+		$SectionNum = $row["SectionNum"];
+		$preparedStatement = "SELECT COUNT(SectionNum) AS CheckSection FROM main_subject WHERE SectionNum = ?";
 
-try{
-	$preparedStatement = "SELECT SectionNum, CreatedBy FROM requests_schedule WHERE ControlNum = ".$cnum."";
-	$stmt = $db->prepare($preparedStatement);
-	$stmt->execute();
-	// $preparedStatement = 
-	$row = $stmt->fetch();
-	// var_dump($row);
-	$SectionNum = $row["SectionNum"];
-	$Creator = $row["CreatedBy"];
+		$stmt = $db->prepare($preparedStatement);
+		$stmt->bindValue(1, $SectionNum);
+		$stmt->execute();
+		$row = $stmt->fetch();
+		if ($row['CheckSection'] == 0){
+			$preparedStatement = "UPDATE requests_schedule SET  Status_ = ?, ApprovedBy = ?, ApprovalDate = CURRENT_TIMESTAMP, Remarks = ? WHERE ControlNum = ?";
+			$stmt = $db->prepare($preparedStatement);
+			$stmt->bindValue(1, "APPROVED");
+			$stmt->bindValue(2, $_SESSION['TeacherNum']);
+			$stmt->bindValue(3, null);
+			$stmt->bindValue(4, $cnum);
+			$stmt->execute();
+			
+			$preparedStatement = "INSERT INTO main_subject(SubjectID, TeacherNum, SectionNum, SubjectCode, DateCreated) SELECT SubjectID, TeacherNum, SectionNum, SubjectCode, CURRENT_TIMESTAMP FROM temp_subject WHERE RequestNum = ?";
+			$stmt = $db->prepare($preparedStatement);
+			$stmt->bindValue(1, $cnum);
+			$stmt->execute();
 
-	// $preparedStatement = "SELECT SubjectID FROM temp_subject WHERE CreatedBy = ".$Creator." AND SectionNum = ".$SectionNum."";
-	$preparedStatement = "SELECT SubjectID FROM temp_subject WHERE SectionNum = ".$SectionNum."";
-	$stmt = $db->prepare($preparedStatement);
-	$stmt->execute();
+			$preparedStatement = "INSERT INTO main_sched(SchedID, SubjectID, SubjectDay, SubjectTime, DateCreated) SELECT SchedID, temp_subject.SubjectID, SubjectDay, SubjectTime, CURRENT_TIMESTAMP FROM temp_sched INNER JOIN temp_subject ON temp_subject.ControlNum = temp_sched.SubjectNum WHERE temp_subject.RequestNum = ?";
+			$stmt = $db->prepare($preparedStatement);
+			$stmt->bindValue(1, $cnum);
+			$stmt->execute();
 
-	// $row = $stmt->fetchAll();
-	while ($row = $stmt->fetch()) {
-		// echo($SubjectID);
-		// // $id[$index] = $row['Return_ID'];
-		// // $index++;
-		echo "Subject:" . $row['SubjectID'];
-
-		$preparedStatement = "INSERT INTO main_subject(SubjectID, TeacherNum, SectionNum, SubjectCode, DateCreated) SELECT SubjectID, TeacherNum, SectionNum, SubjectCode, CURRENT_TIMESTAMP FROM temp_subject WHERE SubjectID = ?";
-		$stmt0 = $db->prepare($preparedStatement);
-		$stmt0->bindValue(1, $row['SubjectID']);
-		$stmt0->execute();
-
-		$preparedStatement = "SELECT SchedID FROM temp_sched WHERE SubjectID = '".$row['SubjectID']."'";
-		$stmt1 = $db->prepare($preparedStatement);
-		$stmt1->execute();
-
-		while ($row1 = $stmt1->fetch()) {
-			echo "Sched:" . $row1['SchedID'];
-			$preparedStatement = "INSERT INTO main_sched(SchedID, SubjectID, SubjectDay, SubjectTime, DateCreated) SELECT SchedID, SubjectID, SubjectDay, SubjectTime, CURRENT_TIMESTAMP FROM temp_sched WHERE SchedID = ?";
-			$stmt2 = $db->prepare($preparedStatement);
-			$stmt2->bindValue(1, $row1['SchedID']);
-			$stmt2->execute();
-		}			
-		// echo $preparedStatement;
+			echo "Approved";
+		}
+		else{
+			echo "This section has a schedule already!";
+		}
 	}
-	// echo(json_encode($row));
-
-
+	catch(Exception $e){
+		echo($e);
+	}
 }
-catch(Exception $e){
-	echo($e);
+else if($approval == 0){
+	$preparedStatement = "UPDATE requests_schedule SET  Status_ = ?, ApprovedBy = ?, ApprovalDate = CURRENT_TIMESTAMP, Remarks = ? WHERE ControlNum = ?";
+	$stmt = $db->prepare($preparedStatement);
+	$stmt->bindValue(1, "REJECTED");
+	$stmt->bindValue(2, $_SESSION['TeacherNum']);
+	$stmt->bindValue(3, null);
+	$stmt->bindValue(4, $cnum);
+	$stmt->execute();
+	echo "Rejected";
 }
 ?>

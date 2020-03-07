@@ -30,6 +30,7 @@
     <p><b>Section Name: </b><span id="txt_SectionName"></span></p>
     <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
     <p><b>Adviser: </b><span id="txt_Adviser"></span></p>
+    <p><b>Status: </b><span id="txt_Status"></span></p>
     <table class="mt-3 s-table">
         <thead class="dark">
             <tr>
@@ -162,6 +163,7 @@
     let txt_SectionName = document.getElementById("txt_SectionName")
     let txt_GradeLevel = document.getElementById("txt_GradeLevel")
     let txt_Adviser = document.getElementById("txt_Adviser")
+    let txt_Status = document.getElementById("txt_Status");
     let content = [];
     let subjectcode;
     let units;
@@ -174,33 +176,42 @@ var controlNum;
 btn[0].addEventListener("click", function(){ //REJECT BUTTON
     
     // AJAX(data, true, "post", "php/Create.php", true, callback);
-    data = "";
-    data += "cnum=" + controlNum;
-    data += "&approval=" + 0; 
-    AJAX(data, true, "post", "php/ScheduleApproval.php", true, Decided);
+    if(txt_Status.innerHTML == "PENDING"){
+        data = "";
+        data += "cnum=" + controlNum;
+        data += "&approval=" + 0; 
+        AJAX(data, true, "post", "php/ScheduleApproval.php", true, requestStatus);
+    }
+    else{
+        alert("Request is already " + txt_Status.innerHTML.toLowerCase());
+    }
 });
 
 btn[1].addEventListener("click", function(){ //APPROVE BUTTON
-
-    data = "";
-    data += "cnum=" + controlNum;
-    data += "&approval=" + 1; 
-    AJAX(data, true, "post", "php/ScheduleApproval.php", true, Decided);
+    if(txt_Status.innerHTML == "PENDING"){
+        data = "";
+        data += "cnum=" + controlNum;
+        data += "&approval=" + 1; 
+        AJAX(data, true, "post", "php/ScheduleApproval.php", true, requestStatus);
+    }
+    else{
+        alert("Request is already " + txt_Status.innerHTML.toLowerCase());
+    }
 });
 
 function Decided(xhttp){
-    alert("GAGI");
+    // alert("GAGI");
     console.log(xhttp.responseText);
 }
 
 btn[2].addEventListener("click", function(){
-    theadID = "ControlNum@SectionNum@none@DateCreated@Action_@Status_";
-    theadHTML = "Control No.@Section No.@none@DateCreated@Action_@Status_";
+    theadID = "ControlNum@SectionNum@SectionName@GradeLevel@@CreatedBy@DateCreated@Action_@Status_";
+    theadHTML = "Control No.@Section No.@Section@Grade Level@@Created By@DateCreated@Action_@Status_";
     CreateSearchBox(theadID, theadHTML, '@', 'Request', 'search', modal_body);
     // CreateInput("SearchSubjectCode", "search", modal_body);
-    let hiddenCol = "none"
+    // let hiddenCol = "none"
     modal_cat = document.querySelector("#modal-body select");
-    CreateTable("RequestTable", theadID, theadHTML, "@", modal_body, 0, hiddenCol);
+    CreateTable("RequestTable", theadID, theadHTML, "@", modal_body, 0, null);
 
     let searchRequest = document.getElementById("Request");
     openModal("Requests", "Request");
@@ -225,6 +236,7 @@ function PickRequest(xhttp){
             document.querySelector("#Request").value = "";
             // console.log(this);
             closeModal(modal_body);
+            txt_Status.innerHTML = this.childNodes[8].innerHTML;
             // txt_SectionNum.value = this.childNodes[0].innerHTML;
             // txt_SectionName.value = this.childNodes[1].innerHTML;
             // txt_GradeLevel.innerHTML = this.childNodes[3].innerHTML;
@@ -234,7 +246,7 @@ function PickRequest(xhttp){
             data = "cnum="
             controlNum = this.childNodes[0].innerHTML; 
             data += this.childNodes[0].innerHTML;
-            
+            console.log(controlNum);
             AJAX(data, true, "post", "php/ScheduleRequest.php", true, Retrieve);
             // Create("php/ScheduleRequest.php", content, Retrieve);
         });
@@ -244,6 +256,7 @@ function PickRequest(xhttp){
 function Retrieve(xhttp){
     // content = [];
     let json = JSON.parse(xhttp.responseText);
+    console.log(json);
     txt_Adviser.innerHTML = json[0][3];
     txt_GradeLevel.innerHTML = json[0][2];
     txt_SectionName.innerHTML = json[0][1];
@@ -294,5 +307,4 @@ function RemoveTD_InnerHTML(){
     // btn[2].disabled = "disabled";
 }
 </script>
-
 
