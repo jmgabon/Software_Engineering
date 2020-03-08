@@ -135,7 +135,9 @@ if (accessType === 'teacher') {
 
 
 function PickStudent(xhttp) {
-    console.log(JSON.parse(xhttp.responseText));
+    let jsonStudentInfo = JSON.parse(xhttp.responseText);
+    console.log(jsonStudentInfo);
+
     CreateTBody(xhttp, PickStudent);
     const tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
 
@@ -145,26 +147,30 @@ function PickStudent(xhttp) {
             document.querySelector('#SearchStudent').value = '';
             closeModal(modal_body);
 
-            let extName = this.childNodes[2].innerHTML;
-
-            if (extName !== '') {
-                extName = ' ' + extName;
+            if (jsonStudentInfo[i]['ExtendedName'] !== null) {
+                jsonStudentInfo[i]['ExtendedName'] = ' ' + jsonStudentInfo[i]['ExtendedName'];
+            } else {
+                jsonStudentInfo[i]['ExtendedName'] = '';
             }
 
-            LRNNum = this.childNodes[0].textContent;
-            txt_StudentName.textContent = this.childNodes[1].textContent;
-            txt_StudentName.textContent += extName + ', ';
-            txt_StudentName.textContent += this.childNodes[3].textContent + ' ';
-            txt_StudentName.textContent += this.childNodes[4].textContent;
-            txt_StudentModal.value = txt_StudentName.textContent;
-            studentName = txt_StudentName.textContent
 
-            studentAge = this.childNodes[4].textContent;
-            studentSex = this.childNodes[5].textContent;
+            LRNNum = jsonStudentInfo[i]['LRNNum'];
+            txt_StudentName.textContent = jsonStudentInfo[i]['LastName'];
+            txt_StudentName.textContent += jsonStudentInfo[i]['ExtendedName'] + ', ';
+            txt_StudentName.textContent += jsonStudentInfo[i]['FirstName'] + ' ';
+            txt_StudentName.textContent += jsonStudentInfo[i]['MiddleName'];
+
+            txt_StudentModal.value = txt_StudentName.textContent;
+            studentName = txt_StudentName.textContent;
+
+            studentAge = jsonStudentInfo[i]['Birthday'];
+            studentSex = jsonStudentInfo[i]['Gender'];
+
+            if (document.querySelector('#print-btnI').disabled === true) {
+                document.querySelector('#print-btnI').disabled = false;
+            }
 
             btn_encode.disabled = true;
-
-
             setGradeSubjDB();
             setGradeValDB();
         });
@@ -182,11 +188,12 @@ function PickStudent(xhttp) {
 
 function AddPostData() {
     const formData = document.forms['postData'];
+    let schoolYear = 2020; //temp
 
     formData.elements["LRNNum"].value = LRNNum;
-    formData.elements["schoolYear"].value = schoolYear;
+    formData.elements["schoolYear"].value = String(schoolYear + '-' + (schoolYear + 1));
     formData.elements["studentName"].value = studentName;
-    formData.elements["studentAge"].value = studentAge;
+    formData.elements["studentAge"].value = Number(schoolYear - studentAge.slice(0, 4));
     formData.elements["studentSex"].value = studentSex;
     formData.elements["gradeLevel"].value = gradeLevel;
     formData.elements["sectionName"].value = sectionName;
@@ -457,8 +464,8 @@ function setGradeSubjDB() {
     if (accessType === 'student') {
         query += 'AND Status = "ENCODED" ';
     } else if (accessType === 'teacher') {
-        query += 'AND Status = "APPROVED" ';
-        query += 'OR Status = "ENCODED" ';
+        query += 'AND (Status = "APPROVED" ';
+        query += 'OR Status = "ENCODED") ';
     }
 
     SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
@@ -699,7 +706,6 @@ function printInnerReportCard() {
 let init = (function() {
     if (accessType === 'teacher') {
         setSectionInfo();
-
         btn_encode.style.display = 'block';
     } else if (accessType === 'student') {
         setStudentInfo();

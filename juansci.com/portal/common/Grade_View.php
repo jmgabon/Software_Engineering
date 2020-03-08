@@ -54,7 +54,7 @@
           <a class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user p-0 m-0"></i>
-              <!-- <span class="text-capitalize ml-1"><?php echo $fullname?></span> -->
+              <!-- <span class="text-capitalize ml-1"><?php //echo $fullname?></span> -->
             </a>
             <div class="d-none" id="divDropdown">
                 <a href="" class="dropdown-item">Profile</a>
@@ -259,46 +259,44 @@
             </div>
         </div>
 
-        <form id="postData" action="Grade_oView.php" method="post" target="_blank">
-                <input type="hidden" name="LRNNum" value="">
-                <input type="hidden" name="schoolYear" value="">
-                <input type="hidden" name="studentName" value="">
-                <input type="hidden" name="studentAge" value="">
-                <input type="hidden" name="studentSex" value="">
-                <input type="hidden" name="gradeLevel" value="">
-                <input type="hidden" name="sectionName" value="">
-                <input type="hidden" name="principalName" value="">
-                <input type="hidden" name="adviserName" value="">
-       
+      
 
-        <?php if($_SESSION['AccessType'] === '') { ?>
+        <?php //if($_SESSION['AccessType'] === '') { ?>
         <div class="hide-on-print float-right d-inline-block mb-5">
             <select id="print-select" class="form-control-sm">
                 <option>Outer Page</option>
                 <option>Inner Page</option>
             </select>
-            <button id='print-btn' class="btn btn-sm btn-danger mb-1">Print</button>
-        <?php } ?>
-        <script type="text/javascript">
-        var selected = 'Outer Page';
-            $('#print-select').change(function(){
-               selected = $('#print-select').val();
-            });
-            $('#print-btn').click(function(){    
-                if(selected == 'Outer Page'){
-                    printInnerReportCard();
-                }
-                else if(selected == 'Inner Page'){
-                    AddPostData();
-                }
-            }) 
-        </script>
-         </form>
-            <!-- <?php //if($_SESSION['AccessType'] === 'teacher') { ?>
-                <button class="btn btn-dark" onclick="printInnerReportCard()">PRINT INNER PAGE OF FORM 138</button>
-            <?php //} ?>
             
-            <form id="postData" action="../teacher/Grade_oView.php" method="post" target="_blank">
+            <br /><button id='print-btnO' class="btn btn-sm btn-danger mb-1">Print Outer Page</button>
+
+            <script type="text/javascript">
+                var selected = 'Outer Page';
+
+                $('#print-select').change(function(){
+                    selected = $('#print-select').val();
+                    if(selected == 'Outer Page'){
+                        $('#print-btnO').show();
+                        $('#print-btnI').hide();
+                    } else if(selected == 'Inner Page'){
+                        $('#print-btnO').hide();
+                        $('#print-btnI').show();
+
+                        if (txt_StudentName.textContent === '') {
+                            $('#print-btnI').attr('disabled', true);
+                            alert('Please select student first!');
+                        }
+                    }
+                });
+
+                $('#print-btnO').click(function(){
+                    printInnerReportCard();
+                });
+            </script>
+
+            <form id="postData" action="Grade_oView.php" method="post" target="_blank">
+                <button id='print-btnI' class="btn btn-sm btn-danger mb-1" style="display: none">Print Inner Page</button>
+
                 <input type="hidden" name="LRNNum" value="">
                 <input type="hidden" name="schoolYear" value="">
                 <input type="hidden" name="studentName" value="">
@@ -309,15 +307,37 @@
                 <input type="hidden" name="principalName" value="">
                 <input type="hidden" name="adviserName" value="">
 
-                <?php //if($_SESSION['AccessType'] === 'teacher') { ?>
-                    <input type="submit" class="btn btn-dark" value="PRINT OUTER PAGE OF FORM 138" onclick="AddPostData()">
-                <?php //} ?>
-            </form> -->
+                <script type="text/javascript">
+                    $('#print-btnI').click(function(){
+                        AddPostData();
+                    });
+                </script>
+            </form>
         </div>
+        <?php //} ?>
+
+        <!-- <?php //if($_SESSION['AccessType'] === 'teacher') { ?>
+            <button class="btn btn-dark" onclick="printInnerReportCard()">PRINT INNER PAGE OF FORM 138</button>
+        <?php //} ?>
+        
+        <form id="postData" action="../teacher/Grade_oView.php" method="post" target="_blank">
+            <input type="hidden" name="LRNNum" value="">
+            <input type="hidden" name="schoolYear" value="">
+            <input type="hidden" name="studentName" value="">
+            <input type="hidden" name="studentAge" value="">
+            <input type="hidden" name="studentSex" value="">
+            <input type="hidden" name="gradeLevel" value="">
+            <input type="hidden" name="sectionName" value="">
+            <input type="hidden" name="principalName" value="">
+            <input type="hidden" name="adviserName" value="">
+
+            <?php //if($_SESSION['AccessType'] === 'teacher') { ?>
+                <input type="submit" class="btn btn-dark" value="PRINT OUTER PAGE OF FORM 138" onclick="AddPostData()">
+            <?php //} ?>
+        </form> -->
     </div>
+
     <?php include 'partials/footer.php'; ?>
-
-
     <script>
         $('#lead').text("View Student's Grade");
         let LRNNum;
@@ -335,9 +355,8 @@
         <?php } else if($_SESSION['AccessType'] === 'student') { ?>
             LRNNum = <?php echo $_SESSION['LRNNum']?>;
             console.log('LRNNum: ' + LRNNum);
-        <?php } ?>;
+        <?php } ?>
     </script>
-
     <script src="js/Grade_View.js" type="text/javascript"></script>
 </body>
 </html>
