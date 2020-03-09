@@ -95,33 +95,45 @@ if (accessType === 'teacher') {
 
 
         let Search = function() {
-            let query = '';
+            // let query = '';
 
-            query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ';
-            query += 'FROM main_student ';
-            query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-            query += 'WHERE main_student_section.SectionNum IN (' + sectionNum + ')';
+            // query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ';
+            // query += 'FROM main_student ';
+            // query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
+            // query += 'WHERE main_student_section.SectionNum IN (' + sectionNum + ')';
 
-            if (searchStudent.value !== '') {
-                let queryAnd;
-                let queryNull;
+            // if (queryValue !== '') {
+            //     let queryAnd;
+            //     let queryNull;
 
-                if (cat.options[cat.selectedIndex].value === 'LRNNum') {
-                    queryAnd = 'AND student.';
-                } else {
-                    queryAnd = 'AND '
-                }
+            //     if (queryIndex === 'LRNNum') {
+            //         queryAnd = 'AND main_student.';
+            //     } else {
+            //         queryAnd = 'AND '
+            //     }
 
-                if (searchStudent.value === ' ') {
-                    queryNull = ' IS NULL';
-                } else {
-                    queryNull = ' LIKE "' + searchStudent.value + '%"';
-                }
+            //     if (queryValue === ' ') {
+            //         queryNull = ' IS NULL';
+            //     } else {
+            //         queryNull = ' LIKE "' + queryValue + '%"';
+            //     }
 
-                query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
-            }
+            //     query += queryAnd + queryIndex + queryNull;
+            //     console.log(query)
+            // }
 
-            SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
+            // SimplifiedQuery('SELECT', query, null, PickStudent);
+
+
+            let val = '';
+            let queryValue = searchStudent.value;
+            let queryIndex = cat.options[cat.selectedIndex].value;
+
+            val += '&sectionNum=' + sectionNum;
+            val += '&queryValue=' + queryValue;
+            val += '&queryIndex=' + queryIndex;
+
+            misQuery('SearchStudent', val, PickStudent);
         }
         Search();
 
@@ -135,7 +147,9 @@ if (accessType === 'teacher') {
 
 
 function PickStudent(xhttp) {
-    console.log(JSON.parse(xhttp.responseText));
+    let jsonStudentInfo = JSON.parse(xhttp.responseText);
+    console.log(jsonStudentInfo);
+
     CreateTBody(xhttp, PickStudent);
     const tbody_tr = document.querySelectorAll('#SearchStudentTable tbody tr');
 
@@ -145,26 +159,30 @@ function PickStudent(xhttp) {
             document.querySelector('#SearchStudent').value = '';
             closeModal(modal_body);
 
-            let extName = this.childNodes[2].innerHTML;
-
-            if (extName !== '') {
-                extName = ' ' + extName;
+            if (jsonStudentInfo[i]['ExtendedName'] !== null) {
+                jsonStudentInfo[i]['ExtendedName'] = ' ' + jsonStudentInfo[i]['ExtendedName'];
+            } else {
+                jsonStudentInfo[i]['ExtendedName'] = '';
             }
 
-            LRNNum = this.childNodes[0].textContent;
-            txt_StudentName.textContent = this.childNodes[1].textContent;
-            txt_StudentName.textContent += extName + ', ';
-            txt_StudentName.textContent += this.childNodes[3].textContent + ' ';
-            txt_StudentName.textContent += this.childNodes[4].textContent;
-            txt_StudentModal.value = txt_StudentName.textContent;
-            studentName = txt_StudentName.textContent
 
-            studentAge = this.childNodes[4].textContent;
-            studentSex = this.childNodes[5].textContent;
+            LRNNum = jsonStudentInfo[i]['LRNNum'];
+            txt_StudentName.textContent = jsonStudentInfo[i]['LastName'];
+            txt_StudentName.textContent += jsonStudentInfo[i]['ExtendedName'] + ', ';
+            txt_StudentName.textContent += jsonStudentInfo[i]['FirstName'] + ' ';
+            txt_StudentName.textContent += jsonStudentInfo[i]['MiddleName'];
+
+            txt_StudentModal.value = txt_StudentName.textContent;
+            studentName = txt_StudentName.textContent;
+
+            studentAge = jsonStudentInfo[i]['Birthday'];
+            studentSex = jsonStudentInfo[i]['Gender'];
+
+            if (document.querySelector('#print-btnI').disabled === true) {
+                document.querySelector('#print-btnI').disabled = false;
+            }
 
             btn_encode.disabled = true;
-
-
             setGradeSubjDB();
             setGradeValDB();
         });
@@ -182,11 +200,12 @@ function PickStudent(xhttp) {
 
 function AddPostData() {
     const formData = document.forms['postData'];
+    let schoolYear = 2020; //temp
 
     formData.elements["LRNNum"].value = LRNNum;
-    formData.elements["schoolYear"].value = schoolYear;
+    formData.elements["schoolYear"].value = String(schoolYear + '-' + (schoolYear + 1));
     formData.elements["studentName"].value = studentName;
-    formData.elements["studentAge"].value = studentAge;
+    formData.elements["studentAge"].value = Number(schoolYear - studentAge.slice(0, 4));
     formData.elements["studentSex"].value = studentSex;
     formData.elements["gradeLevel"].value = gradeLevel;
     formData.elements["sectionName"].value = sectionName;
@@ -266,16 +285,21 @@ let createTBodySubj = function(subj) {
 
 
 let setSubjectListDB = function(grLvl) {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ';
-    query += 'FROM main_subjectcode ';
-    query += 'LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ';
-    query += 'WHERE main_subjectcode.GradeLevel IN (' + grLvl + ') ';
-    query += 'AND main_subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
-    query += 'ORDER BY grade_sortable.OrderNumber ASC ';
+    // query += 'SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ';
+    // query += 'FROM main_subjectcode ';
+    // query += 'LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ';
+    // query += 'WHERE main_subjectcode.GradeLevel IN (' + grLvl + ') ';
+    // query += 'AND main_subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+    // query += 'ORDER BY grade_sortable.OrderNumber ASC ';
 
-    SimplifiedQuery('SELECT', query, '', getSubjectListDB);
+    // SimplifiedQuery('SELECT', query, '', getSubjectListDB);
+
+    let val = '';
+    val += '&grLvl=' + grLvl;
+
+    misQuery('setSubjectListDB', val, getSubjectListDB);
 }
 
 
@@ -294,13 +318,18 @@ let getSubjectListDB = function(xhttp) {
 }
 
 let setStudentInfo = function() {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender, GradeLevel ';
-    query += 'FROM main_student ';
-    query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
+    // query += 'SELECT LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender, GradeLevel ';
+    // query += 'FROM main_student ';
+    // query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
 
-    SimplifiedQuery('SELECT', query, '', getStudentInfo);
+    // SimplifiedQuery('SELECT', query, '', getStudentInfo);
+
+    let val = '';
+    val += '&LRNNum=' + LRNNum;
+
+    misQuery('setStudentInfo', val, getStudentInfo);
 }
 
 let getStudentInfo = function(xhttp) {
@@ -346,14 +375,21 @@ let getStudentInfo = function(xhttp) {
 
 
 let setIfSectionAssigned = function() {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT SectionNum ';
-    query += 'FROM main_student_section ';
-    query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
-    query += 'AND GradeLevel IN ("' + gradeLevel + '") ';
+    // query += 'SELECT SectionNum ';
+    // query += 'FROM main_student_section ';
+    // query += 'WHERE LRNNum IN ("' + LRNNum + '") ';
+    // query += 'AND GradeLevel IN ("' + gradeLevel + '") ';
 
-    SimplifiedQuery('SELECT', query, '', getIfSectionAssigned);
+    // SimplifiedQuery('SELECT', query, '', getIfSectionAssigned);
+
+
+    let val = '';
+    val += '&LRNNum=' + LRNNum;
+    val += '&gradeLevel=' + gradeLevel;
+
+    misQuery('setIfSectionAssigned', val, getIfSectionAssigned);
 }
 
 
@@ -379,30 +415,43 @@ let getIfSectionAssigned = function(xhttp) {
 
 
 function setSectionInfo() {
-    let query = '';
+    // let query = '';
+
+    // if (accessType === 'teacher') {
+    //     query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
+    //     query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
+    //     query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+    //     query += 'FROM main_section ';
+    //     query += 'LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ';
+    //     query += 'WHERE main_section.Adviser IN (' + teacherNum + ') ';
+    // } else if (accessType === 'student') {
+    //     query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
+    //     query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
+    //     query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
+    //     query += 'FROM main_section ';
+    //     query += 'LEFT JOIN main_student_section ';
+    //     query += 'ON main_section.SectionNum = main_student_section.SectionNum ';
+    //     query += 'JOIN main_teacher ';
+    //     query += 'ON main_section.Adviser = main_teacher.TeacherNum ';
+    //     query += 'WHERE main_student_section.LRNNum IN (' + LRNNum + ') ';
+    //     query += 'ORDER BY main_student_section.DateCreated DESC ';
+    //     query += 'LIMIT 1 ';
+    // }
+
+    // SimplifiedQuery('SELECT', query, '', getSectionInfo);
+
+
+    let val = '';
 
     if (accessType === 'teacher') {
-        query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
-        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
-        query += 'FROM main_section ';
-        query += 'LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ';
-        query += 'WHERE main_section.Adviser IN (' + teacherNum + ') ';
+        val += '&accessType=teacher';
+        val += '&teacherNum=' + teacherNum;
     } else if (accessType === 'student') {
-        query += 'SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ';
-        query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
-        query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
-        query += 'FROM main_section ';
-        query += 'LEFT JOIN main_student_section ';
-        query += 'ON main_section.SectionNum = main_student_section.SectionNum ';
-        query += 'JOIN main_teacher ';
-        query += 'ON main_section.Adviser = main_teacher.TeacherNum ';
-        query += 'WHERE main_student_section.LRNNum IN (' + LRNNum + ') ';
-        query += 'ORDER BY main_student_section.DateCreated DESC ';
-        query += 'LIMIT 1 ';
+        val += '&accessType=student';
+        val += '&LRNNum=' + LRNNum;
     }
 
-    SimplifiedQuery('SELECT', query, '', getSectionInfo);
+    misQuery('setSectionInfo', val, getSectionInfo);
 }
 
 
@@ -448,20 +497,34 @@ function clearTBodySubj() {
 
 
 function setGradeSubjDB() {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT SubjectCode, Quarter, GradeRating ';
-    query += 'FROM grade_subject ';
-    query += 'WHERE LRNNum IN (' + LRNNum + ') ';
-    query += 'AND GradeLevel IN (' + gradeLevel + ') ';
+    // query += 'SELECT SubjectCode, Quarter, GradeRating ';
+    // query += 'FROM grade_subject ';
+    // query += 'WHERE LRNNum IN (' + LRNNum + ') ';
+    // query += 'AND GradeLevel IN (' + gradeLevel + ') ';
+    // if (accessType === 'student') {
+    //     query += 'AND Status = "ENCODED" ';
+    // } else if (accessType === 'teacher') {
+    //     query += 'AND (Status = "APPROVED" ';
+    //     query += 'OR Status = "ENCODED") ';
+    // }
+
+    // SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
+
+
+    let val = '';
+
+    val += '&LRNNum=' + LRNNum;
+    val += '&gradeLevel=' + gradeLevel;
+
     if (accessType === 'student') {
-        query += 'AND Status = "ENCODED" ';
+        val += '&accessType=student';
     } else if (accessType === 'teacher') {
-        query += 'AND Status = "APPROVED" ';
-        query += 'OR Status = "ENCODED" ';
+        val += '&accessType=teacher';
     }
 
-    SimplifiedQuery('SELECT', query, '', getGradeSubjDB);
+    misQuery('setGradeSubjDB', val, getGradeSubjDB);
 }
 
 
@@ -556,16 +619,19 @@ function calculateFinalWithRemark() {
     }
 }
 
-setQuarterDB();
 
 function setQuarterDB() {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT SettingValue ';
-    query += 'FROM setting ';
-    query += 'WHERE SettingName = "quarter_enabled" ';
+    // query += 'SELECT SettingValue ';
+    // query += 'FROM setting ';
+    // query += 'WHERE SettingName = "quarter_enabled" ';
 
-    SimplifiedQuery('SELECT', query, '', getQuarter);
+    // SimplifiedQuery('SELECT', query, '', getQuarter);
+
+    let val = '';
+
+    misQuery('setQuarterDB', val, getQuarter);
 };
 
 
@@ -646,14 +712,22 @@ function calculateAverage() {
 
 
 function setGradeValDB() {
-    let query = '';
+    // let query = '';
 
-    query += 'SELECT BehaviorID, Quarter, GradeValRating ';
-    query += 'FROM grade_values ';
-    query += 'WHERE LRNNum IN (' + LRNNum + ') ';
-    query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
+    // query += 'SELECT BehaviorID, Quarter, GradeValRating ';
+    // query += 'FROM grade_values ';
+    // query += 'WHERE LRNNum IN (' + LRNNum + ') ';
+    // query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
 
-    SimplifiedQuery('SELECT', query, '', getGradesValDB);
+    // SimplifiedQuery('SELECT', query, '', getGradesValDB);
+
+
+    let val = '';
+
+    val += '&LRNNum=' + LRNNum;
+    val += '&gradeLevel=' + gradeLevel;
+
+    misQuery('setGradeValDB', val, getGradesValDB);
 }
 
 
@@ -697,9 +771,11 @@ function printInnerReportCard() {
 
 
 let init = (function() {
+    setQuarterDB();
+
+
     if (accessType === 'teacher') {
         setSectionInfo();
-
         btn_encode.style.display = 'block';
     } else if (accessType === 'student') {
         setStudentInfo();
@@ -707,17 +783,27 @@ let init = (function() {
 
     btn_encode.addEventListener('click', () => {
         if (confirm("Do you want to store grades to the database?")) {
-            let query = '';
+            // let query = '';
 
-            query += 'UPDATE grade_subject ';
-            query += 'SET Status = "ENCODED" ';
-            query += 'WHERE LRNNum = "' + LRNNum + '" ';
-            query += 'AND GradeLevel = "' + gradeLevel + '" ';
-            query += 'AND Quarter = "' + quarterSelected + '" ';
+            // query += 'UPDATE grade_subject ';
+            // query += 'SET Status = "ENCODED" ';
+            // query += 'WHERE LRNNum = "' + LRNNum + '" ';
+            // query += 'AND GradeLevel = "' + gradeLevel + '" ';
+            // query += 'AND Quarter = "' + quarterSelected + '" ';
 
-            console.log(query);
+            // console.log(query);
 
-            SimplifiedQuery('UPDATE', query, '', () => null);
+            // SimplifiedQuery('UPDATE', query, '', () => null);
+
+
+            let val = '';
+
+            val += '&LRNNum=' + LRNNum;
+            val += '&gradeLevel=' + gradeLevel;
+            val += '&quarterSelected=' + quarterSelected;
+
+            misQuery('btn_encode', val, () => null);
+
 
             alert('Encoding done. Grades are stored to the database!');
         } else {

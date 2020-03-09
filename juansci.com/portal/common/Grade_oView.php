@@ -262,6 +262,26 @@
             window.print();
         }
     </script>
+
+    <script>
+        // $('#lead').text("View Student's Grade");
+        let LRNNum;
+        let teacherNum;
+        let accessType = '<?php echo $_SESSION['AccessType']?>';
+
+        if (accessType === '') {
+            accessType = 'teacher';
+        }
+
+        console.log('accessType: ' + accessType);
+        <?php if($_SESSION['AccessType'] === '') { ?>
+            teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+            console.log('teacherNum: ' + teacherNum);
+        <?php } else if($_SESSION['AccessType'] === 'student') { ?>
+            LRNNum = <?php echo $_SESSION['LRNNum']?>;
+            console.log('LRNNum: ' + LRNNum);
+        <?php } ?>
+    </script>
 </body>
     <!-- <script type="text/javascript" src="../../js/script.js" ></script> -->
     <!-- <script type="text/javascript" src="../../js/bootstrap.bundle.min.js"></script> -->

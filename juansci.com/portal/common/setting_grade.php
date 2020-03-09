@@ -91,4 +91,6 @@
     </script>
     <?php include 'partials/footer.php'; ?>
     <script src="js/Grade_Setting.js" type="text/javascript"></script>
+</body>
+</html>
     
