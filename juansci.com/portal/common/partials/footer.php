@@ -1,3 +1,4 @@
+    <script type="text/javascript" src="js/MIS_Grade_Common.js"></script>
     <script type="text/javascript" src="js/cms.js"></script>
     <script type="text/javascript" src="../../js/ajax.js"></script>
     <script type="text/javascript" src="../../js/modal.js"></script>
