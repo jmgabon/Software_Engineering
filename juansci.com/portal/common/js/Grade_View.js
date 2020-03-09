@@ -27,7 +27,7 @@ let studentName;
 let studentAge;
 let studentSex;
 let gradeLevel;
-let sectionNum;
+let SectionNum;
 let sectionName;
 let principalName;
 let adviserName;
@@ -100,7 +100,7 @@ if (accessType === 'teacher') {
             // query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ';
             // query += 'FROM main_student ';
             // query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-            // query += 'WHERE main_student_section.SectionNum IN (' + sectionNum + ')';
+            // query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
 
             // if (queryValue !== '') {
             //     let queryAnd;
@@ -129,7 +129,7 @@ if (accessType === 'teacher') {
             let queryValue = searchStudent.value;
             let queryIndex = cat.options[cat.selectedIndex].value;
 
-            val += '&sectionNum=' + sectionNum;
+            val += '&SectionNum=' + SectionNum;
             val += '&queryValue=' + queryValue;
             val += '&queryIndex=' + queryIndex;
 
@@ -464,7 +464,7 @@ function getSectionInfo(xhttp) {
 
         console.log(jsonSecInfo);
 
-        sectionNum = jsonSecInfo[0]['SectionNum'];
+        SectionNum = jsonSecInfo[0]['SectionNum'];
         adviserName = jsonSecInfo[0]['Adviser'];
         sectionName = jsonSecInfo[0]['SectionName'];
 

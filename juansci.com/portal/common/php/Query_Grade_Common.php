@@ -10,7 +10,7 @@
             $query .= "SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ";
             $query .= "FROM main_student ";
             $query .= "LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ";
-            $query .= "WHERE main_student_section.SectionNum = " . $_POST['sectionNum'] . " ";
+            $query .= "WHERE main_student_section.SectionNum = " . $_POST['SectionNum'] . " ";
 
             if ($_POST['queryValue'] !== '') {
                 if ($_POST['queryIndex'] === 'LRNNum') {
@@ -106,6 +106,107 @@
             $query .= "AND Quarter = " . $_POST['quarterSelected'] . " ";
         }
 
+        // Grade_Subject
+        if ($func === 'setAdviserName') {
+            $query .= "SELECT IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
+            $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
+            $query .= "FROM main_section ";
+            $query .= "LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ";
+            $query .= "WHERE SectionNum = " . $_POST['SectionNum'] . " ";
+        }
+
+        if ($func === 'setStudentListDB') {
+            $query .= "SELECT main_student.LRNNum, main_student.LastName, main_student.ExtendedName, main_student.FirstName, main_student.MiddleName ";
+            $query .= "FROM main_student ";
+            $query .= "LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ";
+            $query .= "WHERE main_student_section.SectionNum = " . $_POST['SectionNum'] . " ";
+        }
+
+        if ($func === 'setGradeDB') {
+            $query .= "SELECT main_student.LRNNum, grade_subject.GradeLevel, grade_subject.SubjectCode, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeRating END), null) AS Q1, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeRating END), null) AS Q2, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeRating END), null) AS Q3, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeRating END), null) AS Q4, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeID END), null) AS IDQ1, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeID END), null) AS IDQ2, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeID END), null) AS IDQ3, ";
+            $query .= "COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeID END), null) AS IDQ4 ";
+            $query .= "FROM main_student ";
+            $query .= "LEFT JOIN grade_subject ON main_student.LRNNum = grade_subject.LRNNum ";
+            $query .= "INNER JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ";
+            $query .= "WHERE main_student_section.SectionNum = " . $_POST['SectionNum'] . " ";
+            $query .= "AND grade_subject.SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+            $query .= "GROUP BY main_student.LRNNum ";
+        }
+
+        if ($func === 'saveGrade') {
+            $query .= "INSERT INTO grade_subject ";
+            $query .= "(GradeID, LRNNum, GradeLevel, SubjectCode, Quarter, GradeRating) ";
+            $query .= "VALUES ('" . $_POST['GradeID'] . "', '";
+            $query .= $_POST['LRNNum'] . "', '";
+            $query .= $_POST['GradeLevel'] . "', '";
+            $query .= $_POST['SubjectCode'] . "', '";
+            $query .= $_POST['Quarter'] . "', '";
+            $query .= $_POST['GradeRating'] . "') ";
+            $query .= "ON DUPLICATE KEY UPDATE GradeRating = " . $_POST['GradeRating'] . " ";
+        }
+
+        if ($func === 'setCaseStatus') {
+            $query .= "SELECT CaseValue ";
+            $query .= "FROM grade_case ";
+            $query .= "WHERE TeacherNum = " . $_POST['TeacherNum'] . " ";
+            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+        }
+
+        if ($func === 'updateCaseStatus') {
+            $query .= "UPDATE grade_case ";
+            $query .= "SET CaseValue = " . $_POST['CaseValue'] . " ";
+            $query .= "WHERE TeacherNum = " . $_POST['TeacherNum'] . " ";
+            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+        }
+
+        if ($func === 'principalApproved') {
+            $query .= "UPDATE grade_subject ";
+            $query .= "SET Status = 'APPROVED' ";
+            $query .= "WHERE LRNNum = " . $_POST['LRNNum'] . " ";
+            $query .= "AND GradeLevel = " . $_POST['GradeLevel'] . " ";
+            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+            $query .= "AND Quarter = " . $_POST['Quarter'] . " ";
+        }
+
+        if ($func === 'SearchSubject') {
+            $query .= "SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ";
+            $query .= "IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
+            $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
+            $query .= "main_section.SectionNum, main_subject.TeacherNum ";
+            $query .= "FROM main_subject ";
+            $query .= "INNER JOIN main_section ";
+            $query .= "ON main_subject.SectionNum = main_section.SectionNum ";
+            $query .= "JOIN main_teacher ";
+            $query .= "ON main_subject.TeacherNum = main_teacher.TeacherNum ";
+
+            if ($_POST['accessType'] === 'teacher') {
+                $query .= "WHERE main_subject.TeacherNum = " . $_POST['TeacherNum'] . " ";
+            }
+
+            if ($_POST['queryValue'] !== '') {
+
+                if ($_POST['queryIndex'] === 'Adviser') {
+                    $queryHaving = "HAVING ";
+                } else {
+                    $queryHaving = "AND ";
+                }
+
+                $query .= $queryHaving . $_POST['queryIndex'] . " LIKE '" . $_POST['queryValue'] . "%' ";
+
+                if ($_POST['accessType'] === 'coordinator' || $_POST['accessType'] === 'principal') {
+                    $query .= "ORDER BY Adviser ASC ";
+                }
+            }
+        }
+
+        
         
 		$stmt = $db->prepare($query);
         $stmt->execute();
