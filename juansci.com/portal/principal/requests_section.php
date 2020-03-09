@@ -114,7 +114,7 @@ include 'partials/footer.php';
             // console.log(data);
             AJAX(data, true, "post", "php/Update.php", true, messageAlert);
         }
-        else if(results[i]["Action_"] == "INSERT"){
+        else if(results[i]["Action_"] == "CREATE"){//Changed to CREATE from INSERT MARCH 9
             AJAX(data, true, "post", "php/Create.php", true, messageAlert);
         }
 

@@ -6,7 +6,7 @@ require "../../../php/ConnectToDB.php";
 // $colVal = array();
 // $j = 0;
 session_start();
-
+$executeQuery = 1;
 $remarks = $_POST['remarks'];
 $decision = $_POST['decision'];
 $controlNum = $_POST['value'];
@@ -15,7 +15,7 @@ $url = $_POST['url'];
 $url = explode("/", $url);
 $userType = $url[count($url)-2];
 $table = $url[count($url)-1]; 
-
+// $primary_key = "";
 if(strpos($url[count($url)-1], "#") !== false){
 	$table = explode("#", $table)[0];
 }
@@ -34,6 +34,7 @@ if($table == "regrequests_student"){
 if($table == "requests_room"){
 	$main_table = "main_room";
 	$temp_table = "temp_roomcreation";
+	// $primary_key = "RoomNum";
 }
 if($table == "requests_subjectcode"){
 	$main_table = "main_subjectcode";
@@ -42,88 +43,104 @@ if($table == "requests_subjectcode"){
 if($table == "requests_section"){
 	$main_table = "main_section";
 	$temp_table = "temp_sectioncreation";
+	$preparedStatement = "SELECT COUNT(main_section.SectionNum) AS CheckAdviser FROM `main_section` JOIN temp_sectioncreation ON temp_sectioncreation.Adviser = main_section.Adviser WHERE temp_sectioncreation.ControlNum = ?";
+	$stmt = $db->prepare($preparedStatement);
+	$stmt->bindValue(1, $controlNum);
+	$stmt->execute();
+	$row = $stmt->fetch();
+	$CheckAdviser = $row['CheckAdviser'];
+
+	$preparedStatement = "SELECT COUNT(main_section.RoomNum) AS CheckRoom FROM `main_section` JOIN temp_sectioncreation ON temp_sectioncreation.RoomNum = main_section.RoomNum WHERE temp_sectioncreation.ControlNum = ?";
+	$stmt = $db->prepare($preparedStatement);
+	$stmt->bindValue(1, $controlNum);
+	$stmt->execute();
+	$row = $stmt->fetch();
+	$CheckRoom = $row['CheckRoom'];
+	// echo $row['CheckAdviser'];
+	if($CheckAdviser > 0){
+		$executeQuery = 0;
+		echo "Adviser is not available ";
+	}
+	if($CheckRoom > 0){
+		$executeQuery = 0;
+		echo "Room is not available ";
+	}
+	// var_dump($row);
+	// echo("GAGO");
 }
 if($remarks == ""){
 	$remarks = NULL;
 }
-// echo($temp_table);
 try{
-		$preparedStatement = "UPDATE " .$temp_table. " SET  Status_ = ?, ApprovedBy = ?, ApprovalDate = CURRENT_TIMESTAMP, Remarks = ? WHERE ControlNum = ?";
-		$stmt = $db->prepare($preparedStatement);
-		// $stmt->bindValue(1, $temp_table);
-		$stmt->bindValue(1, $decision);
-		$stmt->bindValue(2, $_SESSION['TeacherNum']);
-		$stmt->bindValue(3, $remarks);
-		$stmt->bindValue(4, $controlNum);
+	// $preparedStatement = "SELECT ".$primary_key." FROM ".$temp_table." WHERE ControlNum = ?";
+	// $stmt = $db->prepare($preparedStatement);
+	// $stmt->bindValue(1, $controlNum);
+	// $stmt->execute();
 
-		$stmt->execute();
-		// $stmt->closeCursor();
+	// $row = $stmt->fetchAll();
+
+	// $preparedStatement = "SELECT COUNT(".$primary_key.") AS CheckNum FROM ".$main_table." WHERE ".$primary_key."=?";
+	// $stmt = $db->prepare($preparedStatement);
+	// $stmt->bindValue(1, $row[$primary_key]);
+
+	// $row = $stmt->fetchAll();
+	
+	//QUERY
 	if($decision == "REJECTED"){
-		echo("Request No. ". $controlNum . " is REJECTED");
-	}
-	else if($decision == "APPROVED"){
-		$preparedStatement = "SELECT column_name
-		FROM information_schema.columns
-		WHERE table_schema = 'mis'
-		AND table_name = ?;";
-		// $preparedStatement = "DESCRIBE " . $main_table;
-		$stmt = $db->prepare($preparedStatement);
-		$stmt->bindValue(1, $main_table);
-		$stmt->execute();
-		$row = $stmt->fetchAll();
-		for ($i=0; $i < count($row); $i++) { 
-		# code...
-			if(!($row[$i][0] == "DateCreated" || $row[$i][0] == "TeacherNum" || $row[$i][0] == "SectionNum")){
-				$columns .= $row[$i][0] . ",";
-			}
-		}
-		// $columns = substr($columns, 0, -1);
-		$preparedStatement = "INSERT INTO ".$main_table."(".$columns."DateCreated) SELECT " . $columns . "ApprovalDate FROM ".$temp_table." WHERE ControlNum = ?";
-		$stmt = $db->prepare($preparedStatement);
-		$stmt->bindValue(1, $controlNum);
-		$stmt->execute();
-		$stmt->closeCursor();
-		echo("Request No. ". $controlNum . " is APPROVED");
-		// echo($preparedStatement);
-	}
-
-}
-catch(Exception $e){
-	echo $preparedStatement;
-}
-
-/*try{
-	// echo $temp_table;
-	$preparedStatement = "SELECT " . $primary_key . " FROM " . $temp_table . " WHERE ";
-	$preparedStatement .= $primary_key . " = '" . $primary_key_value . "' AND Action_ = '";
-	$preparedStatement .= $Action_Val . "'"; 
-	$stmt = $db->prepare($preparedStatement);
-	$stmt->execute();
-	$row = $stmt->fetchAll();
-
-	if(count($row) == 0){
-		$toBind = substr($toBind, 0, strlen($toBind)- 1);
-		$columns = substr($columns, 0, strlen($columns)- 1);
-		$preparedStatement = "INSERT INTO " . $temp_table . "(" . $columns . ") VALUES(" . $toBind . ")";
-		
-		$stmt = $db->prepare($preparedStatement);
-		for($i = 1; $i < $j+1; $i++){
-			$stmt->bindValue($i, $colVal[$i-1]);
-		}
-		$stmt->execute();
-		echo "Successful";
-		$stmt->closeCursor();
-		// echo $preparedStatement;
+		$message = "Request No. ". $controlNum . " is REJECTED";
+		UpdateRequest();
 	}
 	else{
-		echo "Duplicate Request";
+		if($executeQuery == 1){
+			$preparedStatement = "SELECT column_name
+			FROM information_schema.columns
+			WHERE table_schema = 'mis'
+			AND table_name = ?;";
+			// $preparedStatement = "DESCRIBE " . $main_table;
+			$stmt = $db->prepare($preparedStatement);
+			$stmt->bindValue(1, $main_table);
+			$stmt->execute();
+			$row = $stmt->fetchAll();
+			for ($i=0; $i < count($row); $i++) { 
+			# code...
+				if(!($row[$i][0] == "DateCreated" || $row[$i][0] == "TeacherNum" || $row[$i][0] == "SectionNum")){
+					$columns .= $row[$i][0] . ",";
+				}
+			}
+			// $columns = substr($columns, 0, -1);
+			$preparedStatement = "INSERT INTO ".$main_table."(".$columns."DateCreated) SELECT " . $columns . "ApprovalDate FROM ".$temp_table." WHERE ControlNum = ?";
+			$stmt = $db->prepare($preparedStatement);
+			$stmt->bindValue(1, $controlNum);
+			$stmt->execute();
+			$stmt->closeCursor();
+			$message = "Request No. ". $controlNum . " is APPROVED";
+
+			UpdateRequest();
+		}
 	}
-// 	MAKE TIMESTAMP WORKS ON CREATE
-// ALTER TABLE `mytable`
-// CHANGE `mydatefield` `mydatefield`
-// TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 }
 catch(Exception $e){
-	echo $e;
-}*/
+	// echo($e);
+	if(strpos($e, "'PRIMARY'") !== false){
+		echo "Request No. ". $controlNum. " cannot be granted! Check for duplicates";
+	}
+	else{
+		echo($e);
+	}
+	// echo $preparedStatement;
+	// echo($message);
+}
+
+function UpdateRequest(){
+	$preparedStatement = "UPDATE " .$GLOBALS['temp_table']. " SET  Status_ = ?, ApprovedBy = ?, ApprovalDate = CURRENT_TIMESTAMP, Remarks = ? WHERE ControlNum = ?";
+	$stmt = $GLOBALS['db']->prepare($preparedStatement);
+	$stmt->bindValue(1, $GLOBALS['decision']);
+	$stmt->bindValue(2, $_SESSION['TeacherNum']);
+	$stmt->bindValue(3, $GLOBALS['remarks']);
+	$stmt->bindValue(4, $GLOBALS['controlNum']);
+
+	$stmt->execute();
+	// 
+	echo $GLOBALS['message'];
+}
 ?>

@@ -19,7 +19,7 @@ if($_POST['content'] != ""){
 
 try{
 	$preparedStatement = "SELECT TeacherNum, LastName, ExtendedName, FirstName, MiddleName, Shift, Major FROM main_teacher
-	WHERE TeacherNum NOT IN (SELECT summary_schedule.TeacherNum FROM summary_schedule WHERE summary_schedule.SubjectDay = ? AND summary_schedule.SubjectTime = ?) ".$content;
+	WHERE TeacherNum NOT IN (SELECT masterlist_schedule.TeacherNum FROM masterlist_schedule WHERE masterlist_schedule.SubjectDay = ? AND masterlist_schedule.SubjectTime = ?) ".$content;
 	// // }
 	$stmt = $db->prepare($preparedStatement);
 

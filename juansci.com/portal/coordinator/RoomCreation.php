@@ -108,7 +108,7 @@
             content["CreatedBy"] = userID; 
         }
         content["Status_"] = "PENDING";
-        content["Action_"] = "INSERT";
+        content["Action_"] = "CREATE";//CHANGED TO CREATE
 
         Create(window.location.href, content, requestStatus);
     });
