@@ -520,11 +520,24 @@ function setGradeSubjDB() {
 
     if (accessType === 'student') {
         val += '&accessType=student';
+        misQuery('setGradeSubjDB', val, getGradeSubjDB);
     } else if (accessType === 'teacher') {
         val += '&accessType=teacher';
-    }
+        misQuery('setGradeSubjDB', val, getGradeSubjDB);
 
-    misQuery('setGradeSubjDB', val, getGradeSubjDB);
+        val = '';
+        val += '&LRNNum=' + LRNNum;
+        val += '&gradeLevel=' + gradeLevel;
+        val += '&accessType=student';
+        misQuery('setGradeSubjDB', val, (xhttp) => {
+            if (JSON.parse(xhttp.responseText).length === 0) {
+                btn_encode.disabled = false;
+                btn_encode.textContent = 'ENCODE QUARTER ' + quarterSelected;
+            } else {
+                btn_encode.textContent = 'QUARTER ' + quarterSelected + ' ALREADY ENCODED';
+            }
+        });
+    }
 }
 
 
@@ -680,11 +693,11 @@ function calculateAverage() {
             colAverage = colAverage.toFixed(0);
             trTableGrade[trTableGrade.length - 1].cells[i].textContent = colAverage;
 
-            if (quarterSelected == i) {
-                if (colAverage != '') {
-                    btn_encode.disabled = false;
-                }
-            }
+            // if (quarterSelected == i) {
+            //     if (colAverage != '') {
+            //         btn_encode.disabled = false;
+            //     }
+            // }
         }
     }
 
@@ -806,6 +819,8 @@ let init = (function() {
 
 
             alert('Encoding done. Grades are stored to the database!');
+            btn_encode.textContent = 'QUARTER ' + quarterSelected + ' ALREADY ENCODED';
+            btn_encode.disabled = true;
         } else {
             alert('Cancelled.');
         }

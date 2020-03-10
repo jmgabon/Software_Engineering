@@ -25,6 +25,7 @@ let Quarter;
 let GradeLevel;
 let SectionNum;
 let SubjectCode;
+let SubjectID;
 
 let newCase;
 let currCase;
@@ -52,12 +53,12 @@ const colNum = (document.querySelector('table thead tr').childElementCount + 3);
 
 let modalSubject = function() {
     modal_button.addEventListener('click', function() {
-        let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser';
-        let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser';
+        let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser@Status';
+        let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser@Status';
         CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
 
         let cat = document.querySelector('#modal-body select');
-        let hiddenCol = 'SectionNum@TeacherNum';
+        let hiddenCol = 'SubjectID@SectionNum@TeacherNum';
         const searchSubject = document.querySelector('#SearchSubject');
         theadID += '@' + hiddenCol;
         theadHTML += '@' + hiddenCol;
@@ -124,7 +125,9 @@ let modalSubject = function() {
 
 
 let getSubject = function(xhttp) {
-    console.log(JSON.parse(xhttp.responseText));
+    let jsonSubjectInfo = JSON.parse(xhttp.responseText);
+
+    console.log(jsonSubjectInfo);
     CreateTBody(xhttp, getSubject);
     const tbody_tr = document.querySelectorAll('#SearchSubjectTable tbody tr');
 
@@ -133,12 +136,13 @@ let getSubject = function(xhttp) {
             document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
-            SectionNum = this.childNodes[4].innerHTML;
-            teacherNum = this.childNodes[5].innerHTML;
-            SubjectCode = this.childNodes[0].innerHTML;
-            txt_Section.innerHTML = this.childNodes[1].innerHTML;
-            txt_GradeLevel.innerHTML = this.childNodes[2].innerHTML;
-            GradeLevel = this.childNodes[2].innerHTML;
+            SectionNum = jsonSubjectInfo[i]['SectionNum'];
+            teacherNum = jsonSubjectInfo[i]['TeacherNum'];
+            SubjectCode = jsonSubjectInfo[i]['SubjectCode'];
+            txt_Section.innerHTML = jsonSubjectInfo[i]['SectionName'];
+            txt_GradeLevel.innerHTML = jsonSubjectInfo[i]['GradeLevel'];
+            GradeLevel = jsonSubjectInfo[i]['GradeLevel'];
+            SubjectID = jsonSubjectInfo[i]['SubjectID'];
 
             input_SubjectCode.value = SubjectCode;
             txt_SubjectCode.innerHTML = SubjectCode;
@@ -673,8 +677,7 @@ let setCaseStatus = function() {
 
     let val = '';
 
-    val += '&TeacherNum=' + teacherNum;
-    val += '&SubjectCode=' + SubjectCode;
+    val += '&SubjectID=' + SubjectID;
 
     misQuery('setCaseStatus', val, getCaseStatus);
 };
@@ -755,8 +758,7 @@ let updateCaseStatus = function(newCase) {
     let val = '';
 
     val += '&CaseValue=' + newCase;
-    val += '&TeacherNum=' + teacherNum;
-    val += '&SubjectCode=' + SubjectCode;
+    val += '&SubjectID=' + SubjectID;
 
     misQuery('updateCaseStatus', val, () => null);
 

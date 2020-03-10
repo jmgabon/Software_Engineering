@@ -61,18 +61,19 @@
             $query .= "SELECT main_section.SectionNum, main_section.SectionName, main_section.GradeLevel, ";
             $query .= "IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
             $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser ";
-            $query .= "FROM main_section ";
 
             if ($_POST['accessType'] === 'teacher') {
+                $query .= "FROM main_section ";
                 $query .= "LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ";
                 $query .= "WHERE main_section.Adviser = " . $_POST['teacherNum'] . " ";
             } else if ($_POST['accessType'] === 'student') {
-                $query .= "LEFT JOIN main_student_section ";
-                $query .= "ON main_section.SectionNum = main_student_section.SectionNum ";
-                $query .= "JOIN main_teacher ";
+                $query .= "FROM main_student_section ";
+                $query .= "LEFT JOIN main_section ";
+                $query .= "ON main_student_section.SectionNum = main_section.SectionNum ";
+                $query .= "LEFT JOIN main_teacher ";
                 $query .= "ON main_section.Adviser = main_teacher.TeacherNum ";
                 $query .= "WHERE main_student_section.LRNNum = " . $_POST['LRNNum'] . " ";
-                $query .= "ORDER BY main_student_section.DateCreated DESC ";
+                $query .= "ORDER BY main_student_section.GradeLevel DESC ";
                 $query .= "LIMIT 1 ";
             }
         }
@@ -155,15 +156,13 @@
         if ($func === 'setCaseStatus') {
             $query .= "SELECT CaseValue ";
             $query .= "FROM grade_case ";
-            $query .= "WHERE TeacherNum = " . $_POST['TeacherNum'] . " ";
-            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+            $query .= "WHERE SubjectID = '" . $_POST['SubjectID'] . "' ";
         }
 
         if ($func === 'updateCaseStatus') {
             $query .= "UPDATE grade_case ";
             $query .= "SET CaseValue = " . $_POST['CaseValue'] . " ";
-            $query .= "WHERE TeacherNum = " . $_POST['TeacherNum'] . " ";
-            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+            $query .= "WHERE SubjectID = '" . $_POST['SubjectID'] . "' ";
         }
 
         if ($func === 'principalApproved') {
@@ -176,10 +175,14 @@
         }
 
         if ($func === 'SearchSubject') {
+            $query .= "SELECT SubjectCode, SectionName, GradeLevel, Adviser, Status, SubjectID, SectionNum, TeacherNum FROM ( ";
+            $query .= "SELECT * FROM ";
+            $query .= "( ";
+
             $query .= "SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ";
             $query .= "IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
             $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
-            $query .= "main_section.SectionNum, main_subject.TeacherNum ";
+            $query .= "main_subject.SubjectID, main_section.SectionNum, main_subject.TeacherNum ";
             $query .= "FROM main_subject ";
             $query .= "INNER JOIN main_section ";
             $query .= "ON main_subject.SectionNum = main_section.SectionNum ";
@@ -204,6 +207,22 @@
                     $query .= "ORDER BY Adviser ASC ";
                 }
             }
+
+            if ($_POST['accessType'] === 'teacher') {
+                $caseVal = 4;
+            } else if ($_POST['accessType'] === 'coordinator') {
+                $caseVal = 5;
+            } else if ($_POST['accessType'] === 'principal') {
+                $caseVal = 6;
+            }
+
+            $query .= ") AS SubjectInfo, ";
+            $query .= "( ";
+            $query .= "SELECT SubjectID AS ID2, CaseValue, IF(CaseValue >= $caseVal, 'ENCODED', 'NOT ENCODED') AS Status ";
+            $query .= "FROM grade_case ";
+            $query .= ") AS GradeCase ";
+            $query .= "WHERE SubjectInfo.SubjectID = GradeCase.ID2 ";
+            $query .= ") AS MAIN ";
         }
 
         
@@ -212,7 +231,7 @@
         $stmt->execute();
         $row = $stmt->fetchAll();
         echo json_encode($row);
-		$stmt->closeCursor();
+        $stmt->closeCursor();
 	} catch(Exception $e){
 		echo $query;
 	}
