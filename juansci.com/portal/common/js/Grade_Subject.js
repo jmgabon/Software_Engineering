@@ -26,12 +26,14 @@ let GradeLevel;
 let SectionNum;
 let SubjectCode;
 let SubjectID;
+let tempSubjectID;
 
 let newCase;
 let currCase;
 
 
 const txt_Adviser = document.querySelector('#txt_Adviser');
+const txt_SubjTeacher = document.querySelector('#txt_SubjTeacher');
 const txt_Section = document.querySelector('#txt_Section');
 const txt_GradeLevel = document.querySelector('#txt_GradeLevel');
 const txt_SubjectCode = document.querySelector('#txt_SubjectCode');
@@ -53,8 +55,8 @@ const colNum = (document.querySelector('table thead tr').childElementCount + 3);
 
 let modalSubject = function() {
     modal_button.addEventListener('click', function() {
-        let theadID = 'SubjectCode@SectionName@GradeLevel@Adviser@Status';
-        let theadHTML = 'Subject Code@Section Name@Grade Level@Adviser@Status';
+        let theadID = 'SubjectCode@SectionName@GradeLevel@Teacher@Status';
+        let theadHTML = 'Subject Code@Section Name@Grade Level@Teacher@Status';
         CreateSearchBox(theadID, theadHTML, '@', 'SearchSubject', 'search', modal_body);
 
         let cat = document.querySelector('#modal-body select');
@@ -141,6 +143,7 @@ let getSubject = function(xhttp) {
             SubjectCode = jsonSubjectInfo[i]['SubjectCode'];
             txt_Section.innerHTML = jsonSubjectInfo[i]['SectionName'];
             txt_GradeLevel.innerHTML = jsonSubjectInfo[i]['GradeLevel'];
+            txt_SubjTeacher.innerHTML = jsonSubjectInfo[i]['Teacher'];
             GradeLevel = jsonSubjectInfo[i]['GradeLevel'];
             SubjectID = jsonSubjectInfo[i]['SubjectID'];
 
@@ -175,6 +178,7 @@ let displayAfterModal = function() {
         input_SubjectCode.value === 'MAPEH 10') {
         labelMAPEH.style.display = 'block';
         selectMAPEH.value = selectMAPEH.options[0].value;
+        tempSubjectID = SubjectID;
 
         RemoveChildNodes(tbody);
         textCaseStatus('cls');
@@ -196,6 +200,8 @@ let displayAfterModal = function() {
 let setSubMAPEH = function() {
     SubjectCode = selectMAPEH.value + ' ' + GradeLevel;
     txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
+
+    SubjectID = selectMAPEH.value + tempSubjectID.slice(5);
 
     RemoveChildNodes(tbody);
     setCaseStatus();

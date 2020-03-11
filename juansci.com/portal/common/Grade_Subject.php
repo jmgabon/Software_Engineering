@@ -52,9 +52,10 @@
         </div>
 
         <br /><br />
-        <p><b>Section Name: </b><span id="txt_Section"></span></p>
         <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
+        <p><b>Section Name: </b><span id="txt_Section"></span></p>
         <p><b>Adviser Name: </b><span id="txt_Adviser"></span></p>
+        <p><b>Subject Teacher Name: </b><span id="txt_SubjTeacher"></span></p>
         <p><b>Subject Code: </b><span id="txt_SubjectCode"></span></p>
 
         <br /><br />

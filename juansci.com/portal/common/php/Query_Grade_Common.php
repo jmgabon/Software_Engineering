@@ -35,6 +35,7 @@
             $query .= "WHERE SettingName = 'quarter_enabled'";
         }
 
+        // Grade_View; Grade_Setting;
         if ($func === 'setSubjectListDB') {
             $query .= "SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ";
             $query .= "FROM main_subjectcode ";
@@ -42,6 +43,13 @@
             $query .= "WHERE main_subjectcode.GradeLevel IN (" . $_POST['grLvl'] . ") ";
             $query .= "AND main_subjectcode.SubjectCode NOT LIKE 'HOMEROOM%' ";
             $query .= "ORDER BY grade_sortable.OrderNumber ASC ";
+
+            // query += 'SELECT subjectcode.SubjectCode ';
+            // query += 'FROM subjectcode ';
+            // query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
+            // query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
+            // query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
+            // query += 'ORDER BY grade_sortable.OrderNumber ASC ';
         }
 
         if ($func === 'setStudentInfo') {
@@ -175,37 +183,23 @@
         }
 
         if ($func === 'SearchSubject') {
-            $query .= "SELECT SubjectCode, SectionName, GradeLevel, Adviser, Status, SubjectID, SectionNum, TeacherNum FROM ( ";
-            $query .= "SELECT * FROM ";
-            $query .= "( ";
+            $query .= "SELECT * FROM ( ";
+            $query .= "SELECT SubjectCode, SectionName, GradeLevel, Teacher, Status, SubjectID, SectionNum, TeacherNum FROM ( ";
+            $query .= "SELECT * FROM ( ";
 
             $query .= "SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ";
             $query .= "IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
-            $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Adviser, ";
+            $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Teacher, ";
             $query .= "main_subject.SubjectID, main_section.SectionNum, main_subject.TeacherNum ";
             $query .= "FROM main_subject ";
             $query .= "INNER JOIN main_section ";
             $query .= "ON main_subject.SectionNum = main_section.SectionNum ";
             $query .= "JOIN main_teacher ";
             $query .= "ON main_subject.TeacherNum = main_teacher.TeacherNum ";
+            $query .= "WHERE main_subject.SubjectCode NOT LIKE 'MAPEH%' ";
 
             if ($_POST['accessType'] === 'teacher') {
-                $query .= "WHERE main_subject.TeacherNum = " . $_POST['TeacherNum'] . " ";
-            }
-
-            if ($_POST['queryValue'] !== '') {
-
-                if ($_POST['queryIndex'] === 'Adviser') {
-                    $queryHaving = "HAVING ";
-                } else {
-                    $queryHaving = "AND ";
-                }
-
-                $query .= $queryHaving . $_POST['queryIndex'] . " LIKE '" . $_POST['queryValue'] . "%' ";
-
-                if ($_POST['accessType'] === 'coordinator' || $_POST['accessType'] === 'principal') {
-                    $query .= "ORDER BY Adviser ASC ";
-                }
+                $query .= "AND main_subject.TeacherNum = " . $_POST['TeacherNum'] . " ";
             }
 
             if ($_POST['accessType'] === 'teacher') {
@@ -216,55 +210,45 @@
                 $caseVal = 6;
             }
 
-            $query .= ") AS SubjectInfo, ";
-            $query .= "( ";
+            $query .= ") AS SubjectInfo, ( ";
             $query .= "SELECT SubjectID AS ID2, CaseValue, IF(CaseValue >= $caseVal, 'ENCODED', 'NOT ENCODED') AS Status ";
             $query .= "FROM grade_case ";
             $query .= ") AS GradeCase ";
             $query .= "WHERE SubjectInfo.SubjectID = GradeCase.ID2 ";
             $query .= ") AS MAIN ";
-        }
 
-        if ($func === 'setupGradeCase') {
-            /*
-            INSERT all `main_subject`.`SubjectID` to `grade_case`,
-            but with adjustment IF `SubjectID` LIKE 'MAPEH%' OR 'HOMEROOM%'
+            $query .= "UNION ALL ";
+            $query .= "SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ";
+            $query .= "IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, '' , ''), ";
+            $query .= "CONCAT(LastName, IF(ExtendedName is NULL, '', CONCAT(' ', ExtendedName)), ', ' , FirstName, ' ' , LEFT(MiddleName, 1), '.')) AS Teacher, ";
+            $query .= "'MORE INFO' AS Status, ";
+            $query .= "main_subject.SubjectID, main_section.SectionNum, main_subject.TeacherNum ";
+            $query .= "FROM main_subject ";
+            $query .= "INNER JOIN main_section ";
+            $query .= "ON main_subject.SectionNum = main_section.SectionNum ";
+            $query .= "JOIN main_teacher ";
+            $query .= "ON main_subject.TeacherNum = main_teacher.TeacherNum ";
+            $query .= "WHERE main_subject.SubjectCode LIKE 'MAPEH%' ";
 
-            if (SubjectID LIKE 'HOMEROOM%') {
-                don't INSERT (because HOMEROOM don't have grades, only schedules)
-            } else if (SubjectID LIKE 'MAPEH%') {
-                INSERT 'MUSIC`GradeLevel-`SectionNum`'
-                INSERT 'ARTS`GradeLevel-`SectionNum`'
-                INSERT 'PE`GradeLevel-`SectionNum`'
-                INSERT 'HEALTH`GradeLevel-`SectionNum`'
-            } else {
-                INSERT `SubjectID`
+            if ($_POST['accessType'] === 'teacher') {
+                $query .= "AND main_subject.TeacherNum = " . $_POST['TeacherNum'] . " ";
             }
-            */
 
-            $query .= "TRUNCATE mis.grade_case; ";
+            $query .= ") AS MAIN2 ";
 
-            $query .= "INSERT INTO grade_case (SubjectID) ";
-            $query .= "    SELECT SUB.SubjectID ";
-            $query .= "    FROM ( ";
-            $query .= "        SELECT SubjectID ";
-            $query .= "        FROM main_subject ";
-            $query .= "        WHERE SubjectID NOT LIKE 'HOMEROOM%' ";
-            $query .= "        AND SubjectID NOT LIKE 'MAPEH%' ";
-            $query .= "    ) AS SUB ";
+            if ($_POST['queryValue'] !== '') {
 
-            $subMAPEH = array('MUSIC', 'ARTS', 'PE', 'HEALTH');
-            foreach ($subMAPEH as $sub) {
-                $query .= "    UNION ALL ";
-                $query .= "    SELECT IF(SUB.SubjectID LIKE 'MAPEH%', CONCAT('$sub', ";
-                $query .= "    SUBSTRING(SUB.SubjectID, 6)), ";
-                $query .= "    SUB.SubjectID) ";
-                $query .= "    FROM ( ";
-                $query .= "        SELECT SubjectID ";
-                $query .= "        FROM main_subject ";
-                $query .= "        WHERE SubjectID NOT LIKE 'HOMEROOM%' ";
-                $query .= "        AND SubjectID LIKE 'MAPEH%' ";
-                $query .= "    ) AS SUB ";
+                // if ($_POST['queryIndex'] === 'Teacher') {
+                //     $queryHaving = "HAVING ";
+                // } else {
+                //     $queryHaving = "AND ";
+                // }
+
+                $query .= "WHERE " . $_POST['queryIndex'] . " LIKE '" . $_POST['queryValue'] . "%' ";
+
+                if ($_POST['accessType'] === 'coordinator' || $_POST['accessType'] === 'principal') {
+                    $query .= "ORDER BY Teacher ASC ";
+                }
             }
         }
 
