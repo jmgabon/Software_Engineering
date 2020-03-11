@@ -225,6 +225,10 @@ const wrapperGradeEnabler = (function() {
             }
         } else {
             if (jsonQuarter[0][0] == 0) {
+                if (q == 1) {
+                    misQuery('setupGradeCase', '', () => null);
+                }
+
                 query += 'UPDATE grade_case ';
                 query += 'SET CaseValue = 1 ';
 

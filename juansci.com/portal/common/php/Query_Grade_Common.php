@@ -225,6 +225,49 @@
             $query .= ") AS MAIN ";
         }
 
+        if ($func === 'setupGradeCase') {
+            /*
+            INSERT all `main_subject`.`SubjectID` to `grade_case`,
+            but with adjustment IF `SubjectID` LIKE 'MAPEH%' OR 'HOMEROOM%'
+
+            if (SubjectID LIKE 'HOMEROOM%') {
+                don't INSERT (because HOMEROOM don't have grades, only schedules)
+            } else if (SubjectID LIKE 'MAPEH%') {
+                INSERT 'MUSIC`GradeLevel-`SectionNum`'
+                INSERT 'ARTS`GradeLevel-`SectionNum`'
+                INSERT 'PE`GradeLevel-`SectionNum`'
+                INSERT 'HEALTH`GradeLevel-`SectionNum`'
+            } else {
+                INSERT `SubjectID`
+            }
+            */
+
+            $query .= "TRUNCATE mis.grade_case; ";
+
+            $query .= "INSERT INTO grade_case (SubjectID) ";
+            $query .= "    SELECT SUB.SubjectID ";
+            $query .= "    FROM ( ";
+            $query .= "        SELECT SubjectID ";
+            $query .= "        FROM main_subject ";
+            $query .= "        WHERE SubjectID NOT LIKE 'HOMEROOM%' ";
+            $query .= "        AND SubjectID NOT LIKE 'MAPEH%' ";
+            $query .= "    ) AS SUB ";
+
+            $subMAPEH = array('MUSIC', 'ARTS', 'PE', 'HEALTH');
+            foreach ($subMAPEH as $sub) {
+                $query .= "    UNION ALL ";
+                $query .= "    SELECT IF(SUB.SubjectID LIKE 'MAPEH%', CONCAT('$sub', ";
+                $query .= "    SUBSTRING(SUB.SubjectID, 6)), ";
+                $query .= "    SUB.SubjectID) ";
+                $query .= "    FROM ( ";
+                $query .= "        SELECT SubjectID ";
+                $query .= "        FROM main_subject ";
+                $query .= "        WHERE SubjectID NOT LIKE 'HOMEROOM%' ";
+                $query .= "        AND SubjectID LIKE 'MAPEH%' ";
+                $query .= "    ) AS SUB ";
+            }
+        }
+
         
         
 		$stmt = $db->prepare($query);
