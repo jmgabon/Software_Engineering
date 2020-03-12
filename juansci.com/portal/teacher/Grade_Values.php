@@ -376,13 +376,13 @@
     <?php include 'partials/footer.php'; ?>
 
     <script>
-        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
         let accessType = '<?php echo $_SESSION['AccessType']?>';
         if (accessType === '') {
             accessType = 'teacher';
         }
 
         console.log('accessType: ' + accessType);
-        console.log('teacherNum: ' + teacherNum);
+        console.log('TeacherNum: ' + TeacherNum);
     </script>
     <script src="js/Grade_Values.js" type="text/javascript"></script>

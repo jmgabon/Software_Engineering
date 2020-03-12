@@ -37,11 +37,6 @@
             $query .= "(SubjectCode, OrderNumber) ";
             $query .= "VALUES ('" . $_POST['subj'] . "', " . $_POST['num'] . ") ";
             $query .= "ON DUPLICATE KEY UPDATE OrderNumber = '" . $_POST['num'] . "' ";
-
-            // query += 'INSERT INTO grade_sortable ';
-            // query += '(SubjectCode, OrderNumber) ';
-            // query += 'VALUES ("' + subj + '", "' + num + '") ';
-            // query += 'ON DUPLICATE KEY UPDATE OrderNumber = "' + num + '"';
         }
 
         if ($func === 'changeGradeCaseValue1') {

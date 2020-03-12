@@ -136,18 +136,25 @@
 		var table = document.querySelector("table"); //
 		var tr = document.querySelectorAll("tbody tr"); //
 		function RetrieveTeacherSchedule(){
-			query = "SELECT main_subject.SubjectID, SubjectTime, SubjectDay, main_section.SectionName, main_subjectcode.SubjectDescription ";
-			query += "FROM main_subject LEFT JOIN main_sched ON main_subject.SubjectID = main_sched.SubjectID ";
-			query += "LEFT JOIN main_section ON main_subject.SectionNum = main_section.SectionNum ";
-			query += "LEFT JOIN main_subjectcode ON main_subjectcode.SubjectCode = main_subject.SubjectCode ";
-			query += "WHERE main_subject.TeacherNum = '<?php echo($_SESSION['TeacherNum']);?>'";
+			// query = "SELECT main_subject.SubjectID, SubjectTime, SubjectDay, main_section.SectionName, main_subjectcode.SubjectDescription ";
+			// query += "FROM main_subject LEFT JOIN main_sched ON main_subject.SubjectID = main_sched.SubjectID ";
+			// query += "LEFT JOIN main_section ON main_subject.SectionNum = main_section.SectionNum ";
+			// query += "LEFT JOIN main_subjectcode ON main_subjectcode.SubjectCode = main_subject.SubjectCode ";
+			// query += "WHERE main_subject.TeacherNum = '<?php //echo($_SESSION['TeacherNum']);?>'";
 			// function SimplifiedQuery(crud,query,searchbox,callback){
-			SimplifiedQuery(
-				"SELECT",
-				query,
-				null,
-				Retrieved
-			);
+			// SimplifiedQuery(
+			// 	"SELECT",
+			// 	query,
+			// 	null,
+			// 	Retrieved
+			// );
+
+
+			let val = '';
+
+			val += '&TeacherNum=' + <?php echo($_SESSION['TeacherNum']);?>;
+
+			misQuery('RetrieveTeacherSchedule', val, Retrieved);
 		}
 		function Retrieved(xhttp){
 			var json;	

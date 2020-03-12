@@ -41,13 +41,22 @@ const wrapperUIValues = (function() {
 
 
     let setSectionInfo = function() {
-        let query = '';
+        // let query = '';
 
-        query += 'SELECT SectionNum, SectionName, GradeLevel ';
-        query += 'FROM main_section ';
-        query += 'WHERE Adviser IN (' + teacherNum + ') ';
+        // query += 'SELECT SectionNum, SectionName, GradeLevel ';
+        // query += 'FROM main_section ';
+        // query += 'WHERE Adviser IN (' + TeacherNum + ') ';
 
-        SimplifiedQuery('SELECT', query, '', getSectionInfo);
+        // SimplifiedQuery('SELECT', query, '', getSectionInfo);
+
+
+        let val = '';
+        // let queryValue = searchSubject.value;
+        // let queryIndex = cat.options[cat.selectedIndex].value;
+
+        val += '&TeacherNum=' + TeacherNum;
+
+        misQuery('setSectionInfo', val, getSectionInfo);
     };
 
 
@@ -94,13 +103,16 @@ const wrapperUIValues = (function() {
 
 
     let setQuarterDB = function() {
-        let query = '';
+        // let query = '';
 
-        query += 'SELECT SettingValue ';
-        query += 'FROM setting ';
-        query += 'WHERE SettingName = "quarter_enabled" ';
+        // query += 'SELECT SettingValue ';
+        // query += 'FROM setting ';
+        // query += 'WHERE SettingName = "quarter_enabled" ';
 
-        SimplifiedQuery('SELECT', query, '', getQuarter);
+        // SimplifiedQuery('SELECT', query, '', getQuarter);
+
+
+        misQuery('setQuarterDB', '', getQuarter);
     };
 
 
@@ -130,15 +142,23 @@ const wrapperUIValues = (function() {
 const wrapperGradeValues = (function() {
 
     let setGradesValDB = function() {
-        let query = '';
+        // let query = '';
 
-        query += 'SELECT GradeValID, BehaviorID, Quarter, GradeValRating ';
-        query += 'FROM grade_values ';
-        query += 'WHERE LRNNum IN (' + LRNNum + ') ';
-        query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
+        // query += 'SELECT GradeValID, BehaviorID, Quarter, GradeValRating ';
+        // query += 'FROM grade_values ';
+        // query += 'WHERE LRNNum IN (' + LRNNum + ') ';
+        // query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
 
 
-        SimplifiedQuery('SELECT', query, '', getGradesValDB);
+        // SimplifiedQuery('SELECT', query, '', getGradesValDB);
+
+
+        let val = '';
+
+        val += '&LRNNum=' + LRNNum;
+        val += '&gradeLevel=' + gradeLevel;
+
+        misQuery('setGradesValDB', val, getGradesValDB);
     }
 
 
@@ -216,9 +236,10 @@ const wrapperGradeValues = (function() {
 
                 if (GradeValRating !== '--') {
                     updateGradeDB();
-                } else {
-                    deleteGradeDB();
                 }
+                // else {
+                //     deleteGradeDB();
+                // }
             }
 
             alert('QUARTER ' + Quarter + ' GRADES SAVED');
@@ -231,26 +252,38 @@ const wrapperGradeValues = (function() {
 
 
     let updateGradeDB = function() {
-        let query = '';
+        // let query = '';
 
-        query += 'INSERT INTO grade_values ';
-        query += '(GradeValID, LRNNum, GradeValLevel, BehaviorID, Quarter, GradeValRating) ';
-        query += 'VALUES ("' + GradeValID + '", "';
-        query += LRNNum + '", "';
-        query += gradeLevel + '", "';
-        query += BehaviorID + '", "';
-        query += Quarter + '", "';
-        query += GradeValRating + '") ';
-        query += 'ON DUPLICATE KEY UPDATE GradeValRating = "' + GradeValRating + '"';
+        // query += 'INSERT INTO grade_values ';
+        // query += '(GradeValID, LRNNum, GradeValLevel, BehaviorID, Quarter, GradeValRating) ';
+        // query += 'VALUES ("' + GradeValID + '", "';
+        // query += LRNNum + '", "';
+        // query += gradeLevel + '", "';
+        // query += BehaviorID + '", "';
+        // query += Quarter + '", "';
+        // query += GradeValRating + '") ';
+        // query += 'ON DUPLICATE KEY UPDATE GradeValRating = "' + GradeValRating + '"';
 
-        SimplifiedQuery('INSERT', query, '', () => null);
+        // SimplifiedQuery('INSERT', query, '', () => null);
+
+
+        let val = '';
+
+        val += '&GradeValID=' + GradeValID;
+        val += '&LRNNum=' + LRNNum;
+        val += '&gradeLevel=' + gradeLevel;
+        val += '&BehaviorID=' + BehaviorID;
+        val += '&Quarter=' + Quarter;
+        val += '&GradeValRating=' + GradeValRating;
+
+        misQuery('updateGradeDB', val, () => null);
     };
 
-    let deleteGradeDB = function() {
-        let query = 'DELETE FROM grade_values WHERE GradeValID = ' + GradeValID;
+    // let deleteGradeDB = function() {
+    //     let query = 'DELETE FROM grade_values WHERE GradeValID = ' + GradeValID;
 
-        SimplifiedQuery('INSERT', query, '', () => null);
-    };
+    //     SimplifiedQuery('INSERT', query, '', () => null);
+    // };
 
 
     return {
@@ -298,33 +331,44 @@ const mainController = (function(wrapUI, wrapVal) {
 
 
             let Search = function() {
-                let query = '';
+                // let query = '';
 
-                query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName ';
-                query += 'FROM main_student ';
-                query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-                query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
+                // query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName ';
+                // query += 'FROM main_student ';
+                // query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
+                // query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
 
-                if (searchStudent.value !== '') {
-                    let queryAnd;
-                    let queryNull;
+                // if (searchStudent.value !== '') {
+                //     let queryAnd;
+                //     let queryNull;
 
-                    if (cat.options[cat.selectedIndex].value === 'LRNNum') {
-                        queryAnd = 'AND student.';
-                    } else {
-                        queryAnd = 'AND ';
-                    }
+                //     if (cat.options[cat.selectedIndex].value === 'LRNNum') {
+                //         queryAnd = 'AND student.';
+                //     } else {
+                //         queryAnd = 'AND ';
+                //     }
 
-                    if (searchStudent.value === ' ') {
-                        queryNull = ' IS NULL';
-                    } else {
-                        queryNull = ' LIKE "' + searchStudent.value + '%"';
-                    }
+                //     if (searchStudent.value === ' ') {
+                //         queryNull = ' IS NULL';
+                //     } else {
+                //         queryNull = ' LIKE "' + searchStudent.value + '%"';
+                //     }
 
-                    query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
-                }
+                //     query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
+                // }
 
-                SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
+                // SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
+
+
+                let val = '';
+                let queryValue = searchStudent.value;
+                let queryIndex = cat.options[cat.selectedIndex].value;
+
+                val += '&SectionNum=' + SectionNum;
+                val += '&queryValue=' + queryValue;
+                val += '&queryIndex=' + queryIndex;
+
+                misQuery('SearchStudent', val, PickStudent);
             }
             Search();
 

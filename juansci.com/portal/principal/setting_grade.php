@@ -92,7 +92,7 @@
     </script>
     <?php include 'partials/footer.php'; ?>
     <script src="js/MIS_Grade_Principal.js" type="text/javascript"></script>
-    <script src="js/Grade_Setting.js" type="text/javascript"></script>
+    <script src="js/setting_grade.js" type="text/javascript"></script>
 </body>
 </html>
     

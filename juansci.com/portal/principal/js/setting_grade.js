@@ -130,7 +130,6 @@ const wrapperGradeSorter = (function() {
         let val = '';
         val += '&subj=' + subj;
         val += '&num=' + num;
-        console.log(subj)
 
         misQuery('setSaveSubjListDB', val, () => null);
     }
