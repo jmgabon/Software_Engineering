@@ -183,8 +183,8 @@ function PickStudent(xhttp) {
             }
 
             btn_encode.disabled = true;
-            setGradeSubjDB();
-            setGradeValDB();
+            // clearTBodySubj();
+            setSubjectListDB(gradeLevel, LRNNum);
         });
         tbody_tr[i].addEventListener('mouseover', function() {
             this.style.backgroundColor = 'maroon';
@@ -231,6 +231,8 @@ let createTBodySubj = function(subj) {
     let tr, td;
     let columnLen = 7;
     const tbodySubject = document.querySelector('#tbodySubject');
+    tbodySubject.innerHTML = '';
+    arrSubjCode.length = 0;
 
 
     for (let i = 0; i < subj.length + 1; i++) {
@@ -284,7 +286,7 @@ let createTBodySubj = function(subj) {
 }
 
 
-let setSubjectListDB = function(grLvl) {
+let setSubjectListDB = function(grLvl, LRNNum) {
     // let query = '';
 
     // query += 'SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ';
@@ -298,6 +300,7 @@ let setSubjectListDB = function(grLvl) {
 
     let val = '';
     val += '&grLvl=' + grLvl;
+    val += '&LRNNum=' + LRNNum;
 
     misQuery('setSubjectListDB', val, getSubjectListDB);
 }
@@ -309,6 +312,11 @@ let getSubjectListDB = function(xhttp) {
     try {
         jsonSubject = JSON.parse(xhttp.responseText);
         createTBodySubj(jsonSubject);
+
+        if (accessType === 'teacher') {
+            setGradeSubjDB();
+            setGradeValDB();
+        }
 
     } catch (err) {
         alert('CANNOT FIND');
@@ -363,7 +371,7 @@ let getStudentInfo = function(xhttp) {
         gradeLevel = jsonStudentInfo[0]['GradeLevel'];
         txt_GradeLevel.textContent = gradeLevel;
 
-        setSubjectListDB(gradeLevel);
+        setSubjectListDB(gradeLevel, LRNNum);
         setIfSectionAssigned();
 
     } catch (err) {
@@ -470,7 +478,6 @@ function getSectionInfo(xhttp) {
 
         if (accessType === 'teacher') {
             gradeLevel = jsonSecInfo[0]['GradeLevel'];
-            setSubjectListDB(gradeLevel);
         }
 
         txt_AdviserName.textContent = adviserName;
@@ -488,11 +495,15 @@ function getSectionInfo(xhttp) {
 
 
 function clearTBodySubj() {
-    for (let i = 0; i < trTableGrade.length; i++) {
-        for (let j = 1; j <= 6; j++) {
-            trTableGrade[i].cells[j].textContent = '';
+
+    if (trTableGrade.length !== undefined) {
+        for (let i = 0; i < trTableGrade.length; i++) {
+            for (let j = 1; j <= 6; j++) {
+                trTableGrade[i].cells[j].textContent = '';
+            }
         }
     }
+
 }
 
 

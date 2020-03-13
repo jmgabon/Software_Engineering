@@ -5,7 +5,69 @@
     $func = $_POST['func'];
     
 	try{
-        // Grade_View
+        if ($func === 'SearchTransfereeStudent') {
+            $query .= "SELECT LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ";
+            $query .= "FROM main_student ";
+            $query .= "WHERE Type = 'Transferee' ";
+
+            if ($_POST['queryValue'] !== '') {
+                if ($_POST['queryIndex'] === 'LRNNum') {
+                    $queryAnd = "AND main_student.";
+                } else {
+                    $queryAnd = "AND ";
+                }
+
+                if ($_POST['queryValue'] === ' ') {
+                    $queryNull = " IS NULL";
+                } else {
+                    $queryNull = " LIKE '" . $_POST['queryValue'] . "%'";
+                }
+
+                $query .= $queryAnd . $_POST['queryIndex'] . $queryNull;
+            }
+        }
+
+        if ($func === 'selectGrLvl') {
+            $query .= "SELECT GradeLevel ";
+            $query .= "FROM main_student ";
+            $query .= "WHERE LRNNum = " . $_POST['LRNNum'] . " ";
+        }
+
+        if ($func === 'SearchSubjectCode') {
+            $query .= "SELECT SubjectCode, SubjectDescription ";
+            $query .= "FROM main_subjectcode ";
+            $query .= "WHERE GradeLevel = " . $_POST['gradeLevel'] . " ";
+            $query .= "AND SubjectCode NOT LIKE 'HOMEROOM%' ";
+        }
+
+        if ($func === 'saveTrGrade') {
+            $query .= "INSERT INTO grade_subject ";
+            $query .= "(GradeID, LRNNum, GradeLevel, SubjectCode, Quarter, GradeRating, Status) ";
+            $query .= "VALUES ('" . $_POST['GradeID'] . "', '";
+            $query .= $_POST['LRNNum'] . "', '";
+            $query .= $_POST['GradeLevel'] . "', '";
+            $query .= $_POST['SubjectCode'] . "', '";
+            $query .= $_POST['Quarter'] . "', '";
+            $query .= $_POST['GradeRating'] . "', '";
+            $query .= "APPROVED') ";
+            $query .= "ON DUPLICATE KEY UPDATE GradeRating = " . $_POST['GradeRating'] . " ";
+        }
+
+        if ($func === 'setGrade') {
+            $query .= "SELECT LRNNum, GradeLevel, SubjectCode, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 1 THEN GradeRating END), null) AS Q1, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 2 THEN GradeRating END), null) AS Q2, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 3 THEN GradeRating END), null) AS Q3, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 4 THEN GradeRating END), null) AS Q4, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 1 THEN GradeID END), null) AS IDQ1, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 2 THEN GradeID END), null) AS IDQ2, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 3 THEN GradeID END), null) AS IDQ3, ";
+            $query .= "COALESCE(SUM(CASE WHEN Quarter = 4 THEN grade_subject.GradeID END), null) AS IDQ4 ";
+            $query .= "FROM grade_subject ";
+            $query .= "WHERE LRNNum = " . $_POST['LRNNum'] . " ";
+            $query .= "AND SubjectCode = '" . $_POST['SubjectCode'] . "' ";
+        }
+
         if ($func === 'SearchStudent') {
             $query .= "SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName, Birthday, Gender ";
             $query .= "FROM main_student ";
@@ -37,19 +99,40 @@
 
         // Grade_View; Grade_Setting;
         if ($func === 'setSubjectListDB') {
-            $query .= "SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ";
-            $query .= "FROM main_subjectcode ";
-            $query .= "LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ";
-            $query .= "WHERE main_subjectcode.GradeLevel IN (" . $_POST['grLvl'] . ") ";
-            $query .= "AND main_subjectcode.SubjectCode NOT LIKE 'HOMEROOM%' ";
-            $query .= "ORDER BY grade_sortable.OrderNumber ASC ";
+            // $query .= "SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ";
+            // $query .= "FROM main_subjectcode ";
+            // $query .= "LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ";
+            // $query .= "WHERE main_subjectcode.GradeLevel IN (" . $_POST['grLvl'] . ") ";
+            // $query .= "AND main_subjectcode.SubjectCode NOT LIKE 'HOMEROOM%' ";
+            // $query .= "ORDER BY grade_sortable.OrderNumber ASC ";
 
-            // query += 'SELECT subjectcode.SubjectCode ';
-            // query += 'FROM subjectcode ';
-            // query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
-            // query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
-            // query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
-            // query += 'ORDER BY grade_sortable.OrderNumber ASC ';
+
+            $query .= "SELECT SubjCodeList.SubjectCode, main_subjectcode.SubjectDescription ";
+            $query .= "FROM ( ";
+            $query .= "    SELECT SubjectCode ";
+            $query .= "    FROM grade_subject ";
+            $query .= "    WHERE LRNNum = " . $_POST['LRNNum'] . " ";
+            $query .= "    AND GradeLevel = " . $_POST['grLvl'] . " ";
+            $query .= "    AND SubjectCode NOT LIKE 'MUSIC%' ";
+            $query .= "    AND SubjectCode NOT LIKE 'ARTS%' ";
+            $query .= "    AND SubjectCode NOT LIKE 'PE%' ";
+            $query .= "    AND SubjectCode NOT LIKE 'HEALTH%' ";
+            $query .= "    AND SubjectCode NOT LIKE 'HOMEROOM%' ";
+            $query .= "    GROUP BY SubjectCode ";
+
+            $query .= "    UNION ALL ";
+            $query .= "    SELECT IF(SubjectCode LIKE 'MUSIC%', CONCAT('MAPEH', SUBSTRING(SubjectCode, 6)), '') ";
+            $query .= "    FROM grade_subject ";
+            $query .= "    WHERE LRNNum = " . $_POST['LRNNum'] . " ";
+            $query .= "    AND GradeLevel = " . $_POST['grLvl'] . " ";
+            $query .= "    AND SubjectCode LIKE 'MUSIC%' ";
+            $query .= "    GROUP BY SubjectCode ";
+            $query .= ") AS SubjCodeList ";
+            $query .= "LEFT JOIN main_subjectcode ";
+            $query .= "    ON SubjCodeList.SubjectCode = main_subjectcode.SubjectCode ";
+            $query .= "LEFT JOIN grade_sortable ";
+            $query .= "    ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ";
+            $query .= "ORDER BY grade_sortable.OrderNumber ASC ";
         }
 
         if ($func === 'setStudentInfo') {
@@ -94,7 +177,9 @@
 
             if ($_POST['accessType'] === 'student') {
                 $query .= "AND Status = 'ENCODED' ";
-            } else if ($_POST['accessType'] === 'teacher') {
+            } else if ($_POST['accessType'] === 'principal' ||
+            $_POST['accessType'] === 'coordinator' ||
+            $_POST['accessType'] === 'teacher') {
                 $query .= "AND (Status = 'APPROVED' ";
                 $query .= "OR Status = 'ENCODED') ";
             }
