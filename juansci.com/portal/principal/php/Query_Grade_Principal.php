@@ -50,6 +50,16 @@
             $query .= "WHERE SettingName = 'quarter_enabled' ";
         }
 
+
+        if ($func === 'truncateGradeCase') {
+            $query .= "TRUNCATE mis.grade_case ";
+        }
+
+        if ($func === 'bypassGradeCase') {
+            $query .= "UPDATE grade_case ";
+            $query .= "SET CaseValue = 6 ";
+        }
+
         if ($func === 'setupGradeCase') {
             /*
             INSERT all `main_subject`.`SubjectID` to `grade_case`,
@@ -66,8 +76,6 @@
                 INSERT `SubjectID`
             }
             */
-
-            // $query .= "TRUNCATE mis.grade_case; ";
 
             $query .= "INSERT INTO grade_case (SubjectID) ";
             $query .= "    SELECT SUB.SubjectID ";

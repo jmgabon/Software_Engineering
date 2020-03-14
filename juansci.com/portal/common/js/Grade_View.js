@@ -80,13 +80,15 @@ const objMAPEH = [
 ];
 
 
+if (accessType === 'student') {
+    select_GrLvl.addEventListener('change', () => {
+        gradeLevel = Number(select_GrLvl.value);
 
-select_GrLvl.addEventListener('change', () => {
-    gradeLevel = Number(select_GrLvl.value);
+        setSubjectListDB(gradeLevel, LRNNum);
+        setIfSectionAssigned();
+    });
+}
 
-    setSubjectListDB(gradeLevel, LRNNum);
-    setIfSectionAssigned();
-});
 
 
 let selectGrLvl = function() {
@@ -108,7 +110,7 @@ if (accessType === 'teacher') {
         CreateSearchBox(theadID, theadHTML, '@', 'SearchStudent', 'search', modal_body);
 
         let cat = document.querySelector('#modal-body select');
-        let hiddenCol = '';
+        let hiddenCol = 'Birthday@Gender';
         const searchStudent = document.querySelector('#SearchStudent');
         theadID += '@' + hiddenCol;
         theadHTML += '@' + hiddenCol;
@@ -152,25 +154,30 @@ function PickStudent(xhttp) {
             const txt_StudentModal = document.querySelector('#txt_StudentModal');
             document.querySelector('#SearchStudent').value = '';
             closeModal(modal_body);
+            let LastName, ExtendedName, FirstName, MiddleName;
 
-            if (jsonStudentInfo[i]['ExtendedName'] !== null) {
-                jsonStudentInfo[i]['ExtendedName'] = ' ' + jsonStudentInfo[i]['ExtendedName'];
+
+            LRNNum = this.childNodes[0].textContent;
+            LastName = this.childNodes[1].textContent;
+            ExtendedName = this.childNodes[2].textContent;
+            FirstName = this.childNodes[3].textContent;
+            MiddleName = this.childNodes[4].textContent;
+            studentAge = this.childNodes[5].textContent;
+            studentSex = this.childNodes[6].textContent;
+
+            if (ExtendedName !== null) {
+                ExtendedName = ' ' + ExtendedName;
             } else {
-                jsonStudentInfo[i]['ExtendedName'] = '';
+                ExtendedName = '';
             }
 
-
-            LRNNum = jsonStudentInfo[i]['LRNNum'];
-            txt_StudentName.textContent = jsonStudentInfo[i]['LastName'];
-            txt_StudentName.textContent += jsonStudentInfo[i]['ExtendedName'] + ', ';
-            txt_StudentName.textContent += jsonStudentInfo[i]['FirstName'] + ' ';
-            txt_StudentName.textContent += jsonStudentInfo[i]['MiddleName'];
+            txt_StudentName.textContent = LastName;
+            txt_StudentName.textContent += ExtendedName + ', ';
+            txt_StudentName.textContent += FirstName + ' ';
+            txt_StudentName.textContent += MiddleName;
 
             txt_StudentModal.value = txt_StudentName.textContent;
             studentName = txt_StudentName.textContent;
-
-            studentAge = jsonStudentInfo[i]['Birthday'];
-            studentSex = jsonStudentInfo[i]['Gender'];
 
             if (document.querySelector('#print-btnI').disabled === true) {
                 document.querySelector('#print-btnI').disabled = false;

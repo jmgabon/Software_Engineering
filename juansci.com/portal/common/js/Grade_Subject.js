@@ -70,40 +70,6 @@ let modalSubject = function() {
         openModal('Select Subject', 'Subject');
 
         let Search = function() {
-            // let query = '';
-
-            // query += 'SELECT main_subject.SubjectCode, main_section.SectionName, main_section.GradeLevel, ';
-            // query += 'IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
-            // query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser, ';
-            // query += 'main_section.SectionNum, main_subject.TeacherNum ';
-            // query += 'FROM main_subject ';
-            // query += 'INNER JOIN main_section ';
-            // query += 'ON main_subject.SectionNum = main_section.SectionNum ';
-            // query += 'JOIN main_teacher ';
-            // query += 'ON main_subject.TeacherNum = main_teacher.TeacherNum ';
-
-            // if (accessType === 'teacher') {
-            //     query += 'WHERE main_subject.TeacherNum = ' + teacherNum + ' ';
-            // }
-
-            // if (queryValue !== '') {
-            //     let queryHaving;
-
-            //     if (queryIndex === 'Adviser') {
-            //         queryHaving = 'HAVING ';
-            //     } else {
-            //         queryHaving = 'AND ';
-            //     }
-
-            //     query += queryHaving + queryIndex + ' LIKE "' + queryValue + '%" ';
-            //     if (accessType === 'coordinator' || accessType === 'principal') {
-            //         query += 'ORDER BY Adviser ASC ';
-            //     }
-            // }
-
-            // SimplifiedQuery('SELECT', query, searchSubject, getSubject);
-
-
             let val = '';
             let queryValue = searchSubject.value;
             let queryIndex = cat.options[cat.selectedIndex].value;
@@ -138,14 +104,14 @@ let getSubject = function(xhttp) {
             document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
-            SectionNum = jsonSubjectInfo[i]['SectionNum'];
-            teacherNum = jsonSubjectInfo[i]['TeacherNum'];
-            SubjectCode = jsonSubjectInfo[i]['SubjectCode'];
-            txt_Section.innerHTML = jsonSubjectInfo[i]['SectionName'];
-            txt_GradeLevel.innerHTML = jsonSubjectInfo[i]['GradeLevel'];
-            txt_SubjTeacher.innerHTML = jsonSubjectInfo[i]['Teacher'];
-            GradeLevel = jsonSubjectInfo[i]['GradeLevel'];
-            SubjectID = jsonSubjectInfo[i]['SubjectID'];
+            SubjectCode = this.childNodes[0].textContent;
+            txt_Section.innerHTML = this.childNodes[1].textContent;
+            GradeLevel = this.childNodes[2].textContent;
+            txt_SubjTeacher.innerHTML = this.childNodes[3].textContent;
+
+            SubjectID = this.childNodes[5].textContent;
+            SectionNum = this.childNodes[6].textContent;
+            teacherNum = this.childNodes[7].textContent;
 
             input_SubjectCode.value = SubjectCode;
             txt_SubjectCode.innerHTML = SubjectCode;

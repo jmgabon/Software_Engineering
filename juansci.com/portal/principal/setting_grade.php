@@ -78,6 +78,16 @@
                     <div class = "col">
                         <button id="btnSaveQuarter">SAVE Enabled Quarter</button>
                     </div>
+
+                    <div class = "col">
+                        <!-- Incorrect assignment of Quarter? -->
+                        <button id="btnBypassGradeCase">Bypass Grade Cases</button>
+                    </div>
+
+                    <div class = "col">
+                        <!-- Sudden Updation and Deletion of Subjects in the middle of School Year? -->
+                        <button id="btnUpdateGradeCase">Update Grade Cases</button>
+                    </div>
                 </div>
             </div>
         </div>

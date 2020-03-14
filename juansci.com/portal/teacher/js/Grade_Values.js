@@ -41,18 +41,7 @@ const wrapperUIValues = (function() {
 
 
     let setSectionInfo = function() {
-        // let query = '';
-
-        // query += 'SELECT SectionNum, SectionName, GradeLevel ';
-        // query += 'FROM main_section ';
-        // query += 'WHERE Adviser IN (' + TeacherNum + ') ';
-
-        // SimplifiedQuery('SELECT', query, '', getSectionInfo);
-
-
         let val = '';
-        // let queryValue = searchSubject.value;
-        // let queryIndex = cat.options[cat.selectedIndex].value;
 
         val += '&TeacherNum=' + TeacherNum;
 
@@ -103,15 +92,6 @@ const wrapperUIValues = (function() {
 
 
     let setQuarterDB = function() {
-        // let query = '';
-
-        // query += 'SELECT SettingValue ';
-        // query += 'FROM setting ';
-        // query += 'WHERE SettingName = "quarter_enabled" ';
-
-        // SimplifiedQuery('SELECT', query, '', getQuarter);
-
-
         misQuery('setQuarterDB', '', getQuarter);
     };
 
@@ -142,17 +122,6 @@ const wrapperUIValues = (function() {
 const wrapperGradeValues = (function() {
 
     let setGradesValDB = function() {
-        // let query = '';
-
-        // query += 'SELECT GradeValID, BehaviorID, Quarter, GradeValRating ';
-        // query += 'FROM grade_values ';
-        // query += 'WHERE LRNNum IN (' + LRNNum + ') ';
-        // query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
-
-
-        // SimplifiedQuery('SELECT', query, '', getGradesValDB);
-
-
         let val = '';
 
         val += '&LRNNum=' + LRNNum;
@@ -252,21 +221,6 @@ const wrapperGradeValues = (function() {
 
 
     let updateGradeDB = function() {
-        // let query = '';
-
-        // query += 'INSERT INTO grade_values ';
-        // query += '(GradeValID, LRNNum, GradeValLevel, BehaviorID, Quarter, GradeValRating) ';
-        // query += 'VALUES ("' + GradeValID + '", "';
-        // query += LRNNum + '", "';
-        // query += gradeLevel + '", "';
-        // query += BehaviorID + '", "';
-        // query += Quarter + '", "';
-        // query += GradeValRating + '") ';
-        // query += 'ON DUPLICATE KEY UPDATE GradeValRating = "' + GradeValRating + '"';
-
-        // SimplifiedQuery('INSERT', query, '', () => null);
-
-
         let val = '';
 
         val += '&GradeValID=' + GradeValID;
@@ -331,35 +285,6 @@ const mainController = (function(wrapUI, wrapVal) {
 
 
             let Search = function() {
-                // let query = '';
-
-                // query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName ';
-                // query += 'FROM main_student ';
-                // query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-                // query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
-
-                // if (searchStudent.value !== '') {
-                //     let queryAnd;
-                //     let queryNull;
-
-                //     if (cat.options[cat.selectedIndex].value === 'LRNNum') {
-                //         queryAnd = 'AND student.';
-                //     } else {
-                //         queryAnd = 'AND ';
-                //     }
-
-                //     if (searchStudent.value === ' ') {
-                //         queryNull = ' IS NULL';
-                //     } else {
-                //         queryNull = ' LIKE "' + searchStudent.value + '%"';
-                //     }
-
-                //     query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
-                // }
-
-                // SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
-
-
                 let val = '';
                 let queryValue = searchStudent.value;
                 let queryIndex = cat.options[cat.selectedIndex].value;
@@ -390,18 +315,28 @@ const mainController = (function(wrapUI, wrapVal) {
                     document.querySelector('#SearchStudent').value = '';
                     closeModal(modal_body);
 
-                    let extName = this.childNodes[2].innerHTML;
+                    let LastName, ExtendedName, FirstName, MiddleName;
 
-                    if (extName !== '') {
-                        extName = ' ' + extName;
+
+                    LRNNum = this.childNodes[0].textContent;
+                    LastName = this.childNodes[1].textContent;
+                    ExtendedName = this.childNodes[2].textContent;
+                    FirstName = this.childNodes[3].textContent;
+                    MiddleName = this.childNodes[4].textContent;
+
+                    if (ExtendedName !== null) {
+                        ExtendedName = ' ' + ExtendedName;
+                    } else {
+                        ExtendedName = '';
                     }
 
-                    LRNNum = this.childNodes[0].innerHTML;
-                    txt_Student.innerHTML = this.childNodes[1].innerHTML;
-                    txt_Student.innerHTML += extName + ', ';
-                    txt_Student.innerHTML += this.childNodes[3].innerHTML + ' ';
-                    txt_Student.innerHTML += this.childNodes[4].innerHTML;
-                    txt_StudentModal.value = txt_Student.innerHTML;
+                    txt_StudentName.textContent = LastName;
+                    txt_StudentName.textContent += ExtendedName + ', ';
+                    txt_StudentName.textContent += FirstName + ' ';
+                    txt_StudentName.textContent += MiddleName;
+
+                    txt_StudentModal.value = txt_StudentName.textContent;
+
                     studentSelected = true;
 
                     wrapVal.clearGrades();

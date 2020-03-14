@@ -38,7 +38,7 @@
         <br /><br /><br /><br />
         <p><b>Section Name: </b><span id="txt_SectionName"></span></p>
         <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
-        <p><b>Student Name: </b><span id="txt_Student"></span></p>
+        <p><b>Student Name: </b><span id="txt_StudentName"></span></p>
 
         <div class="row">
             <div class="col-9 p-0 m-0">
