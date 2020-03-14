@@ -126,6 +126,14 @@
                 </div>
             <?php } ?>
 
+            <?php if($_SESSION['AccessType'] == "student") { ?>
+                <div class="float-right">
+                    <label style="display: block">Select Grade Level:
+                        <select id="select_GrLvl"></select>
+                    </label>
+                </div>
+            <?php } ?>
+
 
             <br />
             <p><b>Adviser Name: </b><span id="txt_AdviserName"></span></p>

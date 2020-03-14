@@ -97,16 +97,7 @@
             $query .= "WHERE SettingName = 'quarter_enabled'";
         }
 
-        // Grade_View; Grade_Setting;
         if ($func === 'setSubjectListDB') {
-            // $query .= "SELECT main_subjectcode.SubjectCode, main_subjectcode.SubjectDescription ";
-            // $query .= "FROM main_subjectcode ";
-            // $query .= "LEFT JOIN grade_sortable ON main_subjectcode.SubjectCode = grade_sortable.SubjectCode ";
-            // $query .= "WHERE main_subjectcode.GradeLevel IN (" . $_POST['grLvl'] . ") ";
-            // $query .= "AND main_subjectcode.SubjectCode NOT LIKE 'HOMEROOM%' ";
-            // $query .= "ORDER BY grade_sortable.OrderNumber ASC ";
-
-
             $query .= "SELECT SubjCodeList.SubjectCode, main_subjectcode.SubjectDescription ";
             $query .= "FROM ( ";
             $query .= "    SELECT SubjectCode ";
@@ -164,7 +155,7 @@
                 $query .= "LEFT JOIN main_teacher ";
                 $query .= "ON main_section.Adviser = main_teacher.TeacherNum ";
                 $query .= "WHERE main_student_section.LRNNum = " . $_POST['LRNNum'] . " ";
-                $query .= "ORDER BY main_student_section.GradeLevel DESC ";
+                $query .= "AND  main_student_section.GradeLevel = " . $_POST['gradeLevel'] . " ";
                 $query .= "LIMIT 1 ";
             }
         }
@@ -322,13 +313,6 @@
             $query .= ") AS MAIN2 ";
 
             if ($_POST['queryValue'] !== '') {
-
-                // if ($_POST['queryIndex'] === 'Teacher') {
-                //     $queryHaving = "HAVING ";
-                // } else {
-                //     $queryHaving = "AND ";
-                // }
-
                 $query .= "WHERE " . $_POST['queryIndex'] . " LIKE '" . $_POST['queryValue'] . "%' ";
 
                 if ($_POST['accessType'] === 'coordinator' || $_POST['accessType'] === 'principal') {
