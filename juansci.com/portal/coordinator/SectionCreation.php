@@ -20,7 +20,7 @@
         <style type="text/css">
             #Section input, #Section select{
                 width: 30% !important;
-                /*float:right !important;*/
+                float:right !important;
                 margin-right: 35% !important;
             }
             #Buttons{
@@ -50,7 +50,7 @@
             </span>
         </p>
         <!-- <label class="pl-3" for="txt_Capacity">Capacity: <input class="ml-2 mb-2" type="number" name="txt_Capacity" id="txt_Capacity" min="5" max="50" required/></label></p> -->
-        <p>
+        <p style="margin-top: 0.4em !important;">
             <label for="GradeLevel">Grade Level: </label>
             <select id="GradeLevel" name="GradeLevel">
             <option selected="selected" value="7">7</option>

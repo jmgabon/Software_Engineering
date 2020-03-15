@@ -11,7 +11,7 @@ include 'partials/header.php';
         <label for="Results">
             <select id="Category" class="form-control mt-5 form-control-sm rounded-0 bg-dark text-light">
                 <option value="ControlNum" selected = "selected">Request Number</option>
-                <option value="LRNNum">LRN Number</option>
+                <option value="LRNNum">LRN </option>
                 <option value="LastName">Last Name</option>
                 <option value="FirstName">First Name</option>
                 <option value="MiddleName">Middle Name</option>
@@ -27,7 +27,7 @@ include 'partials/header.php';
             <tr>
             <!-- <td>Section Number</td> -->
             <td id="ControlNum">Request Number</td>
-            <td id="LRNNum">LRN Number</td>
+            <td id="LRNNum">LRN</td>
             <td id="LastName">Last Name</td>
             <!-- <td id="Extension">Extension</td> -->
             <td id="FirstName">First Name</td>

@@ -8,12 +8,19 @@ include 'partials/header.php';
 <style type="text/css">
 	input,select{
 		width: 60% !important;
+      float: right !important;
 	}
 	input[type='checkbox']{
 		/*display: none;*/
 		margin-left: -20% !important;
 		margin-right: -25% !important;
+      float: left !important;
 	}
+   input[type = 'file']{
+      /*border: black solid 0.1em;*/
+      float: none !important;
+      width: 40% !important;
+   }
 </style>
 <div class="content-main mt-4" id="Student">
   	<form>
@@ -26,7 +33,7 @@ include 'partials/header.php';
 		<input type="file" id="file" name="file" accept=".gif,.jpg,.jpeg,.png" required>
 		</center>
 	</div>
-   <h4 class="pt-3 pb-2">Student Information</h4>
+   <h4 class="pt-3 pb-2" style="margin-top:1rem !important;">Student Information</h4>
    <p><label for="LRNNum"><b>*LRN: </b></label><input type="text" id = "LRNNum" name = "LRNNum" required minlength="12" maxlength="12" required/></p>
    	<p>
 		<label for="GradeLevel">Grade Level: </label>
