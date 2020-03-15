@@ -221,7 +221,7 @@
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
-                <a href="../common/setting_grade.php" class="dropdown-item">Report Card</a>
+                <a href="setting_grade.php" class="dropdown-item">Report Card</a>
                 <!-- <a href="logs.php" class="dropdown-item">Logs</a> -->
               </div>
             </li> 

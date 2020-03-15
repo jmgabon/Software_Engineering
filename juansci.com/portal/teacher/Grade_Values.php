@@ -38,7 +38,7 @@
         <br /><br /><br /><br />
         <p><b>Section Name: </b><span id="txt_SectionName"></span></p>
         <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
-        <p><b>Student Name: </b><span id="txt_Student"></span></p>
+        <p><b>Student Name: </b><span id="txt_StudentName"></span></p>
 
         <div class="row">
             <div class="col-9 p-0 m-0">
@@ -376,13 +376,13 @@
     <?php include 'partials/footer.php'; ?>
 
     <script>
-        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
         let accessType = '<?php echo $_SESSION['AccessType']?>';
         if (accessType === '') {
             accessType = 'teacher';
         }
 
         console.log('accessType: ' + accessType);
-        console.log('teacherNum: ' + teacherNum);
+        console.log('TeacherNum: ' + TeacherNum);
     </script>
     <script src="js/Grade_Values.js" type="text/javascript"></script>

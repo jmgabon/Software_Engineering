@@ -41,13 +41,11 @@ const wrapperUIValues = (function() {
 
 
     let setSectionInfo = function() {
-        let query = '';
+        let val = '';
 
-        query += 'SELECT SectionNum, SectionName, GradeLevel ';
-        query += 'FROM main_section ';
-        query += 'WHERE Adviser IN (' + teacherNum + ') ';
+        val += '&TeacherNum=' + TeacherNum;
 
-        SimplifiedQuery('SELECT', query, '', getSectionInfo);
+        misQuery('setSectionInfo', val, getSectionInfo);
     };
 
 
@@ -94,13 +92,7 @@ const wrapperUIValues = (function() {
 
 
     let setQuarterDB = function() {
-        let query = '';
-
-        query += 'SELECT SettingValue ';
-        query += 'FROM setting ';
-        query += 'WHERE SettingName = "quarter_enabled" ';
-
-        SimplifiedQuery('SELECT', query, '', getQuarter);
+        misQuery('setQuarterDB', '', getQuarter);
     };
 
 
@@ -130,15 +122,12 @@ const wrapperUIValues = (function() {
 const wrapperGradeValues = (function() {
 
     let setGradesValDB = function() {
-        let query = '';
+        let val = '';
 
-        query += 'SELECT GradeValID, BehaviorID, Quarter, GradeValRating ';
-        query += 'FROM grade_values ';
-        query += 'WHERE LRNNum IN (' + LRNNum + ') ';
-        query += 'AND GradeValLevel IN (' + gradeLevel + ') ';
+        val += '&LRNNum=' + LRNNum;
+        val += '&gradeLevel=' + gradeLevel;
 
-
-        SimplifiedQuery('SELECT', query, '', getGradesValDB);
+        misQuery('setGradesValDB', val, getGradesValDB);
     }
 
 
@@ -216,9 +205,10 @@ const wrapperGradeValues = (function() {
 
                 if (GradeValRating !== '--') {
                     updateGradeDB();
-                } else {
-                    deleteGradeDB();
                 }
+                // else {
+                //     deleteGradeDB();
+                // }
             }
 
             alert('QUARTER ' + Quarter + ' GRADES SAVED');
@@ -231,26 +221,23 @@ const wrapperGradeValues = (function() {
 
 
     let updateGradeDB = function() {
-        let query = '';
+        let val = '';
 
-        query += 'INSERT INTO grade_values ';
-        query += '(GradeValID, LRNNum, GradeValLevel, BehaviorID, Quarter, GradeValRating) ';
-        query += 'VALUES ("' + GradeValID + '", "';
-        query += LRNNum + '", "';
-        query += gradeLevel + '", "';
-        query += BehaviorID + '", "';
-        query += Quarter + '", "';
-        query += GradeValRating + '") ';
-        query += 'ON DUPLICATE KEY UPDATE GradeValRating = "' + GradeValRating + '"';
+        val += '&GradeValID=' + GradeValID;
+        val += '&LRNNum=' + LRNNum;
+        val += '&gradeLevel=' + gradeLevel;
+        val += '&BehaviorID=' + BehaviorID;
+        val += '&Quarter=' + Quarter;
+        val += '&GradeValRating=' + GradeValRating;
 
-        SimplifiedQuery('INSERT', query, '', () => null);
+        misQuery('updateGradeDB', val, () => null);
     };
 
-    let deleteGradeDB = function() {
-        let query = 'DELETE FROM grade_values WHERE GradeValID = ' + GradeValID;
+    // let deleteGradeDB = function() {
+    //     let query = 'DELETE FROM grade_values WHERE GradeValID = ' + GradeValID;
 
-        SimplifiedQuery('INSERT', query, '', () => null);
-    };
+    //     SimplifiedQuery('INSERT', query, '', () => null);
+    // };
 
 
     return {
@@ -298,33 +285,15 @@ const mainController = (function(wrapUI, wrapVal) {
 
 
             let Search = function() {
-                let query = '';
+                let val = '';
+                let queryValue = searchStudent.value;
+                let queryIndex = cat.options[cat.selectedIndex].value;
 
-                query += 'SELECT main_student.LRNNum, LastName, ExtendedName, FirstName, MiddleName ';
-                query += 'FROM main_student ';
-                query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-                query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ')';
+                val += '&SectionNum=' + SectionNum;
+                val += '&queryValue=' + queryValue;
+                val += '&queryIndex=' + queryIndex;
 
-                if (searchStudent.value !== '') {
-                    let queryAnd;
-                    let queryNull;
-
-                    if (cat.options[cat.selectedIndex].value === 'LRNNum') {
-                        queryAnd = 'AND student.';
-                    } else {
-                        queryAnd = 'AND ';
-                    }
-
-                    if (searchStudent.value === ' ') {
-                        queryNull = ' IS NULL';
-                    } else {
-                        queryNull = ' LIKE "' + searchStudent.value + '%"';
-                    }
-
-                    query += queryAnd + cat.options[cat.selectedIndex].value + queryNull;
-                }
-
-                SimplifiedQuery('SELECT', query, searchStudent, PickStudent);
+                misQuery('SearchStudent', val, PickStudent);
             }
             Search();
 
@@ -346,18 +315,28 @@ const mainController = (function(wrapUI, wrapVal) {
                     document.querySelector('#SearchStudent').value = '';
                     closeModal(modal_body);
 
-                    let extName = this.childNodes[2].innerHTML;
+                    let LastName, ExtendedName, FirstName, MiddleName;
 
-                    if (extName !== '') {
-                        extName = ' ' + extName;
+
+                    LRNNum = this.childNodes[0].textContent;
+                    LastName = this.childNodes[1].textContent;
+                    ExtendedName = this.childNodes[2].textContent;
+                    FirstName = this.childNodes[3].textContent;
+                    MiddleName = this.childNodes[4].textContent;
+
+                    if (ExtendedName !== null) {
+                        ExtendedName = ' ' + ExtendedName;
+                    } else {
+                        ExtendedName = '';
                     }
 
-                    LRNNum = this.childNodes[0].innerHTML;
-                    txt_Student.innerHTML = this.childNodes[1].innerHTML;
-                    txt_Student.innerHTML += extName + ', ';
-                    txt_Student.innerHTML += this.childNodes[3].innerHTML + ' ';
-                    txt_Student.innerHTML += this.childNodes[4].innerHTML;
-                    txt_StudentModal.value = txt_Student.innerHTML;
+                    txt_StudentName.textContent = LastName;
+                    txt_StudentName.textContent += ExtendedName + ', ';
+                    txt_StudentName.textContent += FirstName + ' ';
+                    txt_StudentName.textContent += MiddleName;
+
+                    txt_StudentModal.value = txt_StudentName.textContent;
+
                     studentSelected = true;
 
                     wrapVal.clearGrades();

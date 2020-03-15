@@ -52,10 +52,12 @@
         </div>
 
         <br /><br />
-        <p><b>Section Name: </b><span id="txt_Section"></span></p>
         <p><b>Grade Level: </b><span id="txt_GradeLevel"></span></p>
+        <p><b>Section Name: </b><span id="txt_Section"></span></p>
         <p><b>Adviser Name: </b><span id="txt_Adviser"></span></p>
+        <br />
         <p><b>Subject Code: </b><span id="txt_SubjectCode"></span></p>
+        <p><b>Subject Teacher Name: </b><span id="txt_SubjTeacher"></span></p>
 
         <br /><br />
         <p><b>Status: </b><span id="txt_gradeCaseStatus"></span></p>

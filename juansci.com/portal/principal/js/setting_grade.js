@@ -12,16 +12,10 @@ const wrapperGradeSorter = (function() {
 
 
     let setSubjectListDB = function(grLvl) {
-        let query = '';
+        let val = '';
+        val += '&grLvl=' + grLvl;
 
-        query += 'SELECT subjectcode.SubjectCode ';
-        query += 'FROM subjectcode ';
-        query += 'LEFT JOIN grade_sortable ON subjectcode.SubjectCode = grade_sortable.SubjectCode ';
-        query += 'WHERE subjectcode.GradeLevel IN (' + grLvl + ') ';
-        query += 'AND subjectcode.SubjectCode NOT LIKE "HOMEROOM%" ';
-        query += 'ORDER BY grade_sortable.OrderNumber ASC ';
-
-        SimplifiedQuery('SELECT', query, '', getSubjectListDB);
+        misQuery('setSubjectListDB', val, getSubjectListDB);
     }
 
 
@@ -106,19 +100,16 @@ const wrapperGradeSorter = (function() {
 
         listSubject.addEventListener('click', function(evt) {
             clickEl = evt.target;
-            // console.log(clickEl);
         }, false);
     }
 
     let setSaveSubjListDB = function(subj, num) {
-        let query = '';
+        let val = '';
 
-        query += 'INSERT INTO grade_sortable ';
-        query += '(SubjectCode, OrderNumber) ';
-        query += 'VALUES ("' + subj + '", "' + num + '") ';
-        query += 'ON DUPLICATE KEY UPDATE OrderNumber = "' + num + '"';
+        val += '&subj=' + subj;
+        val += '&num=' + num;
 
-        SimplifiedQuery('INSERT', query, '', () => null);
+        misQuery('setSaveSubjListDB', val, () => null);
     }
 
 
@@ -159,6 +150,8 @@ const wrapperGradeEnabler = (function() {
     let setDOMString = {
         selectQuarter: '#selectQuarter',
         btnSaveQuarter: '#btnSaveQuarter',
+        btnBypassGradeCase: '#btnBypassGradeCase',
+        btnUpdateGradeCase: '#btnUpdateGradeCase',
         txt_CaseApproved: '#txt_CaseApproved',
         txt_CaseTotal: '#txt_CaseTotal',
     }
@@ -168,13 +161,7 @@ const wrapperGradeEnabler = (function() {
 
 
     let setQuarter = function() {
-        let query = '';
-
-        query += 'SELECT SettingValue ';
-        query += 'FROM setting ';
-        query += 'WHERE SettingName = "quarter_enabled" ';
-
-        SimplifiedQuery('SELECT', query, '', getQuarter);
+        misQuery('setQuarter', '', getQuarter);
     };
 
 
@@ -209,47 +196,38 @@ const wrapperGradeEnabler = (function() {
 
 
     let changeGradeCaseValue = function(q) {
-        let query = '';
+        if (confirm("Do you want to save Quarter?")) {
+            if (q == 0) {
+                if (totalApproved == overall) {
+                    misQuery('changeGradeCaseValue0', '', () => null);
 
-        if (q == 0) {
-            if (totalApproved == overall) {
-                query += 'UPDATE grade_case ';
-                query += 'SET CaseValue = 0 ';
-
-                SimplifiedQuery('UPDATE', query, '', () => null);
-                alert('Enabled Quarter is set to ' + q);
-                return true;
+                    alert('Enabled Quarter is set to ' + q);
+                    return true;
+                } else {
+                    alert('Some teachers are not yet finished grading.');
+                    return false;
+                }
             } else {
-                alert('Some teachers are not yet finished grading.');
-                return false;
+                if (jsonQuarter[0][0] == 0) {
+                    if (q == 1) {
+                        misQuery('truncateGradeCase', '', () => null);
+                        misQuery('setupGradeCase', '', () => null);
+                    }
+
+                    misQuery('changeGradeCaseValue1', '', () => null);
+
+                    alert('Enabled Quarter is set to ' + q);
+                    return true;
+
+
+                } else {
+                    alert('Error input. Quarter ' + jsonQuarter[0][0] + ' ongoing.');
+                    return false;
+                }
             }
         } else {
-            if (jsonQuarter[0][0] == 0) {
-                query += 'UPDATE grade_case ';
-                query += 'SET CaseValue = 1 ';
-
-                SimplifiedQuery('UPDATE', query, '', () => null);
-                alert('Enabled Quarter is set to ' + q);
-                return true;
-            } else {
-                alert('Error input. Quarter ' + jsonQuarter[0][0] + ' ongoing.');
-                return false;
-            }
+            alert('Cancelled.');
         }
-
-        // query += 'UPDATE grade_case JOIN ';
-        // query += '((SELECT COUNT(*) ';
-        // query += '     AS TotalApproved ';
-        // query += '     FROM grade_case ';
-        // query += '     WHERE CaseValue ';
-        // query += '     IN (6)) AS SUB, ';
-        // query += '     ';
-        // query += '(SELECT COUNT(*) ';
-        // query += '     AS Overall ';
-        // query += '     FROM grade_case) ';
-        // query += '    AS SUB2) ';
-        // query += 'SET CaseValue = 0 ';
-        // query += 'WHERE SUB.TotalApproved = SUB2.Overall ';
     }
 
 
@@ -261,14 +239,22 @@ const wrapperGradeEnabler = (function() {
 
         saveQuarter: function(q) {
             if (changeGradeCaseValue(q)) {
-                let query = '';
+                let val = '';
+                val += '&q=' + q;
 
-                query += 'UPDATE setting ';
-                query += 'SET SettingValue ="' + q + '" ';
-                query += 'WHERE SettingName = "quarter_enabled" ';
-
-                SimplifiedQuery('UPDATE', query, '', () => null);
+                misQuery('saveQuarter', val, () => null);
             }
+        },
+
+
+        bypassGradeCase: function(q) {
+            misQuery('bypassGradeCase', '', () => null);
+        },
+
+
+        updateGradeCase: function(q) {
+            misQuery('truncateGradeCase', '', () => null);
+            misQuery('setupGradeCase', '', () => null);
         },
 
 
@@ -278,13 +264,7 @@ const wrapperGradeEnabler = (function() {
 
 
         setGradeCaseValues: function() {
-            let query = '';
-
-            query += 'SELECT * FROM ';
-            query += '(SELECT COUNT(*) AS TotalApproved FROM grade_case WHERE `CaseValue` IN (6)) AS SUB, ';
-            query += '(SELECT COUNT(*) AS Overall FROM grade_case) AS SUB2 ';
-
-            SimplifiedQuery('SELECT', query, '', getGradeCaseValues);
+            misQuery('setGradeCaseValues', '', getGradeCaseValues);
         }
     }
 })();
@@ -301,6 +281,8 @@ const wrapperGradeSettingMain = (function(wrapGrSort, wrapGrEn) {
     let setupEventListeners = function() {
         document.querySelector(DOMGrSort.btnSaveSubj).addEventListener('click', saveSubject);
         document.querySelector(DOMGrEn.btnSaveQuarter).addEventListener('click', saveQuarter);
+        document.querySelector(DOMGrEn.btnBypassGradeCase).addEventListener('click', bypassGradeCase);
+        document.querySelector(DOMGrEn.btnUpdateGradeCase).addEventListener('click', updateGradeCase);
     };
 
 
@@ -313,6 +295,16 @@ const wrapperGradeSettingMain = (function(wrapGrSort, wrapGrEn) {
         let selectedQuarter = document.querySelector(DOMGrEn.selectQuarter).value;
 
         wrapGrEn.saveQuarter(selectedQuarter);
+        wrapGrEn.setGradeCaseValues();
+    };
+
+    let bypassGradeCase = function() {
+        wrapGrEn.bypassGradeCase();
+        wrapGrEn.setGradeCaseValues();
+    };
+
+    let updateGradeCase = function() {
+        wrapGrEn.updateGradeCase();
     };
 
 
