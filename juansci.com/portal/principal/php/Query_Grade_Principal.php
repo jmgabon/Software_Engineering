@@ -9,7 +9,7 @@
         if ($func === 'setQuarter') {
             $query .= "SELECT SettingValue ";
             $query .= "FROM setting ";
-            $query .= "WHERE SettingName = 'quarter_enabled' ";
+            $query .= "WHERE SettingName = 'quarter_now' ";
         }
 
         if ($func === 'setGradeCaseValues') {
@@ -44,10 +44,16 @@
             $query .= "SET CaseValue = 1 ";
         }
 
+        if ($func === 'setEncodingEnabledDB') {
+            $query .= "SELECT SettingValue ";
+            $query .= "FROM setting ";
+            $query .= "WHERE SettingName = 'encoding_enabled'";
+        }
+
         if ($func === 'saveQuarter') {
             $query .= "UPDATE setting ";
             $query .= "SET SettingValue = " . $_POST['q'] . " ";
-            $query .= "WHERE SettingName = 'quarter_enabled' ";
+            $query .= "WHERE SettingName = 'quarter_now' ";
         }
 
 

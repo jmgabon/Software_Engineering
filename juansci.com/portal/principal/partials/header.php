@@ -92,7 +92,6 @@
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="studentsDropdown">
                 <a href="masterlist_student.php" class="dropdown-item">Masterlist</a>
                 <a href="regrequests_student.php" class="dropdown-item">Requests</a>
-                <a href="../common/Grade_Subject.php" class="dropdown-item">Evaluate Grade Subjects</a>
                 <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
                 <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
               </div>
@@ -109,6 +108,18 @@
                 <a href="requests_teacher.php" class="dropdown-item">Requests</a>
                 <!-- <a href="student_lst.php" class="dropdown-item">Masterlist</a> -->
                 <!-- <a href="student_rec__old_css.php" class="dropdown-item">Form 137</a> -->
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a id="student" class="nav-link dropdown-toggle" href="#" 
+              id="gradesDropdown" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-book mr-2"></i>
+                Grades
+                </a>
+              <div class="dropdown-menu pl-5 bg-light" aria-labelledby="gradesDropdown">
+                <a href="../common/Grade_Subject.php" class="dropdown-item">Evaluation</a>
+                <a href="../common/Grade_Transferee.php" class="dropdown-item">For Transferee</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -221,10 +232,11 @@
                 Settings
               </a>
               <div class="dropdown-menu pl-5 bg-light" aria-labelledby="settingsDropdown">
-                <a href="setting_grade.php" class="dropdown-item">Report Card</a>
+                <a href="setting_gradeConfig.php" class="dropdown-item">Grade Configuration</a>
+                <a href="setting_gradeSortable.php" class="dropdown-item">Learning Areas Sorting</a>
                 <!-- <a href="logs.php" class="dropdown-item">Logs</a> -->
               </div>
-            </li> 
+            </li>
               
           </ul>
             <div class="text-center text-light mt-5">

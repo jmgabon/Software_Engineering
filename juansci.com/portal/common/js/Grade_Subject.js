@@ -31,6 +31,8 @@ let tempSubjectID;
 let newCase;
 let currCase;
 
+let encodingEnabled;
+
 
 const txt_Adviser = document.querySelector('#txt_Adviser');
 const txt_SubjTeacher = document.querySelector('#txt_SubjTeacher');
@@ -51,6 +53,8 @@ const btn_disapprove = document.querySelector('#btn_disapprove');
 const tbody = document.querySelector('table tbody');
 const colNum = (document.querySelector('table thead tr').childElementCount + 3);
 
+const txt_encoding = document.querySelector('#txt_encoding');
+const txt_quarter = document.querySelector('#txt_quarter');
 
 
 let modalSubject = function() {
@@ -149,7 +153,7 @@ let displayAfterModal = function() {
         RemoveChildNodes(tbody);
         textCaseStatus('cls');
         setAdviserName();
-        setQuarterDB();
+
 
     } else {
         labelMAPEH.style.display = 'none';
@@ -157,7 +161,6 @@ let displayAfterModal = function() {
         RemoveChildNodes(tbody);
         setCaseStatus();
         setAdviserName();
-        setQuarterDB();
         setStudentListDB();
     }
 }
@@ -178,18 +181,6 @@ let setSubMAPEH = function() {
 
 
 let setAdviserName = function() {
-    // let query = '';
-    // txt_Adviser.innerHTML = '';
-
-    // query += 'SELECT IF(MiddleName IS NULL, CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, "" , ""), ';
-    // query += 'CONCAT(LastName, IF(ExtendedName is NULL, "", CONCAT(" ", ExtendedName)), ", " , FirstName, " " , LEFT(MiddleName, 1), ".")) AS Adviser ';
-    // query += 'FROM main_section ';
-    // query += 'LEFT JOIN main_teacher ON main_section.Adviser = main_teacher.TeacherNum ';
-    // query += 'WHERE SectionNum IN (' + SectionNum + ') ';
-
-    // SimplifiedQuery('SELECT', query, '', getAdviserName);
-
-
     let val = '';
 
     val += '&SectionNum=' + SectionNum;
@@ -210,15 +201,32 @@ let getAdviserName = function(xhttp) {
 }
 
 
+let setEncodingEnabledDB = function() {
+    let val = '';
+
+    misQuery('setEncodingEnabledDB', val, getEncodingEnabledDB);
+};
+
+
+let getEncodingEnabledDB = function(xhttp) {
+    try {
+        jsonQuarter = JSON.parse(xhttp.responseText);
+        encodingEnabled = jsonQuarter[0]['SettingValue'];
+
+        console.log(encodingEnabled);
+        encodingEnabled = (encodingEnabled === '1') ? true : false;
+
+        txt_encoding.textContent = (encodingEnabled === true) ? 'True' : 'False';
+
+    } catch (err) {
+        alert('CANNOT FIND');
+        console.log(xhttp.responseText);
+        console.log(err);
+    }
+}
+
+
 let setQuarterDB = function() {
-    // let query = '';
-
-    // query += 'SELECT SettingValue ';
-    // query += 'FROM setting ';
-    // query += 'WHERE SettingName = "quarter_enabled" ';
-
-    // SimplifiedQuery('SELECT', query, '', getQuarter);
-
     let val = '';
 
     misQuery('setQuarterDB', val, getQuarter);
@@ -230,6 +238,8 @@ let getQuarter = function(xhttp) {
         jsonQuarter = JSON.parse(xhttp.responseText);
         quarterSelected = jsonQuarter[0]['SettingValue'];
 
+        txt_quarter.textContent = `Quarter now is ${quarterSelected}`;
+
     } catch (err) {
         alert('CANNOT FIND');
         console.log(xhttp.responseText);
@@ -239,7 +249,7 @@ let getQuarter = function(xhttp) {
 
 
 let enablerQuarter = function(q, currCase) {
-    if (q == quarterSelected &&
+    if (encodingEnabled === true && q == quarterSelected &&
         (currCase == 1 || currCase == 2 || currCase == 3)) {
         return false
     }
@@ -249,16 +259,6 @@ let enablerQuarter = function(q, currCase) {
 
 
 let setStudentListDB = function() {
-    // let query = '';
-
-    // query += 'SELECT main_student.LRNNum, main_student.LastName, main_student.ExtendedName, main_student.FirstName, main_student.MiddleName ';
-    // query += 'FROM main_student ';
-    // query += 'LEFT JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-    // query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ') ';
-
-    // SimplifiedQuery('SELECT', query, '', tBodyGrade);
-
-
     let val = '';
 
     val += '&SectionNum=' + SectionNum;
@@ -424,27 +424,6 @@ let tBodyGrade = function(xhttp) {
 
 
 let setGradeDB = function() {
-    // let query = '';
-
-    // query += 'SELECT main_student.LRNNum, grade_subject.GradeLevel, grade_subject.SubjectCode, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeRating END), null) AS Q1, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeRating END), null) AS Q2, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeRating END), null) AS Q3, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeRating END), null) AS Q4, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 1 THEN grade_subject.GradeID END), null) AS IDQ1, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 2 THEN grade_subject.GradeID END), null) AS IDQ2, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 3 THEN grade_subject.GradeID END), null) AS IDQ3, ';
-    // query += 'COALESCE(SUM(CASE WHEN grade_subject.Quarter = 4 THEN grade_subject.GradeID END), null) AS IDQ4 ';
-    // query += 'FROM main_student ';
-    // query += 'LEFT JOIN grade_subject ON main_student.LRNNum = grade_subject.LRNNum ';
-    // query += 'INNER JOIN main_student_section ON main_student.LRNNum = main_student_section.LRNNum ';
-    // query += 'WHERE main_student_section.SectionNum IN (' + SectionNum + ') ';
-    // query += 'AND grade_subject.SubjectCode IN ("' + SubjectCode + '") ';
-    // query += 'GROUP BY main_student.LRNNum ';
-
-    // SimplifiedQuery('SELECT', query, '', getGradeDB);
-
-
     let val = '';
 
     val += '&SectionNum=' + SectionNum;
@@ -550,21 +529,6 @@ let saveGrade = function() {
             }
 
             if (GradeRating != '') {
-                // let query = '';
-
-                // query += 'INSERT INTO grade_subject ';
-                // query += '(GradeID, LRNNum, GradeLevel, SubjectCode, Quarter, GradeRating) ';
-                // query += 'VALUES ("' + GradeID + '", "';
-                // query += jsonStudent[i][0] + '", "';
-                // query += GradeLevel + '", "';
-                // query += SubjectCode + '", "';
-                // query += Quarter + '", "';
-                // query += GradeRating + '") ';
-                // query += 'ON DUPLICATE KEY UPDATE GradeRating = ' + GradeRating;
-
-                // SimplifiedQuery('INSERT', query, '', () => null);
-
-
                 let val = '';
 
                 val += '&GradeID=' + GradeID;
@@ -637,16 +601,6 @@ let computeFinalAndRemark = function() {
 
 
 let setCaseStatus = function() {
-    // let query = '';
-
-    // query += 'SELECT CaseValue ';
-    // query += 'FROM grade_case ';
-    // query += 'WHERE TeacherNum = ' + teacherNum + ' ';
-    // query += 'AND SubjectCode = "' + SubjectCode + '" ';
-
-    // SimplifiedQuery('SELECT', query, '', getCaseStatus);
-
-
     let val = '';
 
     val += '&SubjectID=' + SubjectID;
@@ -705,28 +659,6 @@ let textCaseStatus = function(val) {
 
 
 let updateCaseStatus = function(newCase) {
-    // switch (currCase) {
-    //     case 1:
-    //         newCase = 4;
-    //         break;
-    //     case 2:
-    //         newCase = 4;
-    //         break;
-    //     case 3:
-    //         newCase = 5;
-    //         break;
-    // }
-
-    // let query = '';
-
-    // query += 'UPDATE grade_case ';
-    // query += 'SET CaseValue = ' + newCase + ' ';
-    // query += 'WHERE TeacherNum = ' + teacherNum + ' ';
-    // query += 'AND SubjectCode = "' + SubjectCode + '" ';
-
-    // SimplifiedQuery('UPDATE', query, '', () => null);
-
-
     let val = '';
 
     val += '&CaseValue=' + newCase;
@@ -743,18 +675,6 @@ let approvalListeners = function() {
     btn_approve.addEventListener('click', () => {
         let principalApproved = function() {
             for (let i = 0; i < jsonStudent.length; i++) {
-                // let query = '';
-
-                // query += 'UPDATE grade_subject ';
-                // query += 'SET Status = "APPROVED" ';
-                // query += 'WHERE LRNNum = "' + jsonStudent[i][0] + '" ';
-                // query += 'AND GradeLevel = "' + GradeLevel + '" ';
-                // query += 'AND SubjectCode = "' + SubjectCode + '" ';
-                // query += 'AND Quarter = "' + quarterSelected + '" ';
-
-                // SimplifiedQuery('UPDATE', query, '', () => null);
-
-
                 let val = '';
 
                 val += '&LRNNum=' + jsonStudent[i][0];
@@ -851,4 +771,6 @@ let approvalChange = function() {
 let init = (function() {
     modalSubject();
     approvalListeners();
+    setEncodingEnabledDB();
+    setQuarterDB();
 })();

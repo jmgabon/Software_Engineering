@@ -60,6 +60,8 @@
         <p><b>Subject Teacher Name: </b><span id="txt_SubjTeacher"></span></p>
 
         <br /><br />
+        <p><b>Encoding: </b><span id="txt_encoding"></span></p>
+        <p><b>Quarter: </b><span id="txt_quarter"></span></p>
         <p><b>Status: </b><span id="txt_gradeCaseStatus"></span></p>
 
         <div class="row">

@@ -91,10 +91,16 @@
             }
         }
 
+        if ($func === 'setEncodingEnabledDB') {
+            $query .= "SELECT SettingValue ";
+            $query .= "FROM setting ";
+            $query .= "WHERE SettingName = 'encoding_enabled'";
+        }
+
         if ($func === 'setQuarterDB') {
             $query .= "SELECT SettingValue ";
             $query .= "FROM setting ";
-            $query .= "WHERE SettingName = 'quarter_enabled'";
+            $query .= "WHERE SettingName = 'quarter_now'";
         }
 
         if ($func === 'setSubjectListDB') {
