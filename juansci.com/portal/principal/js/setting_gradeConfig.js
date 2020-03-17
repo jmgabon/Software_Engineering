@@ -2,12 +2,13 @@
 
 
 
-const wrapperGradeEnabler = (function() {
+const wrapperGradeConfig = (function() {
     let setDOMString = {
-        selectQuarter: '#selectQuarter',
+        setQuarter: '#setQuarter',
         btnSaveQuarter: '#btnSaveQuarter',
         btnBypassGradeCase: '#btnBypassGradeCase',
         btnUpdateGradeCase: '#btnUpdateGradeCase',
+        btnStartClass: '#btnStartClass',
         chk_EncodingEnabled: '#chk_EncodingEnabled',
         txt_CaseApproved: '#txt_CaseApproved',
         txt_CaseTotal: '#txt_CaseTotal',
@@ -15,7 +16,7 @@ const wrapperGradeEnabler = (function() {
         txt_SchoolYear: '#txt_SchoolYear',
     }
 
-    let jsonQuarter
+    let quarter;
     let totalApproved;
     let overall;
     let encodingEnabled;
@@ -23,22 +24,21 @@ const wrapperGradeEnabler = (function() {
     document.querySelector(setDOMString.txt_SchoolYear).textContent = '2020-2021'; //temp
 
 
-    let setEncodingEnabledDB = function() {
+    let setEncodingEnabled = function() {
         let val = '';
 
-        misQuery('setEncodingEnabledDB', val, getEncodingEnabledDB);
+        misQuery('setEncodingEnabled', val, getEncodingEnabled);
     };
 
 
-    let getEncodingEnabledDB = function(xhttp) {
+    let getEncodingEnabled = function(xhttp) {
         try {
-            jsonQuarter = JSON.parse(xhttp.responseText);
-            encodingEnabled = jsonQuarter[0]['SettingValue'];
+            let json = JSON.parse(xhttp.responseText);
 
-            encodingEnabled = (encodingEnabled === '1') ? true : false;
-            console.log(encodingEnabled);
-
+            encodingEnabled = (json[0]['SettingValue'] === '1') ? true : false;
             document.querySelector(setDOMString.chk_EncodingEnabled).checked = encodingEnabled;
+
+            console.log(encodingEnabled);
 
         } catch (err) {
             alert('CANNOT FIND');
@@ -48,17 +48,55 @@ const wrapperGradeEnabler = (function() {
     }
 
 
-    let setEncodingEnabled = function() {
+    let updateEncodingEnabled = function() {
+        let val = '';
+        let en;
         let chk = document.querySelector(setDOMString.chk_EncodingEnabled);
 
+
         if (chk.checked) {
-            // do this
-            console.log('Checked');
+            if (quarter != 0) {
+                if (confirm("Do you want to OPEN Encoding of Grades?")) {
+                    en = 1;
+
+                    updateGradeCaseValue(true, quarter) // set ALL to 1
+
+                    val += '&en=' + en;
+
+                    misQuery('updateEncodingEnabled', val, () => null);
+
+                    console.log('Checked');
+                } else {
+                    chk.checked = false;
+                    alert('Cancelled.');
+                }
+            } else {
+                alert('Classes ended. Please start new class for new school year.');
+                chk.checked = false;
+            }
+
+
         } else {
-            // do that
-            console.log('Not checked');
+            if (confirm("Do you want to CLOSE Encoding of Grades?")) {
+                en = 0;
+
+                if (updateGradeCaseValue(false, quarter)) {
+                    val += '&en=' + en;
+
+                    misQuery('updateEncodingEnabled', val, () => null);
+
+                    setQuarter();
+                    setGradeCaseValues();
+
+                    console.log('Not checked');
+                } else {
+                    chk.checked = true;
+                }
+            } else {
+                chk.checked = true;
+                alert('Cancelled.');
+            }
         }
-        alert('Another update for toggle is currently in progress...')
     };
 
 
@@ -69,17 +107,27 @@ const wrapperGradeEnabler = (function() {
 
     let getQuarter = function(xhttp) {
         try {
-            jsonQuarter = JSON.parse(xhttp.responseText);
+            let json = JSON.parse(xhttp.responseText);
+            quarter = json[0]['SettingValue']
 
+            if (quarter != 0) {
+                document.querySelector(setDOMString.txt_Quarter).innerHTML =
+                    `<b>Quarter ${quarter}</b> is currently ongoing.`;
+            } else {
+                document.querySelector(setDOMString.txt_Quarter).textContent = 'Classes for this school year has been ended.';
+            }
 
-            document.querySelector(setDOMString.txt_Quarter).innerHTML =
-                `<b>Quarter ${jsonQuarter[0]['SettingValue']}</b> is currently ongoing.`;
 
         } catch (err) {
             alert('CANNOT FIND');
             console.log(xhttp.responseText);
             console.log(err);
         }
+    }
+
+
+    let setGradeCaseValues = function() {
+        misQuery('setGradeCaseValues', '', getGradeCaseValues);
     }
 
 
@@ -99,40 +147,50 @@ const wrapperGradeEnabler = (function() {
     }
 
 
-    let changeGradeCaseValue = function(q) {
-        if (confirm("Do you want to save Quarter?")) {
-            if (q == 0) {
-                if (totalApproved == overall) {
+    let updateGradeCaseValue = function(en, q) {
+        if (en === true) {
+            misQuery('changeGradeCaseValue1', '', () => null);
+
+            alert(`Encoding of Grades for Quarter ${q} has been started.`);
+        } else if (en === false) {
+            if (totalApproved == overall) {
+                if (updateQuarter(q)) {
                     misQuery('changeGradeCaseValue0', '', () => null);
-
-                    alert('Enabled Quarter is set to ' + q);
-                    return true;
-                } else {
-                    alert('Some teachers are not yet finished grading.');
-                    return false;
                 }
+
+                return true;
             } else {
-                if (jsonQuarter[0][0] == 0) {
-                    if (q == 1) {
-                        misQuery('truncateGradeCase', '', () => null);
-                        misQuery('setupGradeCase', '', () => null);
-                    }
+                alert('Please wait. Some teachers are not yet finished grading.');
 
-                    misQuery('changeGradeCaseValue1', '', () => null);
-
-                    alert('Enabled Quarter is set to ' + q);
-                    return true;
-
-
-                } else {
-                    alert('Error input. Quarter ' + jsonQuarter[0][0] + ' ongoing.');
-                    return false;
-                }
+                return false;
             }
-        } else {
-            alert('Cancelled.');
         }
     }
+
+    let updateQuarter = function(q) {
+        let val = '';
+
+        if (q != 4) {
+            q++;
+
+            val += '&q=' + q;
+            misQuery('updateQuarter', val, () => null);
+
+            alert(`Encoding of Grades done. Now, Quarter ${Number(q)} starts.`);
+
+            return true;
+        } else {
+            q = 0;
+
+            val += '&q=' + q;
+            misQuery('updateQuarter', val, () => null);
+
+            alert(`Encoding of Grades done. Now, Classes has been ended for this school year.`);
+
+            return false;
+        }
+    }
+
 
 
     return {
@@ -141,24 +199,13 @@ const wrapperGradeEnabler = (function() {
         },
 
 
-        saveQuarter: function(q) {
-            if (changeGradeCaseValue(q)) {
-                let val = '';
-                val += '&q=' + q;
-
-                misQuery('saveQuarter', val, () => null);
-            }
-        },
-
-
         bypassGradeCase: function(q) {
             misQuery('bypassGradeCase', '', () => null);
         },
 
 
-        updateGradeCase: function(q) {
-            misQuery('truncateGradeCase', '', () => null);
-            misQuery('setupGradeCase', '', () => null);
+        updateEncodingEnabled: function() {
+            updateEncodingEnabled();
         },
 
 
@@ -167,93 +214,84 @@ const wrapperGradeEnabler = (function() {
         },
 
 
-        setEncodingEnabledDB: function() {
-            setEncodingEnabledDB();
-        },
-
-
-        setEncodingEnabled: function() {
-            setEncodingEnabled();
-        },
-
-
-        selectQuarter: function() {
+        setQuarter: function() {
             setQuarter();
         },
 
 
-        encodingEnabled: function() {
-            return encodingEnabled;
+        setGradeCaseValues: function() {
+            setGradeCaseValues();
         },
 
 
-        setGradeCaseValues: function() {
-            misQuery('setGradeCaseValues', '', getGradeCaseValues);
+        startclass: function() {
+            if (quarter == 0) {
+                if (confirm("Do you want to START classes for this school year?")) {
+                    misQuery('truncateGradeCase', '', () => null);
+                    misQuery('setupGradeCase', '', () => null);
+                    misQuery('updateQuarter', '&q=1', () => {
+                        setQuarter();
+                        setGradeCaseValues();
+                    });
+
+
+                    alert('Classes for this school year has been started.')
+                } else {
+                    alert('Cancelled.');
+                }
+            } else {
+                alert('Classes for this school year is ongoing.');
+            }
         }
     }
 })();
 
 
 
-const wrapperGradeSettingMain = (function(wrapGrEn) {
-    const DOMGrEn = wrapGrEn.getDOMString();
-    let selectQuarter = wrapGrEn.selectQuarter;
+const wrapperGradeSettingMain = (function(wrapGrCon) {
+    const DOMGrEn = wrapGrCon.getDOMString();
 
 
     let setupEventListeners = function() {
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector(DOMGrEn.chk_EncodingEnabled).addEventListener('change', setEncodingEnabled);
+            document.querySelector(DOMGrEn.chk_EncodingEnabled).addEventListener('change', wrapGrCon.updateEncodingEnabled);
         });
 
-        // document.querySelector(DOMGrEn.btnSaveQuarter).addEventListener('click', saveQuarter);
-        // document.querySelector(DOMGrEn.btnBypassGradeCase).addEventListener('click', bypassGradeCase);
-        // document.querySelector(DOMGrEn.btnUpdateGradeCase).addEventListener('click', updateGradeCase);
+        document.querySelector(DOMGrEn.btnStartClass).addEventListener('click', wrapGrCon.startclass);
     };
-
-
-
-
-    let saveQuarter = function() {
-        let selectedQuarter = document.querySelector(DOMGrEn.selectQuarter).value;
-
-        wrapGrEn.saveQuarter(selectedQuarter);
-        wrapGrEn.setGradeCaseValues();
-    };
-
-    let bypassGradeCase = function() {
-        wrapGrEn.bypassGradeCase();
-        wrapGrEn.setGradeCaseValues();
-    };
-
-    let updateGradeCase = function() {
-        wrapGrEn.updateGradeCase();
-    };
-
-
-    let setGradeCaseValues = function() {
-        wrapGrEn.setGradeCaseValues();
-    }
-
-
-    let setEncodingEnabled = function() {
-        wrapGrEn.setEncodingEnabled();
-    }
-
-
-    let setEncodingEnabledDB = function() {
-        wrapGrEn.setEncodingEnabledDB();
-    }
 
 
     return {
         init: () => {
             console.log('Application has started.');
             setupEventListeners();
-            selectQuarter();
-            setEncodingEnabledDB();
-            setGradeCaseValues();
+
+            wrapGrCon.setQuarter();
+            wrapGrCon.setEncodingEnabled();
+            wrapGrCon.setGradeCaseValues();
         },
     };
-})(wrapperGradeEnabler);
+})(wrapperGradeConfig);
 
 wrapperGradeSettingMain.init();
+
+
+// START CLASS
+
+// Q1
+// ON ENC
+// OFF ENC
+
+// Q2
+// ON ENC
+// OFF ENC
+
+// Q3
+// ON ENC
+// OFF ENC
+
+// Q4
+// ON ENC
+// OFF ENC
+
+// END CLASS

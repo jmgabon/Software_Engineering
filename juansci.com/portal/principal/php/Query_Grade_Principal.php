@@ -44,13 +44,19 @@
             $query .= "SET CaseValue = 1 ";
         }
 
-        if ($func === 'setEncodingEnabledDB') {
+        if ($func === 'setEncodingEnabled') {
             $query .= "SELECT SettingValue ";
             $query .= "FROM setting ";
             $query .= "WHERE SettingName = 'encoding_enabled'";
         }
 
-        if ($func === 'saveQuarter') {
+        if ($func === 'updateEncodingEnabled') {
+            $query .= "UPDATE setting ";
+            $query .= "SET SettingValue = " . $_POST['en'] . " ";
+            $query .= "WHERE SettingName = 'encoding_enabled' ";
+        }
+
+        if ($func === 'updateQuarter') {
             $query .= "UPDATE setting ";
             $query .= "SET SettingValue = " . $_POST['q'] . " ";
             $query .= "WHERE SettingName = 'quarter_now' ";

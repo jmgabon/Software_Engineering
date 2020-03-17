@@ -84,8 +84,13 @@
                         </label>
                     </div>
 
+                    <!-- <div> -->
+                        <button id="btnStartClass" class="rounded-pill" style="width: 50% !important">START CLASS</button>
+                    <!-- </div> -->
+
+
                     <!-- <label>Quarter SAVE Button Enabled:
-                        <select id="selectQuarter">
+                        <select id="setQuarter">
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
