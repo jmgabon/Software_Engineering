@@ -310,7 +310,7 @@
                 <input type="hidden" name="studentName" value="">
                 <input type="hidden" name="studentAge" value="">
                 <input type="hidden" name="studentSex" value="">
-                <input type="hidden" name="gradeLevel" value="">
+                <input type="hidden" name="GradeLevel" value="">
                 <input type="hidden" name="sectionName" value="">
                 <input type="hidden" name="principalName" value="">
                 <input type="hidden" name="adviserName" value="">
@@ -334,7 +334,7 @@
             <input type="hidden" name="studentName" value="">
             <input type="hidden" name="studentAge" value="">
             <input type="hidden" name="studentSex" value="">
-            <input type="hidden" name="gradeLevel" value="">
+            <input type="hidden" name="GradeLevel" value="">
             <input type="hidden" name="sectionName" value="">
             <input type="hidden" name="principalName" value="">
             <input type="hidden" name="adviserName" value="">
@@ -349,17 +349,17 @@
     <script>
         $('#lead').text("View Student's Grade");
         let LRNNum;
-        let teacherNum;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        let TeacherNum;
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
 
-        if (accessType === '') {
-            accessType = 'teacher';
+        if (AccessType === '') {
+            AccessType = 'teacher';
         }
 
-        console.log('accessType: ' + accessType);
+        console.log('AccessType: ' + AccessType);
         <?php if($_SESSION['AccessType'] === '') { ?>
-            teacherNum = <?php echo $_SESSION['TeacherNum']?>;
-            console.log('teacherNum: ' + teacherNum);
+            TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
+            console.log('TeacherNum: ' + TeacherNum);
         <?php } else if($_SESSION['AccessType'] === 'student') { ?>
             LRNNum = <?php echo $_SESSION['LRNNum']?>;
             console.log('LRNNum: ' + LRNNum);

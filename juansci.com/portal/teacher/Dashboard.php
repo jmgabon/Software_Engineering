@@ -7,14 +7,14 @@
         $('#back-to-menu').addClass('d-none');
     </script>
     <script>
-        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
-        if (accessType === '') {
-            accessType = 'teacher';
+        let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
+        if (AccessType === '') {
+            AccessType = 'teacher';
         }
 
-        console.log('accessType: ' + accessType);
-        console.log('teacherNum: ' + teacherNum);
+        console.log('AccessType: ' + AccessType);
+        console.log('TeacherNum: ' + TeacherNum);
     </script>
 
     <div class="newcontainer">

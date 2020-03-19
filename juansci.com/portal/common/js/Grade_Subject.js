@@ -78,8 +78,8 @@ let modalSubject = function() {
             let queryValue = searchSubject.value;
             let queryIndex = cat.options[cat.selectedIndex].value;
 
-            val += '&accessType=' + accessType;
-            val += '&TeacherNum=' + teacherNum;
+            val += '&AccessType=' + AccessType;
+            val += '&TeacherNum=' + TeacherNum;
             val += '&queryValue=' + queryValue;
             val += '&queryIndex=' + queryIndex;
 
@@ -108,21 +108,34 @@ let getSubject = function(xhttp) {
             document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
-            SubjectCode = this.childNodes[0].textContent;
-            txt_Section.innerHTML = this.childNodes[1].textContent;
-            GradeLevel = this.childNodes[2].textContent;
-            txt_SubjTeacher.innerHTML = this.childNodes[3].textContent;
 
-            SubjectID = this.childNodes[5].textContent;
-            SectionNum = this.childNodes[6].textContent;
-            teacherNum = this.childNodes[7].textContent;
+            const [_SubjectCode,
+                _SectionName,
+                _GradeLevel,
+                _Teacher,
+                _Status,
+                _SubjectID,
+                _SectionNum,
+                _TeacherNum,
+            ] = this.childNodes;
+
+
+            SubjectCode = _SubjectCode.textContent;
+            txt_Section.textContent = _SectionName.textContent;
+            GradeLevel = _GradeLevel.textContent;
+            txt_SubjTeacher.textContent = _Teacher.textContent;
+            SubjectID = _SubjectID.textContent;
+            SectionNum = _SectionNum.textContent;
+            TeacherNum = _TeacherNum.textContent;
+
 
             input_SubjectCode.value = SubjectCode;
-            txt_SubjectCode.innerHTML = SubjectCode;
+            txt_SubjectCode.textContent = SubjectCode;
+            txt_GradeLevel.textContent = GradeLevel;
 
             displayAfterModal();
 
-            console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+            console.log(txt_Section.textContent + ' ' + SubjectCode + ' selected.');
         });
 
         tbody_tr[i].addEventListener('mouseover', function() {
@@ -168,7 +181,7 @@ let displayAfterModal = function() {
 
 let setSubMAPEH = function() {
     SubjectCode = selectMAPEH.value + ' ' + GradeLevel;
-    txt_SubjectCode.innerHTML = input_SubjectCode.value + '/' + SubjectCode;
+    txt_SubjectCode.textContent = input_SubjectCode.value + '/' + SubjectCode;
 
     SubjectID = selectMAPEH.value + tempSubjectID.slice(5);
 
@@ -176,7 +189,7 @@ let setSubMAPEH = function() {
     setCaseStatus();
     setStudentListDB();
 
-    console.log(txt_Section.innerHTML + ' ' + SubjectCode + ' selected.');
+    console.log(txt_Section.textContent + ' ' + SubjectCode + ' selected.');
 }
 
 
@@ -191,12 +204,12 @@ let setAdviserName = function() {
 
 let getAdviserName = function(xhttp) {
     try {
-        txt_Adviser.innerHTML = JSON.parse(xhttp.responseText)[0][0];
+        txt_Adviser.textContent = JSON.parse(xhttp.responseText)[0][0];
 
     } catch (err) {
-        alert('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
+        alert('Section ' + txt_Section.textContent + ' does not have an adviser yet.');
         console.log(xhttp.responseText);
-        console.log('Section ' + txt_Section.innerHTML + ' does not have an adviser yet.');
+        console.log('Section ' + txt_Section.textContent + ' does not have an adviser yet.');
     }
 }
 
@@ -238,7 +251,7 @@ let getQuarter = function(xhttp) {
         jsonQuarter = JSON.parse(xhttp.responseText);
         quarterSelected = jsonQuarter[0]['SettingValue'];
 
-        txt_quarter.textContent = `Quarter now is ${quarterSelected}`;
+        txt_quarter.textContent = quarterSelected;
 
     } catch (err) {
         alert('CANNOT FIND');
@@ -307,7 +320,7 @@ let tBodyGrade = function(xhttp) {
                     }
 
                     let setSaveButton = function(i) {
-                        if (accessType === 'teacher') {
+                        if (AccessType === 'teacher') {
                             button_save = document.createElement('button');
                             button_save.disabled = enablerQuarter(i, currCase);
 
@@ -326,7 +339,7 @@ let tBodyGrade = function(xhttp) {
                                     break;
                             }
 
-                            button_save.innerHTML = 'SAVE';
+                            button_save.textContent = 'SAVE';
                             td.appendChild(button_save);
                         }
 
@@ -334,7 +347,7 @@ let tBodyGrade = function(xhttp) {
 
                     if (j == 0) {
                         if (i != jsonStudent.length)
-                            td.innerHTML = i + 1;
+                            td.textContent = i + 1;
                     } else if (j == 1) {
                         if (i != jsonStudent.length) {
                             let extName = jsonStudent[i]['ExtendedName'];
@@ -349,7 +362,7 @@ let tBodyGrade = function(xhttp) {
                                 extName = ' ' + extName;
                             }
 
-                            td.innerHTML = jsonStudent[i]['LastName'] + extName + ', ' +
+                            td.textContent = jsonStudent[i]['LastName'] + extName + ', ' +
                                 jsonStudent[i]['FirstName'] + ' ' + jsonStudent[i]['MiddleName'];
                         }
                     } else if (j == 2) {
@@ -383,7 +396,7 @@ let tBodyGrade = function(xhttp) {
 
             setGradeDB();
 
-            if (accessType === 'teacher') {
+            if (AccessType === 'teacher') {
                 const save1 = document.querySelector('#save1');
                 const save2 = document.querySelector('#save2');
                 const save3 = document.querySelector('#save3');
@@ -533,6 +546,7 @@ let saveGrade = function() {
 
                 val += '&GradeID=' + GradeID;
                 val += '&LRNNum=' + jsonStudent[i][0];
+                val += '&TeacherNum=' + TeacherNum;
                 val += '&GradeLevel=' + GradeLevel;
                 val += '&SubjectCode=' + SubjectCode;
                 val += '&Quarter=' + Quarter;
@@ -569,16 +583,16 @@ let computeFinalAndRemark = function() {
     const CreateGradeTable = document.querySelector('#CreateGradeTable');
 
     for (let i = 0; i < jsonStudent.length; i++) {
-        CreateGradeTable.rows[i + 2].cells[6].innerHTML = '';
-        CreateGradeTable.rows[i + 2].cells[7].innerHTML = '';
+        CreateGradeTable.rows[i + 2].cells[6].textContent = '';
+        CreateGradeTable.rows[i + 2].cells[7].textContent = '';
 
         let completeGrade = function() {
-            CreateGradeTable.rows[i + 2].cells[6].innerHTML = finalRating.toFixed(0);
+            CreateGradeTable.rows[i + 2].cells[6].textContent = finalRating.toFixed(0);
 
             if (finalRating >= 75)
-                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'PASSED';
+                CreateGradeTable.rows[i + 2].cells[7].textContent = 'PASSED';
             else
-                CreateGradeTable.rows[i + 2].cells[7].innerHTML = 'FAILED';
+                CreateGradeTable.rows[i + 2].cells[7].textContent = 'FAILED';
         }
 
         if (jsonStudent.length > 1) {
@@ -615,7 +629,7 @@ let getCaseStatus = function(xhttp) {
         currCase = jsonGradeCase[0]['CaseValue'];
 
         textCaseStatus(currCase);
-        if (accessType === 'principal' || accessType === 'coordinator') {
+        if (AccessType === 'principal' || AccessType === 'coordinator') {
             approvalChange();
         }
     } catch (err) {
@@ -694,14 +708,14 @@ let approvalListeners = function() {
         }
 
 
-        if (accessType === 'coordinator') {
+        if (AccessType === 'coordinator') {
             if (confirm("Do you want to approve?")) {
                 isConfirmed(5);
                 alert('Grades can now be evaluated by the principal!');
             } else {
                 alert('Cancelled.');
             }
-        } else if (accessType === 'principal') {
+        } else if (AccessType === 'principal') {
             if (confirm("Do you want to approve?")) {
                 principalApproved();
                 isConfirmed(6);
@@ -722,9 +736,9 @@ let approvalListeners = function() {
         }
 
         if (confirm("Do you want to disapprove?")) {
-            if (accessType === 'coordinator') {
+            if (AccessType === 'coordinator') {
                 isConfirmed(2);
-            } else if (accessType === 'principal') {
+            } else if (AccessType === 'principal') {
                 isConfirmed(3);
             }
         } else {
@@ -747,7 +761,7 @@ let approvalChange = function() {
     btn_disapprove.style.display = 'block';
 
 
-    if (accessType === 'coordinator') {
+    if (AccessType === 'coordinator') {
         if (currCase === 4) {
             btn_approve.disabled = false;
             btn_disapprove.disabled = false;
@@ -755,7 +769,7 @@ let approvalChange = function() {
             btn_approve.disabled = true;
             btn_disapprove.disabled = true;
         }
-    } else if (accessType === 'principal') {
+    } else if (AccessType === 'principal') {
         if (currCase === 5) {
             btn_approve.disabled = false;
             btn_disapprove.disabled = false;

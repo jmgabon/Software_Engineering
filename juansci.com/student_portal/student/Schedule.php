@@ -220,9 +220,9 @@
 
 	<script>
         let LRNNum = <?php echo $_SESSION['LRNNum']?>;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
 
-        console.log('accessType: ' + accessType);
+        console.log('AccessType: ' + AccessType);
         console.log('LRNNum: ' + LRNNum);
     </script>
 </body>

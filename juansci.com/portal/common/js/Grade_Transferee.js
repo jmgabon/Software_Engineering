@@ -6,7 +6,7 @@ let schoolYear;
 let studentName;
 let studentAge;
 let studentSex;
-let gradeLevel;
+let GradeLevel;
 let SectionNum;
 let sectionName;
 let principalName;
@@ -70,7 +70,7 @@ btn_AddGrade.addEventListener('click', () => {
 
         val += '&GradeID=' + jsonGrade[0]['IDQ' + (i + 1)];;
         val += '&LRNNum=' + LRNNum;
-        val += '&GradeLevel=' + gradeLevel;
+        val += '&GradeLevel=' + GradeLevel;
         val += '&SubjectCode=' + SubjectCode;
         val += '&Quarter=' + (i + 1);
         val += '&GradeRating=' + Number(inputGrade[i].value);
@@ -82,15 +82,15 @@ btn_AddGrade.addEventListener('click', () => {
     labelMAPEH.style.display = 'none';
     resetTBodyGradeTable(false, true);
 
-    setSubjectListDB(gradeLevel, LRNNum);
+    setSubjectListDB(GradeLevel, LRNNum);
 });
 
 
 select_GrLvl.addEventListener('change', () => {
-    gradeLevel = Number(select_GrLvl.value);
+    GradeLevel = Number(select_GrLvl.value);
 
     resetTBodyGradeTable(false, true);
-    setSubjectListDB(gradeLevel, LRNNum);
+    setSubjectListDB(GradeLevel, LRNNum);
 });
 
 
@@ -145,14 +145,23 @@ let PickStudent = function(xhttp) {
             closeModal(modal_body);
             let LastName, ExtendedName, FirstName, MiddleName;
 
+            const [_LRNNum,
+                _LastName,
+                _ExtendedName,
+                _FirstName,
+                _MiddleName,
+                _Birthday,
+                _Gender,
+            ] = this.childNodes;
 
-            LRNNum = this.childNodes[0].textContent;
-            LastName = this.childNodes[1].textContent;
-            ExtendedName = this.childNodes[2].textContent;
-            FirstName = this.childNodes[3].textContent;
-            MiddleName = this.childNodes[4].textContent;
-            studentAge = this.childNodes[5].textContent;
-            studentSex = this.childNodes[6].textContent;
+
+            LRNNum = _LRNNum.textContent;
+            LastName = _LastName.textContent;
+            ExtendedName = _ExtendedName.textContent;
+            FirstName = _FirstName.textContent;
+            MiddleName = _MiddleName.textContent;
+            studentAge = _Birthday.textContent;
+            studentSex = _Gender.textContent;
 
             if (ExtendedName !== null) {
                 ExtendedName = ' ' + ExtendedName;
@@ -213,7 +222,7 @@ let selectGrLvl = function() {
 
 let modalSubjectCode = function() {
     selectSubjCode.addEventListener('click', () => {
-        if (gradeLevel === undefined) {
+        if (GradeLevel === undefined) {
             alert('Select Student and Grade Level first');
         } else {
             let theadID = 'SubjectCode@SubjectDescription';
@@ -235,7 +244,7 @@ let modalSubjectCode = function() {
                 let queryValue = searchSubject.value;
                 let queryIndex = cat.options[cat.selectedIndex].value;
 
-                val += '&gradeLevel=' + gradeLevel;
+                val += '&GradeLevel=' + GradeLevel;
                 val += '&queryValue=' + queryValue;
                 val += '&queryIndex=' + queryIndex;
 
@@ -265,8 +274,14 @@ let getSubjectCode = function(xhttp) {
             document.querySelector('#SearchSubject').value = '';
             closeModal(modal_body);
 
-            SubjectCode = this.childNodes[0].textContent;
-            selectSubjCode.textContent = this.childNodes[1].textContent;
+            const [_SubjectCode,
+                _selectSubjCode,
+            ] = this.childNodes;
+
+
+            SubjectCode = _SubjectCode.textContent;
+            selectSubjCode.textContent = _selectSubjCode.textContent;
+
 
             afterSubjectModal();
         });
@@ -304,7 +319,7 @@ let afterSubjectModal = function() {
 let setSubMAPEH = function() {
     resetTBodyGradeTable(false, false);
 
-    SubjectCode = selectMAPEH.value + ' ' + gradeLevel;
+    SubjectCode = selectMAPEH.value + ' ' + GradeLevel;
     selectSubjCode.textContent = SubjectCode;
 
     for (let i = 0; i < inputGrade.length; i++) {
@@ -477,12 +492,12 @@ let createTBodySubj = function(subj) {
                 subj[i]['SubjectCode'] === 'MAPEH 8' ||
                 subj[i]['SubjectCode'] === 'MAPEH 9' ||
                 subj[i]['SubjectCode'] === 'MAPEH 10') {
-                Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).forEach((key) => {
+                Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).forEach((key) => {
                     tr = document.createElement('tr');
 
                     for (let j = 0; j < columnLen; j++) {
                         td = document.createElement('td');
-                        td.innerHTML = (j == 0) ? '&nbsp &nbsp' + objMAPEH[indexGrLvl(gradeLevel)][key] : '';
+                        td.innerHTML = (j == 0) ? '&nbsp &nbsp' + objMAPEH[indexGrLvl(GradeLevel)][key] : '';
                         tr.appendChild(td);
                     }
 
@@ -540,8 +555,8 @@ let setGradeSubjDB = function() {
     let val = '';
 
     val += '&LRNNum=' + LRNNum;
-    val += '&gradeLevel=' + gradeLevel;
-    val += '&accessType=' + accessType;
+    val += '&GradeLevel=' + GradeLevel;
+    val += '&AccessType=' + AccessType;
     misQuery('setGradeSubjDB', val, getGradeSubjDB);
 }
 
@@ -587,7 +602,7 @@ let getAveMAPEH = function() {
                 let aveMAPEH = 0;
                 let isMAPEHGradeCompleted = true;
 
-                Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).forEach((key) => {
+                Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).forEach((key) => {
                     let childMAPEH = trTableGrade[arrSubjCode.indexOf(key)].cells[j].textContent;
 
                     if (childMAPEH == '') {
@@ -659,7 +674,7 @@ let calculateAverage = function() {
 
             for (let j = 0; j < trTableGrade.length - 1; j++) {
                 // skip compute of average if child (MAPEH)
-                if (Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).includes(arrSubjCode[j])) {
+                if (Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).includes(arrSubjCode[j])) {
                     lenChild++;
                     continue;
                 } else {

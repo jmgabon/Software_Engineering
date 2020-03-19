@@ -186,11 +186,11 @@
 
     <?php include 'partials/footer.php'; ?>
     <script>
-        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
 
-        console.log('accessType: ' + accessType);
-        console.log('teacherNum: ' + teacherNum);
+        console.log('AccessType: ' + AccessType);
+        console.log('TeacherNum: ' + TeacherNum);
     </script>
     <script src="js/Grade_Transferee.js" type="text/javascript"></script>
 </body>

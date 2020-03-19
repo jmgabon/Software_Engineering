@@ -26,7 +26,7 @@ let schoolYear;
 let studentName;
 let studentAge;
 let studentSex;
-let gradeLevel;
+let GradeLevel;
 let SectionNum;
 let sectionName;
 let principalName;
@@ -80,11 +80,11 @@ const objMAPEH = [
 ];
 
 
-if (accessType === 'student') {
+if (AccessType === 'student') {
     select_GrLvl.addEventListener('change', () => {
-        gradeLevel = Number(select_GrLvl.value);
+        GradeLevel = Number(select_GrLvl.value);
 
-        setSubjectListDB(gradeLevel, LRNNum);
+        setSubjectListDB(GradeLevel, LRNNum);
         setIfSectionAssigned();
     });
 }
@@ -103,7 +103,7 @@ let selectGrLvl = function() {
 }
 
 
-if (accessType === 'teacher') {
+if (AccessType === 'teacher') {
     modal_button.addEventListener('click', function() {
         let theadID = 'LRNNum@LastName@ExtendedName@FirstName@MiddleName';
         let theadHTML = 'LRN@Last Name@ExtendedName@First Name@Middle Name';
@@ -156,14 +156,23 @@ function PickStudent(xhttp) {
             closeModal(modal_body);
             let LastName, ExtendedName, FirstName, MiddleName;
 
+            const [_LRNNum,
+                _LastName,
+                _ExtendedName,
+                _FirstName,
+                _MiddleName,
+                _Birthday,
+                _Gender,
+            ] = this.childNodes;
 
-            LRNNum = this.childNodes[0].textContent;
-            LastName = this.childNodes[1].textContent;
-            ExtendedName = this.childNodes[2].textContent;
-            FirstName = this.childNodes[3].textContent;
-            MiddleName = this.childNodes[4].textContent;
-            studentAge = this.childNodes[5].textContent;
-            studentSex = this.childNodes[6].textContent;
+
+            LRNNum = _LRNNum.textContent;
+            LastName = _LastName.textContent;
+            ExtendedName = _ExtendedName.textContent;
+            FirstName = _FirstName.textContent;
+            MiddleName = _MiddleName.textContent;
+            studentAge = _Birthday.textContent;
+            studentSex = _Gender.textContent;
 
             if (ExtendedName !== null) {
                 ExtendedName = ' ' + ExtendedName;
@@ -179,13 +188,14 @@ function PickStudent(xhttp) {
             txt_StudentModal.value = txt_StudentName.textContent;
             studentName = txt_StudentName.textContent;
 
+
             if (document.querySelector('#print-btnI').disabled === true) {
                 document.querySelector('#print-btnI').disabled = false;
             }
 
             btn_encode.disabled = true;
             // clearTBodySubj();
-            setSubjectListDB(gradeLevel, LRNNum);
+            setSubjectListDB(GradeLevel, LRNNum);
         });
         tbody_tr[i].addEventListener('mouseover', function() {
             this.style.backgroundColor = 'maroon';
@@ -208,7 +218,7 @@ function AddPostData() {
     formData.elements["studentName"].value = studentName;
     formData.elements["studentAge"].value = Number(schoolYear - studentAge.slice(0, 4));
     formData.elements["studentSex"].value = studentSex;
-    formData.elements["gradeLevel"].value = gradeLevel;
+    formData.elements["GradeLevel"].value = GradeLevel;
     formData.elements["sectionName"].value = sectionName;
     formData.elements["principalName"].value = principalName;
     formData.elements["adviserName"].value = adviserName;
@@ -265,12 +275,12 @@ let createTBodySubj = function(subj) {
                 subj[i]['SubjectCode'] === 'MAPEH 8' ||
                 subj[i]['SubjectCode'] === 'MAPEH 9' ||
                 subj[i]['SubjectCode'] === 'MAPEH 10') {
-                Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).forEach((key) => {
+                Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).forEach((key) => {
                     tr = document.createElement('tr');
 
                     for (let j = 0; j < columnLen; j++) {
                         td = document.createElement('td');
-                        td.innerHTML = (j == 0) ? '&nbsp &nbsp' + objMAPEH[indexGrLvl(gradeLevel)][key] : '';
+                        td.innerHTML = (j == 0) ? '&nbsp &nbsp' + objMAPEH[indexGrLvl(GradeLevel)][key] : '';
                         tr.appendChild(td);
                     }
 
@@ -303,7 +313,7 @@ let getSubjectListDB = function(xhttp) {
         jsonSubject = JSON.parse(xhttp.responseText);
         createTBodySubj(jsonSubject);
 
-        if (accessType === 'teacher') {
+        if (AccessType === 'teacher') {
             setGradeSubjDB();
             setGradeValDB();
         }
@@ -350,11 +360,11 @@ let getStudentInfo = function(xhttp) {
         studentAge = jsonStudentInfo[0]['Birthday'];
         studentSex = jsonStudentInfo[0]['Gender'];
 
-        gradeLevel = jsonStudentInfo[0]['GradeLevel'];
-        txt_GradeLevel.textContent = gradeLevel;
-        maxGradeLevel = gradeLevel;
+        GradeLevel = jsonStudentInfo[0]['GradeLevel'];
+        txt_GradeLevel.textContent = GradeLevel;
+        maxGradeLevel = GradeLevel;
 
-        setSubjectListDB(gradeLevel, LRNNum);
+        setSubjectListDB(GradeLevel, LRNNum);
         setIfSectionAssigned();
         selectGrLvl();
 
@@ -369,7 +379,7 @@ let getStudentInfo = function(xhttp) {
 let setIfSectionAssigned = function() {
     let val = '';
     val += '&LRNNum=' + LRNNum;
-    val += '&gradeLevel=' + gradeLevel;
+    val += '&GradeLevel=' + GradeLevel;
 
     misQuery('setIfSectionAssigned', val, getIfSectionAssigned);
 }
@@ -399,13 +409,13 @@ let getIfSectionAssigned = function(xhttp) {
 function setSectionInfo() {
     let val = '';
 
-    if (accessType === 'teacher') {
-        val += '&accessType=teacher';
-        val += '&teacherNum=' + teacherNum;
-    } else if (accessType === 'student') {
-        val += '&accessType=student';
+    if (AccessType === 'teacher') {
+        val += '&AccessType=teacher';
+        val += '&TeacherNum=' + TeacherNum;
+    } else if (AccessType === 'student') {
+        val += '&AccessType=student';
         val += '&LRNNum=' + LRNNum;
-        val += '&gradeLevel=' + gradeLevel;
+        val += '&GradeLevel=' + GradeLevel;
     }
 
     misQuery('setSectionInfo', val, getSectionInfo);
@@ -425,13 +435,13 @@ function getSectionInfo(xhttp) {
         adviserName = jsonSecInfo[0]['Adviser'];
         sectionName = jsonSecInfo[0]['SectionName'];
 
-        if (accessType === 'teacher') {
-            gradeLevel = jsonSecInfo[0]['GradeLevel'];
+        if (AccessType === 'teacher') {
+            GradeLevel = jsonSecInfo[0]['GradeLevel'];
         }
 
         txt_AdviserName.textContent = adviserName;
         txt_SectionName.textContent = sectionName;
-        txt_GradeLevel.textContent = gradeLevel;
+        txt_GradeLevel.textContent = GradeLevel;
 
 
 
@@ -460,19 +470,19 @@ function setGradeSubjDB() {
     let val = '';
 
     val += '&LRNNum=' + LRNNum;
-    val += '&gradeLevel=' + gradeLevel;
+    val += '&GradeLevel=' + GradeLevel;
 
-    if (accessType === 'student') {
-        val += '&accessType=student';
+    if (AccessType === 'student') {
+        val += '&AccessType=student';
         misQuery('setGradeSubjDB', val, getGradeSubjDB);
-    } else if (accessType === 'teacher') {
-        val += '&accessType=teacher';
+    } else if (AccessType === 'teacher') {
+        val += '&AccessType=teacher';
         misQuery('setGradeSubjDB', val, getGradeSubjDB);
 
         val = '';
         val += '&LRNNum=' + LRNNum;
-        val += '&gradeLevel=' + gradeLevel;
-        val += '&accessType=student';
+        val += '&GradeLevel=' + GradeLevel;
+        val += '&AccessType=student';
         misQuery('setGradeSubjDB', val, (xhttp) => {
             if (JSON.parse(xhttp.responseText).length === 0) {
                 btn_encode.disabled = false;
@@ -524,7 +534,7 @@ function getAveMAPEH() {
                 let aveMAPEH = 0;
                 let isMAPEHGradeCompleted = true;
 
-                Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).forEach((key) => {
+                Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).forEach((key) => {
                     let childMAPEH = trTableGrade[arrSubjCode.indexOf(key)].cells[j].textContent;
 
                     if (childMAPEH == '') {
@@ -617,7 +627,7 @@ function calculateAverage() {
 
             for (let j = 0; j < trTableGrade.length - 1; j++) {
                 // skip compute of average if child (MAPEH)
-                if (Object.keys(objMAPEH[indexGrLvl(gradeLevel)]).includes(arrSubjCode[j])) {
+                if (Object.keys(objMAPEH[indexGrLvl(GradeLevel)]).includes(arrSubjCode[j])) {
                     lenChild++;
                     continue;
                 } else {
@@ -664,7 +674,7 @@ function setGradeValDB() {
     let val = '';
 
     val += '&LRNNum=' + LRNNum;
-    val += '&gradeLevel=' + gradeLevel;
+    val += '&GradeLevel=' + GradeLevel;
 
     misQuery('setGradeValDB', val, getGradesValDB);
 }
@@ -683,7 +693,7 @@ function getGradesValDB(xhttp) {
 
     try {
         for (let i = 0; i < jsonGradeVal.length; i++) {
-            document.querySelectorAll('.grValQ' + jsonGradeVal[i]['Quarter'])[getParentCol(jsonGradeVal[i]['BehaviorID'])].textContent = jsonGradeVal[i]['GradeValRating'];
+            document.querySelectorAll('.grValQ' + jsonGradeVal[i]['Quarter'])[getParentCol(jsonGradeVal[i]['BehaviorCode'])].textContent = jsonGradeVal[i]['GradeRating'];
         }
 
     } catch (err) {
@@ -693,13 +703,13 @@ function getGradesValDB(xhttp) {
 
 
 function getParentCol(child) {
-    if (child.includes('1a')) return 0;
-    else if (child.includes('1b')) return 1;
-    else if (child.includes('2a')) return 2;
-    else if (child.includes('2b')) return 3;
-    else if (child.includes('3a')) return 4;
-    else if (child.includes('3b')) return 5;
-    else if (child.includes('4a')) return 6;
+    if (child.includes('A1')) return 0;
+    else if (child.includes('A2')) return 1;
+    else if (child.includes('B1')) return 2;
+    else if (child.includes('B2')) return 3;
+    else if (child.includes('C1')) return 4;
+    else if (child.includes('C2')) return 5;
+    else if (child.includes('D1')) return 6;
 }
 
 
@@ -713,10 +723,10 @@ let init = (function() {
     setQuarterDB();
 
 
-    if (accessType === 'teacher') {
+    if (AccessType === 'teacher') {
         setSectionInfo();
         btn_encode.style.display = 'block';
-    } else if (accessType === 'student') {
+    } else if (AccessType === 'student') {
         setStudentInfo();
     }
 
@@ -725,7 +735,7 @@ let init = (function() {
             let val = '';
 
             val += '&LRNNum=' + LRNNum;
-            val += '&gradeLevel=' + gradeLevel;
+            val += '&GradeLevel=' + GradeLevel;
             val += '&quarterSelected=' + quarterSelected;
 
             misQuery('btn_encode', val, () => null);

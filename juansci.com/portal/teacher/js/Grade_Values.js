@@ -10,12 +10,12 @@ let SectionNum;
 let jsonGradeVal;
 let quarterSelected;
 
-let GradeValID;
+let GradeID;
 let LRNNum;
-let gradeLevel;
-let BehaviorID;
+let GradeLevel;
+let BehaviorCode;
 let Quarter;
-let GradeValRating;
+let GradeRating;
 let trLen = document.querySelectorAll('#gradeTable tbody tr').length - 1;
 
 
@@ -56,11 +56,11 @@ const wrapperUIValues = (function() {
 
             SectionNum = jsonSectionInfo[0][0]
             SectionName = jsonSectionInfo[0][1]
-            gradeLevel = jsonSectionInfo[0][2]
+            GradeLevel = jsonSectionInfo[0][2]
 
             document.querySelector('#txt_LRNNum').innerHTML = LRNNum;
             document.querySelector('#txt_SectionName').innerHTML = SectionName;
-            document.querySelector('#txt_GradeLevel').innerHTML = gradeLevel;
+            document.querySelector('#txt_GradeLevel').innerHTML = GradeLevel;
 
         } catch (err) {
             alert('CANNOT FIND');
@@ -125,7 +125,7 @@ const wrapperGradeValues = (function() {
         let val = '';
 
         val += '&LRNNum=' + LRNNum;
-        val += '&gradeLevel=' + gradeLevel;
+        val += '&GradeLevel=' + GradeLevel;
 
         misQuery('setGradesValDB', val, getGradesValDB);
     }
@@ -137,17 +137,17 @@ const wrapperGradeValues = (function() {
 
         try {
             let getParentCol = function(child) {
-                if (child.includes('1a')) return 0;
-                else if (child.includes('1b')) return 1;
-                else if (child.includes('2a')) return 2;
-                else if (child.includes('2b')) return 3;
-                else if (child.includes('3a')) return 4;
-                else if (child.includes('3b')) return 5;
-                else if (child.includes('4a')) return 6;
+                if (child.includes('A1')) return 0;
+                else if (child.includes('A2')) return 1;
+                else if (child.includes('B1')) return 2;
+                else if (child.includes('B2')) return 3;
+                else if (child.includes('C1')) return 4;
+                else if (child.includes('C2')) return 5;
+                else if (child.includes('D1')) return 6;
             }
 
             for (let i = 0; i < jsonGradeVal.length; i++) {
-                document.querySelectorAll('.grValQ' + jsonGradeVal[i]['Quarter'])[getParentCol(jsonGradeVal[i]['BehaviorID'])].value = jsonGradeVal[i]['GradeValRating'];
+                document.querySelectorAll('.grValQ' + jsonGradeVal[i]['Quarter'])[getParentCol(jsonGradeVal[i]['BehaviorCode'])].value = jsonGradeVal[i]['GradeRating'];
             }
 
         } catch (err) {
@@ -157,8 +157,8 @@ const wrapperGradeValues = (function() {
 
     let checkIfAllFilled = function() {
         for (let i = 0; i < trLen; i++) {
-            GradeValRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
-            if (GradeValRating === '--') {
+            GradeRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
+            if (GradeRating === '--') {
                 return false;
             }
         }
@@ -168,42 +168,42 @@ const wrapperGradeValues = (function() {
     let checkGradeVal = function() {
         if (checkIfAllFilled()) {
             for (let i = 0; i < trLen; i++) {
-                GradeValID = 0;
-                GradeValRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
+                GradeID = 0;
+                GradeRating = document.querySelectorAll('.grValQ' + Quarter)[i].value;
 
                 switch (i) {
                     case 0:
-                        BehaviorID = '1a';
+                        BehaviorCode = 'A1';
                         break;
                     case 1:
-                        BehaviorID = '1b';
+                        BehaviorCode = 'A2';
                         break;
                     case 2:
-                        BehaviorID = '2a';
+                        BehaviorCode = 'B1';
                         break;
                     case 3:
-                        BehaviorID = '2b';
+                        BehaviorCode = 'B2';
                         break;
                     case 4:
-                        BehaviorID = '3a';
+                        BehaviorCode = 'C1';
                         break;
                     case 5:
-                        BehaviorID = '3b';
+                        BehaviorCode = 'C2';
                         break;
                     case 6:
-                        BehaviorID = '4a';
+                        BehaviorCode = 'D1';
                         break;
                 }
 
                 for (let j = 0; j < jsonGradeVal.length; j++) {
-                    if (jsonGradeVal[j]['BehaviorID'] === BehaviorID) {
+                    if (jsonGradeVal[j]['BehaviorCode'] === BehaviorCode) {
                         if (jsonGradeVal[j]['Quarter'] === Quarter) {
-                            GradeValID = jsonGradeVal[j]['GradeValID'];
+                            GradeID = jsonGradeVal[j]['GradeID'];
                         }
                     }
                 }
 
-                if (GradeValRating !== '--') {
+                if (GradeRating !== '--') {
                     updateGradeDB();
                 }
                 // else {
@@ -223,18 +223,19 @@ const wrapperGradeValues = (function() {
     let updateGradeDB = function() {
         let val = '';
 
-        val += '&GradeValID=' + GradeValID;
+        val += '&GradeID=' + GradeID;
         val += '&LRNNum=' + LRNNum;
-        val += '&gradeLevel=' + gradeLevel;
-        val += '&BehaviorID=' + BehaviorID;
+        val += '&TeacherNum=' + TeacherNum;
+        val += '&GradeLevel=' + GradeLevel;
+        val += '&BehaviorCode=' + BehaviorCode;
         val += '&Quarter=' + Quarter;
-        val += '&GradeValRating=' + GradeValRating;
+        val += '&GradeRating=' + GradeRating;
 
         misQuery('updateGradeDB', val, () => null);
     };
 
     // let deleteGradeDB = function() {
-    //     let query = 'DELETE FROM grade_values WHERE GradeValID = ' + GradeValID;
+    //     let query = 'DELETE FROM grade_values WHERE GradeID = ' + GradeID;
 
     //     SimplifiedQuery('INSERT', query, '', () => null);
     // };
@@ -318,11 +319,19 @@ const mainController = (function(wrapUI, wrapVal) {
                     let LastName, ExtendedName, FirstName, MiddleName;
 
 
-                    LRNNum = this.childNodes[0].textContent;
-                    LastName = this.childNodes[1].textContent;
-                    ExtendedName = this.childNodes[2].textContent;
-                    FirstName = this.childNodes[3].textContent;
-                    MiddleName = this.childNodes[4].textContent;
+                    const [_LRNNum,
+                        _LastName,
+                        _ExtendedName,
+                        _FirstName,
+                        _MiddleName,
+                    ] = this.childNodes;
+
+
+                    LRNNum = _LRNNum.textContent;
+                    LastName = _LastName.textContent;
+                    ExtendedName = _ExtendedName.textContent;
+                    FirstName = _FirstName.textContent;
+                    MiddleName = _MiddleName.textContent;
 
                     if (ExtendedName !== null) {
                         ExtendedName = ' ' + ExtendedName;
@@ -336,6 +345,7 @@ const mainController = (function(wrapUI, wrapVal) {
                     txt_StudentName.textContent += MiddleName;
 
                     txt_StudentModal.value = txt_StudentName.textContent;
+
 
                     studentSelected = true;
 

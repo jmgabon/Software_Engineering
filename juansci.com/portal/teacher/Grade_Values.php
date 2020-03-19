@@ -377,12 +377,12 @@
 
     <script>
         let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
-        if (accessType === '') {
-            accessType = 'teacher';
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
+        if (AccessType === '') {
+            AccessType = 'teacher';
         }
 
-        console.log('accessType: ' + accessType);
+        console.log('AccessType: ' + AccessType);
         console.log('TeacherNum: ' + TeacherNum);
     </script>
     <script src="js/Grade_Values.js" type="text/javascript"></script>

@@ -34,7 +34,7 @@
         $studentName = ($_POST['studentName'] !== 'undefined') ? $_POST['studentName'] : 'N/A';
         $studentAge = ($_POST['studentAge'] !== 'undefined') ? $_POST['studentAge'] : 'N/A';
         $studentSex = ($_POST['studentSex'] !== 'undefined') ? $_POST['studentSex'] : 'N/A';
-        $gradeLevel = ($_POST['gradeLevel'] !== 'undefined') ? $_POST['gradeLevel'] : 'N/A';
+        $GradeLevel = ($_POST['GradeLevel'] !== 'undefined') ? $_POST['GradeLevel'] : 'N/A';
         $sectionName = ($_POST['sectionName'] !== 'undefined') ? $_POST['sectionName'] : 'N/A';
         $principalName = ($_POST['principalName'] !== 'undefined') ? $_POST['principalName'] : 'N/A';
         $adviserName = ($_POST['adviserName'] !== 'undefined') ? $_POST['adviserName'] : 'N/A';     
@@ -74,7 +74,7 @@
         <div class="hide-on-print">
             <p><b>Adviser Name: </b><?php echo $adviserName ?></p>
             <p><b>Section Name: </b><?php echo $sectionName ?></p>
-            <p><b>Grade Level: </b><?php echo $gradeLevel ?></p>
+            <p><b>Grade Level: </b><?php echo $GradeLevel ?></p>
             <br />
             <p><b>Student Name: </b><?php echo $studentName ?></p>
             <br />
@@ -210,7 +210,7 @@
                 </div>
                 <div class="row">
                     <div class="w-50">
-                        <b>Grade:</b> <?php echo $gradeLevel ?> 
+                        <b>Grade:</b> <?php echo $GradeLevel ?> 
                     </div>
                     <div class="w-50">
                         <b>Section:</b> <?php echo $sectionName ?>
@@ -266,17 +266,17 @@
     <script>
         // $('#lead').text("View Student's Grade");
         let LRNNum;
-        let teacherNum;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        let TeacherNum;
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
 
-        if (accessType === '') {
-            accessType = 'teacher';
+        if (AccessType === '') {
+            AccessType = 'teacher';
         }
 
-        console.log('accessType: ' + accessType);
+        console.log('AccessType: ' + AccessType);
         <?php if($_SESSION['AccessType'] === '') { ?>
-            teacherNum = <?php echo $_SESSION['TeacherNum']?>;
-            console.log('teacherNum: ' + teacherNum);
+            TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
+            console.log('TeacherNum: ' + TeacherNum);
         <?php } else if($_SESSION['AccessType'] === 'student') { ?>
             LRNNum = <?php echo $_SESSION['LRNNum']?>;
             console.log('LRNNum: ' + LRNNum);

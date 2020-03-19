@@ -65,11 +65,11 @@
     </div>
 
     <script>
-        let teacherNum = <?php echo $_SESSION['TeacherNum']?>;
-        let accessType = '<?php echo $_SESSION['AccessType']?>';
+        let TeacherNum = <?php echo $_SESSION['TeacherNum']?>;
+        let AccessType = '<?php echo $_SESSION['AccessType']?>';
 
-        console.log('accessType: ' + accessType);
-        console.log('teacherNum: ' + teacherNum);
+        console.log('AccessType: ' + AccessType);
+        console.log('TeacherNum: ' + TeacherNum);
     </script>
     <?php include 'partials/footer.php'; ?>
     <script src="js/MIS_Grade_Principal.js" type="text/javascript"></script>

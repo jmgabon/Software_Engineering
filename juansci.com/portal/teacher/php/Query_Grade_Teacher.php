@@ -14,26 +14,29 @@
         if ($func === 'setQuarterDB') {
             $query .= "SELECT SettingValue ";
             $query .= "FROM setting ";
-            $query .= "WHERE SettingName = 'quarter_enabled'";
+            $query .= "WHERE SettingName = 'quarter_now'";
         }
 
         if ($func === 'setGradesValDB') {
-            $query .= "SELECT GradeValID, BehaviorID, Quarter, GradeValRating ";
+            $query .= "SELECT GradeID, BehaviorCode, Quarter, GradeRating ";
             $query .= "FROM grade_values ";
             $query .= "WHERE LRNNum = " . $_POST['LRNNum'] . " ";
-            $query .= "AND GradeValLevel = " . $_POST['gradeLevel'] . " ";
+            $query .= "AND GradeLevel = " . $_POST['GradeLevel'] . " ";
         }
 
         if ($func === 'updateGradeDB') {
             $query .= "INSERT INTO grade_values ";
-            $query .= "(GradeValID, LRNNum, GradeValLevel, BehaviorID, Quarter, GradeValRating) ";
-            $query .= "VALUES ('" . $_POST['GradeValID'] . "', '";
+            $query .= "(GradeID, LRNNum, TeacherNum, GradeLevel, BehaviorCode, Quarter, GradeRating, Status) ";
+            $query .= "VALUES ('" . $_POST['GradeID'] . "', '";
             $query .= $_POST['LRNNum'] . "', '";
-            $query .= $_POST['gradeLevel'] . "', '";
-            $query .= $_POST['BehaviorID'] . "', '";
+            $query .= $_POST['TeacherNum'] . "', '";
+            $query .= $_POST['GradeLevel'] . "', '";
+            $query .= $_POST['BehaviorCode'] . "', '";
             $query .= $_POST['Quarter'] . "', '";
-            $query .= $_POST['GradeValRating'] . "') ";
-            $query .= "ON DUPLICATE KEY UPDATE GradeValRating = '" . $_POST['GradeValRating'] . "' ";
+            $query .= $_POST['GradeRating'] . "', '";
+            $query .= "PENDING') ";
+            $query .= "ON DUPLICATE KEY UPDATE GradeRating = '" . $_POST['GradeRating'] . "', ";
+            $query .= "TeacherNum = " . $_POST['TeacherNum'] . " ";
         }
 
         if ($func === 'SearchStudent') {
